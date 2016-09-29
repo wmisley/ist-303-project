@@ -10,6 +10,27 @@ The application supports the camp registration process for Gila Breath Camp
 * Maven 
 * Sqlite3
 
+If you have a Mac, you likely already have Sqlite3 installed, to check, open a command prompts and type:
+
+```
+sqlite3 -version
+```
+
+If you get a response like this:
+
+```
+3.8.10.2 2015-05-20 18:17:19 2ef4f3a5b1d1d0c4338f8243d40a2452cc1f7fe4
+```
+
+then you have it. If your response looks like this:
+
+```
+-bash: sqlite3: command not found
+```
+
+then you need to install it.
+
+See https://www.tutorialspoint.com/sqlite/sqlite_installation.htm
 
 # Instructions
 To build the tool, perform the following command:
