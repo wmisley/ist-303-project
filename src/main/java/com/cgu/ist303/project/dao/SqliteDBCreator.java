@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 public class SqliteDBCreator {
@@ -22,6 +23,54 @@ public class SqliteDBCreator {
         db.deleteDabaseFile(dbPath);
         db.createTables(dbPath);
 
+        db.createCampSessions(dbPath);
+        db.insertCamper(dbPath);
+    }
+
+    public ArrayList<CampSession> createCampSessions(String dbPath) {
+        ArrayList<CampSession> sessions = new ArrayList<CampSession>();
+        DAOFactor.dbPath = dbPath;
+        CampSessionDAO sessionDAO = DAOFactor.createCampSessionDAO();
+
+        //TODO: Camps are in the 2nd and 3rd week of the month
+        //TODO: Need to verify starts on Sunday, ends on Saturday
+        CampSession session = new CampSession();
+        session.setCampYear(2016); session.setGenderLimit(36);
+        session.setStartMonth(6);  session.setStartDay(5);
+        session.setEndMonth(6);    session.setEndDay(18);
+
+        try {
+            int sessionId = sessionDAO.insert(session);
+            session.setCampSessioId(sessionId);
+            sessions.add(session);
+        } catch (Exception e) { log.error(e); }
+
+        session = new CampSession();
+        session.setCampYear(2016); session.setGenderLimit(36);
+        session.setStartMonth(7);  session.setStartDay(3);
+        session.setEndMonth(7);    session.setEndDay(16);
+
+        try {
+            int sessionId = sessionDAO.insert(session);
+            session.setCampSessioId(sessionId);
+            sessions.add(session);
+        } catch (Exception e) { log.error(e); }
+
+        session = new CampSession();
+        session.setCampYear(2016); session.setGenderLimit(36);
+        session.setStartMonth(8);  session.setStartDay(7);
+        session.setEndMonth(8);    session.setEndDay(20);
+
+        try {
+            int sessionId = sessionDAO.insert(session);
+            session.setCampSessioId(sessionId);
+            sessions.add(session);
+        } catch (Exception e) { log.error(e); }
+
+        return sessions;
+    }
+
+    public void insertCamper(String dbPath) {
         DAOFactor.dbPath = dbPath;
         CamperDAO camperDAO = DAOFactor.createCamperDAO();
 
@@ -40,7 +89,6 @@ public class SqliteDBCreator {
         camper.setRpFirstName("Bobby");
         camper.setFirstName("");
         camper.setRpLastName("Boon");
-
 
         try {
             log.debug("Inserting camper record");

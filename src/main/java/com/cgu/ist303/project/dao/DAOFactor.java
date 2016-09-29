@@ -6,4 +6,5 @@ public class DAOFactor {
     static public CamperDAO createCamperDAO() {
         return new SqliteCamperDAO(dbPath);
     }
+    static public CampSessionDAO createCampSessionDAO() { return new SqliteCampSessionDAO(dbPath); }
 }

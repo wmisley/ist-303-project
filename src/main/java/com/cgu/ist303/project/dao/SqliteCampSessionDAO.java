@@ -11,7 +11,7 @@ import java.sql.Statement;
 /**
  * Created by will4769 on 9/29/16.
  */
-public class SqliteCampSessionDAO {
+public class SqliteCampSessionDAO implements CampSessionDAO {
     private static final Logger log = LogManager.getLogger(SqliteDBCreator.class);
     public String dbFilepath = "";
 
@@ -42,7 +42,7 @@ public class SqliteCampSessionDAO {
         stmt.executeUpdate(sql);
         ResultSet rs = stmt.getGeneratedKeys();
         int camperId = rs.getInt(1);
-        log.info("Camper ID is {}", camperId);
+        log.info("Camp Session ID is {}", camperId);
 
         stmt.close();
         c.commit();
