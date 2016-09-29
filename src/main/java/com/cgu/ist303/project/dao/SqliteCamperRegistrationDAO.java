@@ -1,6 +1,9 @@
 package com.cgu.ist303.project.dao;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -21,6 +24,10 @@ import java.sql.Statement;
 
 
 public class SqliteCamperRegistrationDAO {
-    public SqliteCamperRegistrationDAO() {
+    private static final Logger log = LogManager.getLogger(SqliteCamperRegistrationDAO.class);
+    public String dbFilepath = "";
+
+    public SqliteCamperRegistrationDAO(String sqliteFilepath) {
+        dbFilepath = sqliteFilepath;
     }
 }

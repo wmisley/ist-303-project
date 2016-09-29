@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class SqliteCamperDAO implements CamperDAO {
-    private static final Logger log = LogManager.getLogger(SqliteDBCreator.class);
+    private static final Logger log = LogManager.getLogger(SqliteCamperDAO.class);
     public String dbFilepath = "";
 
     public SqliteCamperDAO(String sqliteFilepath) {

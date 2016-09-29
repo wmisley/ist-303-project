@@ -23,7 +23,7 @@ public class SqliteDBCreator {
         db.deleteDabaseFile(dbPath);
         db.createTables(dbPath);
 
-        db.createCampSessions(dbPath);
+        ArrayList<CampSession> sessions = db.createCampSessions(dbPath);
         db.insertCamper(dbPath);
     }
 

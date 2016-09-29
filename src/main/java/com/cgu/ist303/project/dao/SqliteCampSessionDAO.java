@@ -12,7 +12,7 @@ import java.sql.Statement;
  * Created by will4769 on 9/29/16.
  */
 public class SqliteCampSessionDAO implements CampSessionDAO {
-    private static final Logger log = LogManager.getLogger(SqliteDBCreator.class);
+    private static final Logger log = LogManager.getLogger(SqliteCampSessionDAO.class);
     public String dbFilepath = "";
 
     public SqliteCampSessionDAO(String sqliteFilepath) {
