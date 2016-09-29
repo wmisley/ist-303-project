@@ -1,0 +1,8 @@
+package com.cgu.ist303.project.dao;
+
+/**
+ * Created by will4769 on 9/28/16.
+ */
+public interface CamperDAO {
+    int insertCamper(Camper camper) throws Exception;
+}

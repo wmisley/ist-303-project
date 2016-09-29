@@ -1,0 +1,6 @@
+target/
+scrap/
+*.iml
+*.db
+.idea/
+dependency-reduced-pom.xml
