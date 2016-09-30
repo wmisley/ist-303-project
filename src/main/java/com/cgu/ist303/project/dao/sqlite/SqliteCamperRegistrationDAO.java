@@ -1,12 +1,13 @@
-package com.cgu.ist303.project.dao;
+package com.cgu.ist303.project.dao.sqlite;
 
 
+import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
 
 

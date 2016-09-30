@@ -1,5 +1,7 @@
-package com.cgu.ist303.project.dao;
+package com.cgu.ist303.project.dao.sqlite;
 
+import com.cgu.ist303.project.dao.model.Camper;
+import com.cgu.ist303.project.dao.CamperDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

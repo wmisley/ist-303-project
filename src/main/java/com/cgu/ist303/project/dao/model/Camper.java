@@ -1,4 +1,4 @@
-package com.cgu.ist303.project.dao;
+package com.cgu.ist303.project.dao.model;
 
 /**
  * Created by will4769 on 9/24/16.

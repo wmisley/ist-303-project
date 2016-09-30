@@ -1,5 +1,8 @@
-package com.cgu.ist303.project.dao;
+package com.cgu.ist303.project.dao.sqlite;
 
+import com.cgu.ist303.project.dao.model.CampSession;
+import com.cgu.ist303.project.dao.CampSessionDAO;
+import com.cgu.ist303.project.dao.DAOFactor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
