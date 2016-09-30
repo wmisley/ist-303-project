@@ -47,3 +47,11 @@ Notes:
 This project uses the DAO pattern on Sqlite. For more information:
 
 http://www.oracle.com/technetwork/java/dataaccessobject-138824.html
+
+Sqlite resources:
+
+https://www.techonthenet.com/sqlite/index.php
+
+https://www.tutorialspoint.com/sqlite/index.htm
+
+https://www.sqlite.org/docs.html
