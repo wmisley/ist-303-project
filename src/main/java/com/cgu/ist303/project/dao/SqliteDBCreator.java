@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class SqliteDBCreator {
     private static final Logger log = LogManager.getLogger(SqliteDBCreator.class);
 
-    static public void main(String[] args) {
+    static public void testermain(String[] args) {
         final String dbPath = "ist303.db";
 
         log.info("Creating sqlite3 database at {}", dbPath);
@@ -24,17 +24,6 @@ public class SqliteDBCreator {
         db.createTables(dbPath);
 
         ArrayList<CampSession> sessions = db.createCampSessions(dbPath);
-        int camperId = db.insertCamper(dbPath);
-
-        DAOFactor.dbPath = dbPath;
-        CamperRegistrationDAO regDAO = DAOFactor.createCamperRegistrationDAO();
-        CamperRegistration reg = new CamperRegistration();
-        reg.setCamperId(camperId);
-        reg.setCampSessionId(sessions.get(0).getCampSessioId());
-
-        try {
-            regDAO.insert(reg);
-        } catch (Exception e) { log.error(e); }
     }
 
     public ArrayList<CampSession> createCampSessions(String dbPath) {
@@ -78,37 +67,6 @@ public class SqliteDBCreator {
         } catch (Exception e) { log.error(e); }
 
         return sessions;
-    }
-
-    public int insertCamper(String dbPath) {
-        DAOFactor.dbPath = dbPath;
-        CamperDAO camperDAO = DAOFactor.createCamperDAO();
-
-        Camper camper = new Camper();
-        camper.setFirstName("William");
-        camper.setMiddleName("Michael");
-        camper.setLastName("Isley");
-        camper.setAge(9);
-        camper.setGender(Camper.Gender.Male);
-        camper.setAptNumber("");
-        camper.setStreetNumber("380");
-        camper.setStreet("New York St.");
-        camper.setCity("Redlands");
-        camper.setState("CA");
-        camper.setZipCode("91791");
-        camper.setRpFirstName("Bobby");
-        camper.setFirstName("");
-        camper.setRpLastName("Boon");
-
-        try {
-            log.debug("Inserting camper record");
-            int camperId = camperDAO.insertCamper(camper);
-            camper.setCamperId(camperId);
-        } catch (Exception e) {
-            log.error(e);
-        }
-
-        return camper.getCamperId();
     }
 
     public void deleteDabaseFile(String filepath) {
