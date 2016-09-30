@@ -24,7 +24,17 @@ public class SqliteDBCreator {
         db.createTables(dbPath);
 
         ArrayList<CampSession> sessions = db.createCampSessions(dbPath);
-        db.insertCamper(dbPath);
+        int camperId = db.insertCamper(dbPath);
+
+        DAOFactor.dbPath = dbPath;
+        CamperRegistrationDAO regDAO = DAOFactor.createCamperRegistrationDAO();
+        CamperRegistration reg = new CamperRegistration();
+        reg.setCamperId(camperId);
+        reg.setCampSessionId(sessions.get(0).getCampSessioId());
+
+        try {
+            regDAO.insert(reg);
+        } catch (Exception e) { log.error(e); }
     }
 
     public ArrayList<CampSession> createCampSessions(String dbPath) {
@@ -70,7 +80,7 @@ public class SqliteDBCreator {
         return sessions;
     }
 
-    public void insertCamper(String dbPath) {
+    public int insertCamper(String dbPath) {
         DAOFactor.dbPath = dbPath;
         CamperDAO camperDAO = DAOFactor.createCamperDAO();
 
@@ -92,10 +102,13 @@ public class SqliteDBCreator {
 
         try {
             log.debug("Inserting camper record");
-            camperDAO.insertCamper(camper);
+            int camperId = camperDAO.insertCamper(camper);
+            camper.setCamperId(camperId);
         } catch (Exception e) {
             log.error(e);
         }
+
+        return camper.getCamperId();
     }
 
     public void deleteDabaseFile(String filepath) {

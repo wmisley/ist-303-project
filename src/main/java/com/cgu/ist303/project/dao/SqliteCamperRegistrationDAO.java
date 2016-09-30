@@ -38,9 +38,6 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         log.debug(sql);
 
         stmt.executeUpdate(sql);
-        ResultSet rs = stmt.getGeneratedKeys();
-        int camperId = rs.getInt(1);
-        log.info("Camp Session ID is {}", camperId);
 
         stmt.close();
         c.commit();
