@@ -1,8 +1,11 @@
 package com.cgu.ist303.project.dao.sqlite;
 
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
+import com.cgu.ist303.project.dao.TribeDAO;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.CampSessionDAO;
 import com.cgu.ist303.project.dao.DAOFactor;
+import com.cgu.ist303.project.dao.model.Tribe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +30,44 @@ public class SqliteDBCreator {
         db.createTables(dbPath);
 
         ArrayList<CampSession> sessions = db.createCampSessions(dbPath);
+    }
+
+    public ArrayList<Tribe> createTribes(String dbPath) {
+        ArrayList<Tribe> tribes = new ArrayList<Tribe>();
+
+        DAOFactor.dbPath = dbPath;
+        TribeDAO tribeDAO = DAOFactor.createTribeDAO();
+
+        Tribe tribe = new Tribe();
+        tribe.setCampYear(2016);
+        tribe.setTribeName("Tribe 1");
+
+        try {
+            tribe.setTribeId(tribeDAO.insert(tribe));
+            tribes.add(tribe);
+
+            tribe = new Tribe();
+            tribe.setCampYear(2016);
+            tribe.setTribeName("Tribe 2");
+            tribe.setTribeId(tribeDAO.insert(tribe));
+            tribes.add(tribe);
+
+            tribe = new Tribe();
+            tribe.setCampYear(2016);
+            tribe.setTribeName("Tribe 3");
+            tribe.setTribeId(tribeDAO.insert(tribe));
+            tribes.add(tribe);
+
+            tribe = new Tribe();
+            tribe.setCampYear(2016);
+            tribe.setTribeName("Tribe 4");
+            tribe.setTribeId(tribeDAO.insert(tribe));
+            tribes.add(tribe);
+        } catch (Exception e) {
+            log.error(e);
+        }
+
+        return tribes;
     }
 
     public ArrayList<CampSession> createCampSessions(String dbPath) {
