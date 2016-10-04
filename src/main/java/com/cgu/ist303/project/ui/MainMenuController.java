@@ -60,7 +60,7 @@ public class MainMenuController {
         camper.setRpMiddleName(parentMiddleName.getText());
         camper.setRpLastName(parentLastName.getText());
 
-        if (age.getSelectionModel().getSelectedIndex() > 0) {
+        if (age.getSelectionModel().getSelectedIndex() >= 0) {
             camper.setAge(Integer.parseInt(age.getSelectionModel().getSelectedItem()));
         } else {
             throw new Exception("Age not specified");

@@ -12,7 +12,7 @@
       <Label layoutX="28.0" layoutY="24.0" text="Camper Name" />
       <TextField fx:id="camperMiddleName" layoutX="211.0" layoutY="49.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Middle" />
       <TextField fx:id="camperLastName" layoutX="400.0" layoutY="49.0" promptText="Last" />
-      <TextField fx:id="parentlastName" layoutX="401.0" layoutY="153.0" promptText="Last" />
+      <TextField fx:id="parentLastName" layoutX="401.0" layoutY="153.0" promptText="Last" />
       <TextField fx:id="parentMiddleName" layoutX="212.0" layoutY="153.0" promptText="Middle" />
       <Label layoutX="29.0" layoutY="128.0" text="Responsible Party Name" />
       <TextField fx:id="parentFirstName" layoutX="29.0" layoutY="153.0" promptText="First" />
