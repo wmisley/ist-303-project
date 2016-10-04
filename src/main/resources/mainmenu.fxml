@@ -60,6 +60,6 @@
          </items>
       </ComboBox>
       <Button fx:id="save" layoutX="453.0" layoutY="428.0" mnemonicParsing="false" onAction="#saveClicked" text="Save" />
-      <Button fx:id="cancel" layoutX="517.0" layoutY="428.0" mnemonicParsing="false" text="Canel" />
+      <Button fx:id="cancel" layoutX="517.0" layoutY="428.0" mnemonicParsing="false" text="Cancel" />
    </children>
 </AnchorPane>
