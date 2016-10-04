@@ -66,12 +66,18 @@ public class MainMenuController {
             throw new Exception("Age not specified");
         }
 
-        if (age.getSelectionModel().getSelectedIndex() == 0) {
+        if (gender.getSelectionModel().getSelectedIndex() == 0) {
             camper.setGender(Camper.Gender.Male);
-        } else if (age.getSelectionModel().getSelectedIndex() == 1) {
+        } else if (gender.getSelectionModel().getSelectedIndex() == 1) {
             camper.setGender(Camper.Gender.Female);
         } else {
             throw new Exception("Gender not specified");
+        }
+
+        if (state.getSelectionModel().getSelectedIndex() >= 0) {
+            camper.setState(state.getSelectionModel().getSelectedItem());
+        } else {
+            throw new Exception("State not specified");
         }
 
         camper.setStreet(streetLine1.getText());
