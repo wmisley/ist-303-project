@@ -8,7 +8,6 @@ public class Payment {
         return amount;
     }
 
-    //TODO: impliment this
     public void setAmount(double amount) {
         this.amount = amount;
     }
