@@ -11,7 +11,7 @@
       <TextField fx:id="camperFirstName" layoutX="28.0" layoutY="49.0" promptText="First" />
       <Label layoutX="28.0" layoutY="24.0" text="Camper Name" />
       <TextField fx:id="camperMiddleName" layoutX="211.0" layoutY="49.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Middle" />
-      <TextField fx:id="camperLastNam" layoutX="400.0" layoutY="49.0" promptText="Last" />
+      <TextField fx:id="camperLastName" layoutX="400.0" layoutY="49.0" promptText="Last" />
       <TextField fx:id="parentlastName" layoutX="401.0" layoutY="153.0" promptText="Last" />
       <TextField fx:id="parentMiddleName" layoutX="212.0" layoutY="153.0" promptText="Middle" />
       <Label layoutX="29.0" layoutY="128.0" text="Responsible Party Name" />
@@ -35,7 +35,7 @@
       <Label layoutX="26.0" layoutY="392.0" text="(" />
       <Label layoutX="110.0" layoutY="392.0" text=")" />
       <Label layoutX="195.0" layoutY="392.0" text="-" />
-      <ComboBox fx:id="camperAge" layoutX="28.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="Age">
+      <ComboBox fx:id="age" layoutX="28.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="Age">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="9" />
@@ -51,7 +51,7 @@
             </FXCollections>
          </items>
       </ComboBox>
-      <ComboBox fx:id="camperGender" layoutX="211.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="Gender">
+      <ComboBox fx:id="gender" layoutX="211.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="Gender">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="M" />
