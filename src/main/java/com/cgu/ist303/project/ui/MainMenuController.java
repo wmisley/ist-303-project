@@ -1,21 +1,28 @@
 package com.cgu.ist303.project.ui;
 
+import com.cgu.ist303.project.dao.CampSessionDAO;
 import com.cgu.ist303.project.dao.CamperDAO;
-import com.cgu.ist303.project.dao.DAOFactor;
+import com.cgu.ist303.project.dao.DAOFactory;
+import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.drivers.DAOTeser;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.rmi.server.ExportException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by will4769 on 10/3/16.
  */
-public class MainMenuController {
+public class MainMenuController implements Initializable {
     private static final Logger log = LogManager.getLogger(MainMenuController.class);
 
     @FXML
@@ -50,6 +57,35 @@ public class MainMenuController {
     private TextField phone2;
     @FXML
     private TextField phone3;
+    @FXML
+    private ComboBox<String> session;
+
+    public void initialize(URL url, ResourceBundle rb) {
+        DAOFactory.dbPath = "ist303.db";
+        List<CampSession> sessionList = new ArrayList<CampSession>();
+
+        try {
+            log.debug("Querying camp sessions");
+
+            CampSessionDAO sessionDAO = DAOFactory.createCampSessionDAO();
+            sessionList = sessionDAO.query(2016);
+        } catch (Exception e) {
+            log.error(e);
+        }
+
+        List<String> list = new ArrayList<String>();
+
+        for (CampSession session : sessionList) {
+            String sessionValue = String.format("%d/%d to %d/%d",
+                    session.getStartDay(), session.getStartMonth(),
+                    session.getEndMonth(), session.getEndDay());
+            list.add(sessionValue);
+        }
+
+        ObservableList obList = FXCollections.observableList(list);
+        session.getItems().clear();
+        session.setItems(obList);
+    }
 
     public void saveClicked() throws Exception {
         Camper camper = new Camper();
@@ -83,11 +119,9 @@ public class MainMenuController {
         camper.setStreet(streetLine1.getText());
         camper.setCity(city.getText());
         camper.setZipCode(zip.getText());
-
         camper.setPhoneNumber(phone1.getText() + phone2.getText() + phone3.getText());
 
-        DAOFactor.dbPath = "ist303.db";
-        CamperDAO camperDAO = DAOFactor.createCamperDAO();
+        CamperDAO camperDAO = DAOFactory.createCamperDAO();
 
         try {
             log.debug("Inserting new camper record");

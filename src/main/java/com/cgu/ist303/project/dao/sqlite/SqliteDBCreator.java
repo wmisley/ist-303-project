@@ -1,10 +1,9 @@
 package com.cgu.ist303.project.dao.sqlite;
 
-import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.TribeDAO;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.CampSessionDAO;
-import com.cgu.ist303.project.dao.DAOFactor;
+import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.Tribe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,8 +34,8 @@ public class SqliteDBCreator {
     public ArrayList<Tribe> createTribes(String dbPath) {
         ArrayList<Tribe> tribes = new ArrayList<Tribe>();
 
-        DAOFactor.dbPath = dbPath;
-        TribeDAO tribeDAO = DAOFactor.createTribeDAO();
+        DAOFactory.dbPath = dbPath;
+        TribeDAO tribeDAO = DAOFactory.createTribeDAO();
 
         Tribe tribe = new Tribe();
         tribe.setCampYear(2016);
@@ -72,8 +71,8 @@ public class SqliteDBCreator {
 
     public ArrayList<CampSession> createCampSessions(String dbPath) {
         ArrayList<CampSession> sessions = new ArrayList<CampSession>();
-        DAOFactor.dbPath = dbPath;
-        CampSessionDAO sessionDAO = DAOFactor.createCampSessionDAO();
+        DAOFactory.dbPath = dbPath;
+        CampSessionDAO sessionDAO = DAOFactory.createCampSessionDAO();
 
         //TODO: Camps are in the 2nd and 3rd week of the month
         //TODO: Need to verify starts on Sunday, ends on Saturday
@@ -173,12 +172,12 @@ public class SqliteDBCreator {
         Statement stmt = c.createStatement();
         String sql = "CREATE TABLE CAMP_SESSIONS " +
                 "(CAMP_SESSION_ID   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                " CAMP_YEAR           INTEGER NOT NULL, " +
-                " START_MONTH          INTEGER NOT NULL, " +
-                " START_DAY            INTEGER NOT NULL, " +
-                " END_MONTH            INTEGER NOT NULL, " +
-                " END_DAY            INTEGER NOT NULL, " +
-                " GENDER_LIMIT        INTEGER NOT NULL, " +
+                " CAMP_YEAR         INTEGER NOT NULL, " +
+                " START_MONTH       INTEGER NOT NULL, " +
+                " START_DAY         INTEGER NOT NULL, " +
+                " END_MONTH         INTEGER NOT NULL, " +
+                " END_DAY           INTEGER NOT NULL, " +
+                " GENDER_LIMIT      INTEGER NOT NULL, " +
                 " CONSTRAINT CAMPER_SESSION_UNIQUE_KEY UNIQUE (CAMP_YEAR, START_MONTH, START_DAY))";
         log.debug(sql);
         stmt.executeUpdate(sql);

@@ -40,8 +40,8 @@ public class DAOTeser {
     }
 
     public void registerCamper(String dbPath, ArrayList<CampSession> sessions, int camperId) {
-        DAOFactor.dbPath = dbPath;
-        CamperRegistrationDAO regDAO = DAOFactor.createCamperRegistrationDAO();
+        DAOFactory.dbPath = dbPath;
+        CamperRegistrationDAO regDAO = DAOFactory.createCamperRegistrationDAO();
         CamperRegistration reg = new CamperRegistration();
         reg.setCamperId(camperId);
         reg.setCampSessionId(sessions.get(0).getCampSessioId());
@@ -52,8 +52,8 @@ public class DAOTeser {
     }
 
     public int saveCamper(String dbPath) {
-        DAOFactor.dbPath = dbPath;
-        CamperDAO camperDAO = DAOFactor.createCamperDAO();
+        DAOFactory.dbPath = dbPath;
+        CamperDAO camperDAO = DAOFactory.createCamperDAO();
 
         Camper camper = new Camper();
         camper.setFirstName("Joseph");

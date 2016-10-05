@@ -5,7 +5,7 @@ import com.cgu.ist303.project.dao.sqlite.SqliteCamperDAO;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.dao.sqlite.SqliteTribeDAO;
 
-public class DAOFactor {
+public class DAOFactory {
     static public String dbPath = "ist303.db";
 
     static public CamperDAO createCamperDAO() {

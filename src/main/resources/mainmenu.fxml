@@ -21,7 +21,7 @@
       <TextField fx:id="streetLine2" layoutX="29.0" layoutY="269.0" prefHeight="27.0" prefWidth="541.0" promptText="Street Line 2" />
       <TextField fx:id="city" layoutX="28.0" layoutY="314.0" prefHeight="27.0" prefWidth="218.0" promptText="City" />
       <TextField fx:id="zip" layoutX="418.0" layoutY="314.0" prefHeight="27.0" prefWidth="150.0" promptText="Zipcode" />
-      <ComboBox fx:id="state" layoutX="257.0" layoutY="314.0" prefWidth="150.0" promptText="State">
+      <ComboBox fx:id="state" layoutX="257.0" layoutY="314.0" prefWidth="150.0" promptText="- Choose State -">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="CA" />
@@ -35,7 +35,7 @@
       <Label layoutX="26.0" layoutY="392.0" text="(" />
       <Label layoutX="110.0" layoutY="392.0" text=")" />
       <Label layoutX="195.0" layoutY="392.0" text="-" />
-      <ComboBox fx:id="age" layoutX="28.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="Age">
+      <ComboBox fx:id="age" layoutX="28.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="- Choose Age -">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="9" />
@@ -51,7 +51,7 @@
             </FXCollections>
          </items>
       </ComboBox>
-      <ComboBox fx:id="gender" layoutX="211.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="Gender">
+      <ComboBox fx:id="gender" layoutX="211.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="- Choose Gender -">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="M" />
@@ -59,7 +59,9 @@
             </FXCollections>
          </items>
       </ComboBox>
-      <Button fx:id="save" layoutX="453.0" layoutY="428.0" mnemonicParsing="false" onAction="#saveClicked" text="Save" />
-      <Button fx:id="cancel" layoutX="517.0" layoutY="428.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="save" layoutX="440.0" layoutY="428.0" mnemonicParsing="false" onAction="#saveClicked" text="Save" />
+      <Button fx:id="cancel" layoutX="507.0" layoutY="428.0" mnemonicParsing="false" text="Cancel" />
+      <ComboBox fx:id="session" layoutX="312.0" layoutY="387.0" prefHeight="27.0" prefWidth="256.0" promptText="- Choose Session -" />
+      <Label layoutX="312.0" layoutY="361.0" text="Camp Session" />
    </children>
 </AnchorPane>
