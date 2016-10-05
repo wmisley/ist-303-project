@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="598.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.MainMenuController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="592.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.MainMenuController">
    <children>
       <TextField fx:id="camperFirstName" layoutX="28.0" layoutY="49.0" promptText="First" />
       <Label layoutX="28.0" layoutY="24.0" text="Camper Name" />
@@ -59,9 +59,14 @@
             </FXCollections>
          </items>
       </ComboBox>
-      <Button fx:id="save" layoutX="440.0" layoutY="428.0" mnemonicParsing="false" onAction="#saveClicked" text="Save" />
-      <Button fx:id="cancel" layoutX="507.0" layoutY="428.0" mnemonicParsing="false" text="Cancel" />
-      <ComboBox fx:id="session" layoutX="312.0" layoutY="387.0" prefHeight="27.0" prefWidth="256.0" promptText="- Choose Session -" />
-      <Label layoutX="312.0" layoutY="361.0" text="Camp Session" />
+      <Button fx:id="save" layoutX="445.0" layoutY="500.0" mnemonicParsing="false" onAction="#saveClicked" text="Save" />
+      <Button fx:id="cancel" layoutX="506.0" layoutY="501.0" mnemonicParsing="false" text="Cancel" />
+      <ComboBox fx:id="session" layoutX="29.0" layoutY="455.0" prefHeight="27.0" prefWidth="256.0" promptText="- Choose Session -" />
+      <Label layoutX="29.0" layoutY="429.0" text="Camp Session" />
+      <Label layoutX="349.0" layoutY="429.0" text="Payment Provided" />
+      <TextField fx:id="dollars" alignment="CENTER_RIGHT" layoutX="358.0" layoutY="455.0" prefHeight="27.0" prefWidth="76.0" promptText="0" />
+      <Label layoutX="439.0" layoutY="464.0" text="." />
+      <Label layoutX="341.0" layoutY="456.0" text="\$" />
+      <Label layoutX="447.0" layoutY="460.0" text="00" />
    </children>
 </AnchorPane>

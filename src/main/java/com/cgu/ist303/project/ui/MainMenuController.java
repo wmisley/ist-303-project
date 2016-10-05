@@ -2,9 +2,11 @@ package com.cgu.ist303.project.ui;
 
 import com.cgu.ist303.project.dao.CampSessionDAO;
 import com.cgu.ist303.project.dao.CamperDAO;
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
+import com.cgu.ist303.project.dao.model.CamperRegistration;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -60,8 +62,14 @@ public class MainMenuController implements Initializable {
     @FXML
     private ComboBox<String> session;
 
+    private List<CampSession> sessionList = null;
+
     public void initialize(URL url, ResourceBundle rb) {
         DAOFactory.dbPath = "ist303.db";
+        sessionList = loadCampSessions();
+    }
+
+    private List<CampSession>  loadCampSessions() {
         List<CampSession> sessionList = new ArrayList<CampSession>();
 
         try {
@@ -85,9 +93,11 @@ public class MainMenuController implements Initializable {
         ObservableList obList = FXCollections.observableList(list);
         session.getItems().clear();
         session.setItems(obList);
+
+        return sessionList;
     }
 
-    public void saveClicked() throws Exception {
+    private int insertCamperRecord() throws Exception {
         Camper camper = new Camper();
         camper.setFirstName(camperFirstName.getText());
         camper.setMiddleName(camperMiddleName.getText());
@@ -130,5 +140,33 @@ public class MainMenuController implements Initializable {
         } catch (Exception e) {
             log.error(e);
         }
+
+        return camper.getCamperId();
+    }
+
+    public void insertCamperRegistrationRecord(int camperId) throws Exception {
+        int index = session.getSelectionModel().getSelectedIndex();
+
+        if (index > 0) {
+            CamperRegistration cr = new CamperRegistration();
+            cr.setCampSessionId(sessionList.get(index).getCampSessioId());
+            cr.setCamperId(camperId);
+            CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
+            dao.insert(cr);
+        } else {
+            throw new Exception("Need to handle no selected session");
+        }
+    }
+
+    public void saveClicked() throws Exception {
+        //TODO: Check if camper exists
+        int camperId = insertCamperRecord();
+
+        //TODO: Check if camper registered
+        //TODO: Check if age limit reached
+        insertCamperRegistrationRecord(camperId);
+
+        //TODO: Insert payment
+        //TODO: If rejected, send rejection notice
     }
 }

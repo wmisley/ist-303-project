@@ -15,8 +15,8 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/mainmenu.fxml"));
-        primaryStage.setTitle("Camper Information");
-        primaryStage.setScene(new Scene(root, 600, 475));
+        primaryStage.setTitle("Camper Application Form");
+        primaryStage.setScene(new Scene(root, 600, 550));
         primaryStage.show();
     }
 }
