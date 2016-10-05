@@ -1,12 +1,10 @@
 package com.cgu.ist303.project.ui;
 
-import com.cgu.ist303.project.dao.CampSessionDAO;
-import com.cgu.ist303.project.dao.CamperDAO;
-import com.cgu.ist303.project.dao.CamperRegistrationDAO;
-import com.cgu.ist303.project.dao.DAOFactory;
+import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.dao.model.Payment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -61,6 +59,8 @@ public class MainMenuController implements Initializable {
     private TextField phone3;
     @FXML
     private ComboBox<String> session;
+    @FXML
+    private TextField dollars;
 
     private List<CampSession> sessionList = null;
 
@@ -86,7 +86,7 @@ public class MainMenuController implements Initializable {
         for (CampSession session : sessionList) {
             String sessionValue = String.format("%d/%d to %d/%d",
                     session.getStartDay(), session.getStartMonth(),
-                    session.getEndMonth(), session.getEndDay());
+                    session.getEndDay(), session.getEndMonth());
             list.add(sessionValue);
         }
 
@@ -144,29 +144,54 @@ public class MainMenuController implements Initializable {
         return camper.getCamperId();
     }
 
-    public void insertCamperRegistrationRecord(int camperId) throws Exception {
+    public int insertCamperRegistrationRecord(int camperId) throws Exception {
         int index = session.getSelectionModel().getSelectedIndex();
+        int campSessionId = -1;
 
         if (index > 0) {
+            campSessionId = sessionList.get(index).getCampSessioId();
+
             CamperRegistration cr = new CamperRegistration();
-            cr.setCampSessionId(sessionList.get(index).getCampSessioId());
+            cr.setCampSessionId(campSessionId);
             cr.setCamperId(camperId);
             CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
             dao.insert(cr);
         } else {
             throw new Exception("Need to handle no selected session");
         }
+
+        return campSessionId;
     }
 
+    public void insertPayment(int camperId, int sessionId) {
+        double payValue = Double.parseDouble(dollars.getText());
+
+        PaymentDAO dao = DAOFactory.createPaymentDAO();
+        Payment payment = new Payment();
+        payment.setCamperId(camperId);
+        payment.setCampSessionId(sessionId);
+        payment.setAmount(payValue);
+
+        try {
+            log.debug("Inserting payment record");
+            dao.insert(payment);
+        } catch (Exception e) {
+            log.error(e);
+        }
+    }
+
+
     public void saveClicked() throws Exception {
+        //TODO: validate form inputs
+
         //TODO: Check if camper exists
         int camperId = insertCamperRecord();
 
         //TODO: Check if camper registered
         //TODO: Check if age limit reached
-        insertCamperRegistrationRecord(camperId);
+        int sessionId = insertCamperRegistrationRecord(camperId);
 
-        //TODO: Insert payment
+        insertPayment(camperId, sessionId);
         //TODO: If rejected, send rejection notice
     }
 }

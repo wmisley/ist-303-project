@@ -13,6 +13,25 @@ public class Payment {
     }
 
     private double amount = 0.0;
+    private int camperId = 0;
+
+    public int getCampSessionId() {
+        return campSessionId;
+    }
+
+    public void setCampSessionId(int campSessionId) {
+        this.campSessionId = campSessionId;
+    }
+
+    public int getCamperId() {
+        return camperId;
+    }
+
+    public void setCamperId(int camperId) {
+        this.camperId = camperId;
+    }
+
+    private int campSessionId = 0;
 
     public Payment() {
     }
