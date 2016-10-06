@@ -44,21 +44,24 @@ public class Registrar {
         RejectedApplication ra = new RejectedApplication();
         ra.setCampSessionId(campSessionId);
         ra.setCamperId(camper.getCamperId());
-        ra.setReason(reason);
+
 
         if ( wasReceivedInAllowableTimeframe(session) ) {
             log.info("Application rejected, not received within allowable time frame");
             reason = RejectedApplication.RejectionReason.NotReceivedDuringAllowableTimeframe;
+            ra.setReason(reason);
 
             rejecteApplication(ra);
         } if ( isCamperAlreadyRegistered(camper, year) ) {
             log.info("Application rejected, camper already registered for the year");
             reason = RejectedApplication.RejectionReason.AlreadyRegisterForYear;
+            ra.setReason(reason);
 
             rejecteApplication(ra);
         } else if ( isGenderLimitReached(campSessionId, camper.getGender() ) ) {
             log.info("Application rejected, gender limit reached");
             reason = RejectedApplication.RejectionReason.GenderLimitReached;
+            ra.setReason(reason);
 
             rejecteApplication(ra);
         } else {
