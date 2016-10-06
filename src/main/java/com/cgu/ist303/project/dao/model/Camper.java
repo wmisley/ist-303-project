@@ -1,13 +1,21 @@
 package com.cgu.ist303.project.dao.model;
 
-/**
- * Created by will4769 on 9/24/16.
- */
+
 public class Camper {
     public enum Gender {
-        Male,
-        Female,
-        Unspecified
+        Male(0),
+        Female(1),
+        Unspecified(2);
+
+        private int value ;
+
+        Gender(int value) {
+            this.value = value ;
+        }
+
+        public int getValue() {
+            return this.value;
+        }
     }
 
     private int camperId = 0;

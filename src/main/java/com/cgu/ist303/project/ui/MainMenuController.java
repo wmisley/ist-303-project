@@ -1,10 +1,8 @@
 package com.cgu.ist303.project.ui;
 
 import com.cgu.ist303.project.dao.*;
-import com.cgu.ist303.project.dao.model.CampSession;
-import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.CamperRegistration;
-import com.cgu.ist303.project.dao.model.Payment;
+import com.cgu.ist303.project.dao.model.*;
+import com.cgu.ist303.project.registrar.Registrar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,9 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-/**
- * Created by will4769 on 10/3/16.
- */
+
 public class MainMenuController implements Initializable {
     private static final Logger log = LogManager.getLogger(MainMenuController.class);
 
@@ -61,26 +57,23 @@ public class MainMenuController implements Initializable {
     private ComboBox<String> session;
     @FXML
     private TextField dollars;
-
-    private List<CampSession> sessionList = null;
+    
+    private Registrar registrar = new Registrar();
 
     public void initialize(URL url, ResourceBundle rb) {
         DAOFactory.dbPath = "ist303.db";
-        sessionList = loadCampSessions();
-    }
-
-    private List<CampSession>  loadCampSessions() {
-        List<CampSession> sessionList = new ArrayList<CampSession>();
 
         try {
-            log.debug("Querying camp sessions");
-
-            CampSessionDAO sessionDAO = DAOFactory.createCampSessionDAO();
-            sessionList = sessionDAO.query(2016);
+            registrar.load(2016);
         } catch (Exception e) {
             log.error(e);
         }
 
+        loadCampSessions();
+    }
+
+    private void loadCampSessions() {
+        List<CampSession> sessionList = registrar.getSessions();
         List<String> list = new ArrayList<String>();
 
         for (CampSession session : sessionList) {
@@ -93,11 +86,9 @@ public class MainMenuController implements Initializable {
         ObservableList obList = FXCollections.observableList(list);
         session.getItems().clear();
         session.setItems(obList);
-
-        return sessionList;
     }
 
-    private int insertCamperRecord() throws Exception {
+    private Camper insertCamperRecord() throws Exception {
         Camper camper = new Camper();
         camper.setFirstName(camperFirstName.getText());
         camper.setMiddleName(camperMiddleName.getText());
@@ -141,21 +132,17 @@ public class MainMenuController implements Initializable {
             log.error(e);
         }
 
-        return camper.getCamperId();
+        return camper;
     }
 
-    public int insertCamperRegistrationRecord(int camperId) throws Exception {
+    public int registerCamper(Camper camper) throws Exception {
         int index = session.getSelectionModel().getSelectedIndex();
         int campSessionId = -1;
 
         if (index > 0) {
-            campSessionId = sessionList.get(index).getCampSessioId();
+            campSessionId = registrar.getSessions().get(index).getCampSessioId();
 
-            CamperRegistration cr = new CamperRegistration();
-            cr.setCampSessionId(campSessionId);
-            cr.setCamperId(camperId);
-            CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
-            dao.insert(cr);
+            registrar.processApplication(camper, campSessionId);
         } else {
             throw new Exception("Need to handle no selected session");
         }
@@ -185,13 +172,12 @@ public class MainMenuController implements Initializable {
         //TODO: validate form inputs
 
         //TODO: Check if camper exists
-        int camperId = insertCamperRecord();
+        Camper camper = insertCamperRecord();
 
         //TODO: Check if camper registered
-        //TODO: Check if age limit reached
-        int sessionId = insertCamperRegistrationRecord(camperId);
+        int sessionId = registerCamper(camper);
 
-        insertPayment(camperId, sessionId);
+        insertPayment(camper.getCamperId(), sessionId);
         //TODO: If rejected, send rejection notice
     }
 }
