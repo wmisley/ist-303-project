@@ -9,7 +9,8 @@ public class RejectedApplication {
         AlreadyRegisterForYear(1),
         GenderLimitReached(2),
         ApplicationIncomplete(3),
-        NotReceivedDuringAllowableTimeframe(4);
+        NotReceivedDuringAllowableTimeframe(4),
+        CamperNotInAgeRange(5);
 
         private int value ;
 

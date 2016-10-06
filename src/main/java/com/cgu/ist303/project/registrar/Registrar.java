@@ -12,7 +12,6 @@ import com.cgu.ist303.project.dao.model.RejectedApplication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -25,6 +25,8 @@
                <String fx:value="16" />
                <String fx:value="17" />
                <String fx:value="18" />
+               <String fx:value="Other" />
+               <String fx:value="Not Specified" />
             </FXCollections>
          </items>
       </ComboBox>

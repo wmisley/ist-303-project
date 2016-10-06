@@ -97,6 +97,7 @@ public class MainMenuController implements Initializable {
         camper.setRpMiddleName(parentMiddleName.getText());
         camper.setRpLastName(parentLastName.getText());
 
+        //10=other, 11=not specified
         if (age.getSelectionModel().getSelectedIndex() >= 0) {
             camper.setAge(Integer.parseInt(age.getSelectionModel().getSelectedItem()));
         } else {
