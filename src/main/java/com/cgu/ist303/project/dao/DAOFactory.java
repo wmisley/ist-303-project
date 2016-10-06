@@ -12,4 +12,5 @@ public class DAOFactory {
     static public CamperRegistrationDAO createCamperRegistrationDAO() { return new SqliteCamperRegistrationDAO(dbPath); }
     static public TribeDAO createTribeDAO() { return new SqliteTribeDAO(dbPath); }
     static public PaymentDAO createPaymentDAO() { return new SqlitePaymentDAO(dbPath); }
+    static public RejectedApplicationsDAO createRejectedApplicationsDAO() { return new SqliteRejectedApplicationDAO(dbPath); }
 }
