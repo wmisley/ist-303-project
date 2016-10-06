@@ -139,10 +139,11 @@ public class MainMenuController implements Initializable {
         int index = session.getSelectionModel().getSelectedIndex();
         int campSessionId = -1;
 
-        if (index > 0) {
-            campSessionId = registrar.getSessions().get(index).getCampSessioId();
+        if (index >= 0) {
+            CampSession campSession = registrar.getSessions().get(index);
+            campSessionId = campSession.getCampSessioId();
 
-            registrar.processApplication(camper, campSessionId);
+            registrar.processApplication(camper, campSession);
         } else {
             throw new Exception("Need to handle no selected session");
         }

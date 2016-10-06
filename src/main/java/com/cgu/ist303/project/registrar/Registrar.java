@@ -36,12 +36,25 @@ public class Registrar {
         return sessionList;
     }
 
-    public void processApplication(Camper camper, int campSessionId) throws  Exception {
-        if (isGenderLimitReached(campSessionId, camper.getGender()) ) {
-            RejectedApplication ra = new RejectedApplication();
-            ra.setCampSessionId(campSessionId);
-            ra.setCamperId(camper.getCamperId());
-            ra.setReason(RejectedApplication.RejectionReason.GenderLimitReached);
+    public RejectedApplication.RejectionReason processApplication(Camper camper, CampSession session) throws  Exception {
+        RejectedApplication.RejectionReason reason =
+                RejectedApplication.RejectionReason.NotRejected;
+        int campSessionId = session.getCampSessioId();
+        int year = session.getCampYear();
+
+        RejectedApplication ra = new RejectedApplication();
+        ra.setCampSessionId(campSessionId);
+        ra.setCamperId(camper.getCamperId());
+        ra.setReason(reason);
+
+        if ( isCamperAlreadyRegistered(camper, year) ) {
+            log.info("Application rejected, camper already registered for the year");
+            reason = RejectedApplication.RejectionReason.AlreadyRegisterForYear;
+
+            rejecteApplication(ra);
+        } else if ( isGenderLimitReached(campSessionId, camper.getGender() ) ) {
+            log.info("Application rejected, gender limit reached");
+            reason = RejectedApplication.RejectionReason.GenderLimitReached;
 
             rejecteApplication(ra);
         } else {
@@ -51,6 +64,13 @@ public class Registrar {
 
             registerCamper(cr);
         }
+
+        return reason;
+    }
+
+    private boolean isCamperAlreadyRegistered(Camper camper, int year) throws Exception {
+        CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
+        return dao.queryIsCamperRegisterdForYear(camper, year);
     }
 
     private boolean isGenderLimitReached(int campSessionId, Camper.Gender gender) throws Exception {

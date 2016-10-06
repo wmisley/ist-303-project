@@ -5,9 +5,10 @@ package com.cgu.ist303.project.dao.model;
  */
 public class RejectedApplication {
     public enum RejectionReason {
-        AlreadyRegister(0),
-        GenderLimitReached(1),
-        ApplicationIncomplete(2);
+        NotRejected(0),
+        AlreadyRegisterForYear(1),
+        GenderLimitReached(2),
+        ApplicationIncomplete(3);
 
         private int value ;
 

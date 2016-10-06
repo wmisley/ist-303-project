@@ -36,7 +36,7 @@ public class SqliteCamperDAO implements CamperDAO {
 
         sql = String.format(sql,
                 camper.getFirstName(), camper.getMiddleName(), camper.getLastName(),
-                camper.getGender() == Camper.Gender.Male ? 1 : 0, camper.getAge(), camper.getStreetNumber(),
+                camper.getGender().getValue(), camper.getAge(), camper.getStreetNumber(),
                 camper.getStreet(), camper.getAptNumber(), camper.getCity(), camper.getState(),
                 camper.getZipCode(), camper.getPhoneNumber(), camper.getRpFirstName(), camper.getRpMiddleName(),
                 camper.getRpLastName());
