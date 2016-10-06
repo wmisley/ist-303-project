@@ -8,7 +8,8 @@ public class RejectedApplication {
         NotRejected(0),
         AlreadyRegisterForYear(1),
         GenderLimitReached(2),
-        ApplicationIncomplete(3);
+        ApplicationIncomplete(3),
+        NotReceivedDuringAllowableTimeframe(4);
 
         private int value ;
 

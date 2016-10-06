@@ -12,9 +12,8 @@ import com.cgu.ist303.project.dao.model.RejectedApplication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Registrar {
@@ -47,7 +46,12 @@ public class Registrar {
         ra.setCamperId(camper.getCamperId());
         ra.setReason(reason);
 
-        if ( isCamperAlreadyRegistered(camper, year) ) {
+        if ( wasReceivedInAllowableTimeframe(session) ) {
+            log.info("Application rejected, not received within allowable time frame");
+            reason = RejectedApplication.RejectionReason.NotReceivedDuringAllowableTimeframe;
+
+            rejecteApplication(ra);
+        } if ( isCamperAlreadyRegistered(camper, year) ) {
             log.info("Application rejected, camper already registered for the year");
             reason = RejectedApplication.RejectionReason.AlreadyRegisterForYear;
 
@@ -66,6 +70,38 @@ public class Registrar {
         }
 
         return reason;
+    }
+
+    private boolean wasReceivedInAllowableTimeframe(CampSession session) {
+        Calendar calCampStart = Calendar.getInstance();
+        calCampStart.set(Calendar.DAY_OF_MONTH, session.getStartDay());
+        calCampStart.set(Calendar.MONTH, session.getStartMonth() - 1);
+        calCampStart.set(Calendar.YEAR, session.getCampYear());
+        log.debug("calCampStart:{}", calCampStart.getTime());
+
+        Calendar calEarliest = (Calendar) calCampStart.clone();
+        calEarliest.add(Calendar.MONTH, -8);
+        Date dateEarliest = calEarliest.getTime();
+        log.debug("calEarliest:{}", dateEarliest);
+
+        Calendar calLatest = (Calendar) calCampStart.clone();
+        calLatest.add(Calendar.MONTH, -2);
+        Date dateLatest = calLatest.getTime();
+        log.debug("dateLatest:{}", dateLatest);
+
+        Date dateToday = new Date();
+        Date dateAppReceived = dateToday;
+        boolean isAllowable = false;
+
+        if (dateAppReceived.before(dateEarliest)) {
+            log.debug("Application received to early, can't receive before {}", dateEarliest);
+        } else if (dateAppReceived.after(dateLatest)) {
+            log.debug("Application received to late, can't receive after {}", dateLatest);
+        } else {
+            isAllowable = true;
+        }
+
+        return isAllowable;
     }
 
     private boolean isCamperAlreadyRegistered(Camper camper, int year) throws Exception {

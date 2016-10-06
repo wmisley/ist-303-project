@@ -78,8 +78,8 @@ public class MainMenuController implements Initializable {
 
         for (CampSession session : sessionList) {
             String sessionValue = String.format("%d/%d to %d/%d",
-                    session.getStartDay(), session.getStartMonth(),
-                    session.getEndDay(), session.getEndMonth());
+                    session.getStartMonth(), session.getStartDay(),
+                    session.getEndMonth(), session.getEndDay());
             list.add(sessionValue);
         }
 
