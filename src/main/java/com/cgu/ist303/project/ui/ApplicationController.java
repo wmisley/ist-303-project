@@ -5,21 +5,27 @@ import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.registrar.Registrar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class MainMenuController implements Initializable {
-    private static final Logger log = LogManager.getLogger(MainMenuController.class);
+public class ApplicationController implements Initializable {
+    private static final Logger log = LogManager.getLogger(ApplicationController.class);
 
     @FXML
     private TextField camperFirstName;
@@ -70,6 +76,24 @@ public class MainMenuController implements Initializable {
         }
 
         loadCampSessions();
+    }
+
+    private Stage prevStage;
+
+    public void setPrevStage(Stage stage){
+        this.prevStage = stage;
+    }
+
+    public void showMenu(ActionEvent event) throws IOException {
+        Stage stage = new Stage();
+        stage.setTitle("Shop Management");
+        Pane myPane = FXMLLoader.load(getClass().getResource("/menu.fxml"));
+        Scene scene = new Scene(myPane);
+        stage.setScene(scene);
+
+        prevStage.close();
+
+        stage.show();
     }
 
     private void loadCampSessions() {
