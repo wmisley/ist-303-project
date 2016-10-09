@@ -11,6 +11,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
@@ -90,28 +92,56 @@ public class ApplicationController implements Initializable {
     }
 
     private boolean isFormComplete() {
-        String message = "The form is not complete. \n\n";
+        String message = "";
 
         if (camperFirstName.getLength() <= 0) {
-            message += "    - Camper First Name is blank";
+            message += "\n    - Camper First Name is blank";
         }
         if (camperLastName.getLength() <= 0) {
-            message += "    - Camper Last Name is blank";
+            message += "\n    - Camper Last Name is blank";
         }
         if (parentFirstName.getLength() <= 0) {
-            message += "    - Responsible Party First Name is blank";
+            message += "\n    - Responsible Party First Name is blank";
         }
         if (parentLastName.getLength() <= 0) {
-            message += "    - Responsible Party Last Name is blank";
+            message += "\n    - Responsible Party Last Name is blank";
         }
         if (age.getSelectionModel().getSelectedIndex() < 0) {
-            message += "    - Age is not specified";
+            message += "\n    - Age is not specified";
         }
-        if (age.getSelectionModel().getSelectedIndex() < 0) {
-            message += "    - Age is not specified";
+        if (gender.getSelectionModel().getSelectedIndex() < 0) {
+            message += "\n    - Gender is not specified";
+        }
+        if (streetLine1.getLength() <= 0) {
+            message += "\n    - Street Address Line 1 is blank";
+        }
+        if (city.getLength() <= 0) {
+            message += "\n    - City is blank";
+        }
+        if (zip.getLength() != 5) {
+            message += "\n    - Zipcode must be 5 numbers";
+        }
+        if (state.getSelectionModel().getSelectedIndex() < 0) {
+            message += "\n    - State is not specified";
+        }
+        if ((phone1.getLength() != 3) || (phone2.getLength() != 3) || (phone3.getLength() != 4)) {
+            message += "\n    - Phone must be 10 numbers";
+        }
+        if (session.getSelectionModel().getSelectedIndex() < 0) {
+            message += "\n    - Camp Session is not specified";
         }
 
-        return true;
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Form Validation");
+        alert.setHeaderText("The form is not complete");
+        alert.setContentText(message);
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+                System.out.println("Pressed OK.");
+            }
+        });
+
+        return (message.compareToIgnoreCase("") == 0);
     }
 
     public void cancelClicked() throws Exception {
@@ -217,15 +247,15 @@ public class ApplicationController implements Initializable {
 
 
     public void saveClicked() throws Exception {
-        //TODO: validate form inputs
+        if (isFormComplete()) {
+            //TODO: Check if camper exists
+            Camper camper = insertCamperRecord();
 
-        //TODO: Check if camper exists
-        Camper camper = insertCamperRecord();
+            //TODO: Check if camper registered
+            int sessionId = registerCamper(camper);
 
-        //TODO: Check if camper registered
-        int sessionId = registerCamper(camper);
-
-        insertPayment(camper.getCamperId(), sessionId);
-        //TODO: If rejected, send rejection notice
+            insertPayment(camper.getCamperId(), sessionId);
+            //TODO: If rejected, send rejection notice
+        }
     }
 }
