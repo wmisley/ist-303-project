@@ -18,10 +18,15 @@ public class Camper {
         }
     }
 
+    public static final int NOT_SPECIFIED = -1;
+    public static final int NOT_IN_AGE_RANGE = -2;
+
     private int camperId = 0;
     private String firstName = "";
     private String middleName = "";
     private String lastName = "";
+
+    //-1 = Not Specified, -2 Not in the age range for camp
     private int age = 0;
     private Gender gender = Gender.Unspecified;
     private String streetNumber = "";

@@ -6,15 +6,11 @@ import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
 import com.cgu.ist303.project.ui.controls.LimitedNumberTextField;
 import com.cgu.ist303.project.ui.controls.LimitedTextField;
-import com.cgu.ist303.project.ui.controls.NumberTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,7 +87,7 @@ public class ApplicationController implements Initializable {
         loadCampSessions();
     }
 
-    private boolean isFormComplete() {
+    private String getValidationMessage() {
         String message = "";
 
         if (camperFirstName.getLength() <= 0) {
@@ -131,17 +127,7 @@ public class ApplicationController implements Initializable {
             message += "\n    - Camp Session is not specified";
         }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Form Validation");
-        alert.setHeaderText("The form is not complete");
-        alert.setContentText(message);
-        alert.showAndWait().ifPresent(rs -> {
-            if (rs == ButtonType.OK) {
-                System.out.println("Pressed OK.");
-            }
-        });
-
-        return (message.compareToIgnoreCase("") == 0);
+        return message;
     }
 
     public void cancelClicked() throws Exception {
@@ -174,10 +160,14 @@ public class ApplicationController implements Initializable {
         camper.setRpLastName(parentLastName.getText());
 
         //10=other, 11=not specified
-        if (age.getSelectionModel().getSelectedIndex() >= 0) {
+        if (age.getSelectionModel().getSelectedIndex() == 10) {
+            camper.setAge(Camper.NOT_IN_AGE_RANGE);
+        } else if (age.getSelectionModel().getSelectedIndex() == 11) {
+            camper.setAge(Camper.NOT_SPECIFIED);
+        } else if (age.getSelectionModel().getSelectedIndex() >= 0) {
             camper.setAge(Integer.parseInt(age.getSelectionModel().getSelectedItem()));
         } else {
-            throw new Exception("Age not specified");
+            camper.setAge(Camper.NOT_SPECIFIED);
         }
 
         if (gender.getSelectionModel().getSelectedIndex() == 0) {
@@ -185,13 +175,15 @@ public class ApplicationController implements Initializable {
         } else if (gender.getSelectionModel().getSelectedIndex() == 1) {
             camper.setGender(Camper.Gender.Female);
         } else {
-            throw new Exception("Gender not specified");
+            camper.setGender(Camper.Gender.Unspecified);
         }
 
-        if (state.getSelectionModel().getSelectedIndex() >= 0) {
+        if (state.getSelectionModel().getSelectedIndex() == 50) {
+            camper.setState("");
+        } else if (state.getSelectionModel().getSelectedIndex() >= 0) {
             camper.setState(state.getSelectionModel().getSelectedItem());
         } else {
-            throw new Exception("State not specified");
+            camper.setState("");
         }
 
         camper.setStreet(streetLine1.getText());
@@ -207,6 +199,10 @@ public class ApplicationController implements Initializable {
             camper.setCamperId(camperId);
         } catch (Exception e) {
             log.error(e);
+
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setContentText(e.getMessage());
+            errorAlert.showAndWait();
         }
 
         return camper;
@@ -220,9 +216,14 @@ public class ApplicationController implements Initializable {
             CampSession campSession = registrar.getSessions().get(index);
             campSessionId = campSession.getCampSessioId();
 
-            registrar.processApplication(camper, campSession);
+            RejectedApplication.RejectionReason rejectReason =
+                    registrar.processApplication(camper, campSession);
+
+            if (rejectReason == RejectedApplication.RejectionReason.NotRejected) {
+                insertPayment(camper.getCamperId(), campSessionId);
+            }
         } else {
-            throw new Exception("Need to handle no selected session");
+            throw new Exception("No session selected");
         }
 
         return campSessionId;
@@ -242,20 +243,44 @@ public class ApplicationController implements Initializable {
             dao.insert(payment);
         } catch (Exception e) {
             log.error(e);
+
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setContentText(e.getMessage());
+            errorAlert.showAndWait();
         }
     }
 
 
     public void saveClicked() throws Exception {
-        if (isFormComplete()) {
-            //TODO: Check if camper exists
-            Camper camper = insertCamperRecord();
+        String message = getValidationMessage();
 
-            //TODO: Check if camper registered
-            int sessionId = registerCamper(camper);
+        if (!message.equalsIgnoreCase("")) {
+            log.debug("Form not complete, prompting user to reject application or complete form");
+            message = "Press OK to reject the application, press Cancel to go back.\n" + message;
 
-            insertPayment(camper.getCamperId(), sessionId);
-            //TODO: If rejected, send rejection notice
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Form Not Complete");
+            alert.setHeaderText("If the form is not completed, the application will be rejected.");
+            alert.setContentText(message);
+            alert.showAndWait().ifPresent(rs -> {
+                if (rs == ButtonType.OK) {
+                    try {
+                        //TODO: Check if camper exists
+                        Camper camper = insertCamperRecord();
+
+                        //TODO: Check if camper registered
+                        int sessionId = registerCamper(camper);
+                    } catch (Exception e) {
+                        log.error(e);
+
+                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                        errorAlert.setContentText(e.getMessage());
+                        errorAlert.showAndWait();
+                    }
+                }
+            });
         }
+
+        //TODO: Reject application if it isn't compete
     }
 }
