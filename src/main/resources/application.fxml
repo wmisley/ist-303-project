@@ -4,14 +4,16 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="592.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.ApplicationController">
+<?import com.cgu.ist303.project.ui.controls.LimitedTextField?>
+<?import com.cgu.ist303.project.ui.controls.NumberTextField?>
+<?import com.cgu.ist303.project.ui.controls.LimitedNumberTextField?>
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="592.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.ApplicationController">
    <children>
       <Label layoutX="28.0" layoutY="24.0" text="Camper Name" />
-      <TextField fx:id="camperFirstName" layoutX="28.0" layoutY="49.0" promptText="First" />
-      <TextField fx:id="camperMiddleName" layoutX="211.0" layoutY="49.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Middle" />
-      <TextField fx:id="camperLastName" layoutX="400.0" layoutY="49.0" promptText="Last" />
+      <LimitedTextField fx:id="camperFirstName" layoutX="28.0" layoutY="49.0" promptText="First" />
+      <LimitedTextField fx:id="camperMiddleName" layoutX="211.0" layoutY="49.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" promptText="Middle" />
+      <LimitedTextField fx:id="camperLastName" layoutX="400.0" layoutY="49.0" promptText="Last" />
       <ComboBox fx:id="age" layoutX="28.0" layoutY="92.0" prefHeight="27.0" prefWidth="167.0" promptText="- Choose Age -">
          <items>
             <FXCollections fx:factory="observableArrayList">
@@ -35,38 +37,89 @@
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="M" />
                <String fx:value="F" />
+               <String fx:value="Not Specified" />
             </FXCollections>
          </items>
       </ComboBox>
       <Label layoutX="29.0" layoutY="128.0" text="Responsible Party Name" />
-      <TextField fx:id="parentFirstName" layoutX="29.0" layoutY="153.0" promptText="First" />
-      <TextField fx:id="parentMiddleName" layoutX="212.0" layoutY="153.0" promptText="Middle" />
-      <TextField fx:id="parentLastName" layoutX="401.0" layoutY="153.0" promptText="Last" />
+      <LimitedTextField fx:id="parentFirstName" layoutX="29.0" layoutY="153.0" promptText="First" />
+      <LimitedTextField fx:id="parentMiddleName" layoutX="212.0" layoutY="153.0" promptText="Middle" />
+      <LimitedTextField fx:id="parentLastName" layoutX="401.0" layoutY="153.0" promptText="Last" />
       <Label layoutX="29.0" layoutY="197.0" text="Address" />
-      <TextField fx:id="streetLine1" layoutX="29.0" layoutY="225.0" prefHeight="27.0" prefWidth="541.0" promptText="Street Line 1" />
-      <TextField fx:id="streetLine2" layoutX="29.0" layoutY="269.0" prefHeight="27.0" prefWidth="541.0" promptText="Street Line 2" />
-      <TextField fx:id="city" layoutX="28.0" layoutY="314.0" prefHeight="27.0" prefWidth="218.0" promptText="City" />
+      <LimitedTextField fx:id="streetLine1" layoutX="29.0" layoutY="225.0" prefHeight="27.0" prefWidth="541.0" promptText="Street Line 1" />
+      <LimitedTextField fx:id="streetLine2" layoutX="29.0" layoutY="269.0" prefHeight="27.0" prefWidth="541.0" promptText="Street Line 2" />
+      <LimitedTextField fx:id="city" layoutX="28.0" layoutY="314.0" prefHeight="27.0" prefWidth="218.0" promptText="City" />
       <ComboBox fx:id="state" layoutX="257.0" layoutY="314.0" prefWidth="150.0" promptText="- Choose State -">
          <items>
             <FXCollections fx:factory="observableArrayList">
+               <String fx:value="AK" />
+               <String fx:value="AL" />
+               <String fx:value="AZ" />
+               <String fx:value="AR" />
                <String fx:value="CA" />
+               <String fx:value="CO" />
+               <String fx:value="CT" />
+               <String fx:value="DE" />
+               <String fx:value="FL" />
+               <String fx:value="GA" />
+               <String fx:value="HI" />
+               <String fx:value="ID" />
+               <String fx:value="IL" />
+               <String fx:value="IN" />
+               <String fx:value="IA" />
+               <String fx:value="KS" />
+               <String fx:value="KY" />
+               <String fx:value="LA" />
+               <String fx:value="ME" />
+               <String fx:value="MD" />
+               <String fx:value="MA" />
+               <String fx:value="MI" />
+               <String fx:value="MN" />
+               <String fx:value="MS" />
+               <String fx:value="MO" />
+               <String fx:value="MT" />
+               <String fx:value="NE" />
+               <String fx:value="NV" />
+               <String fx:value="NH" />
+               <String fx:value="NJ" />
+               <String fx:value="NM" />
+               <String fx:value="NY" />
+               <String fx:value="NC" />
+               <String fx:value="ND" />
+               <String fx:value="OH" />
+               <String fx:value="OK" />
+               <String fx:value="OR" />
+               <String fx:value="PA" />
+               <String fx:value="RI" />
+               <String fx:value="SC" />
+               <String fx:value="SD" />
+               <String fx:value="TN" />
+               <String fx:value="TX" />
+               <String fx:value="UT" />
+               <String fx:value="VT" />
+               <String fx:value="VA" />
+               <String fx:value="WA" />
+               <String fx:value="WV" />
+               <String fx:value="WI" />
+               <String fx:value="WY" />
+               <String fx:value="Not Specified" />
             </FXCollections>
          </items>
       </ComboBox>
-      <TextField fx:id="zip" layoutX="418.0" layoutY="314.0" prefHeight="27.0" prefWidth="150.0" promptText="Zipcode" />
+      <LimitedNumberTextField fx:id="zip" layoutX="418.0" layoutY="314.0" prefHeight="27.0" prefWidth="150.0" promptText="Zipcode" />
       <Label layoutX="29.0" layoutY="361.0" text="Phone Number" />
       <Label layoutX="26.0" layoutY="392.0" text="(" />
-      <TextField fx:id="phone1" layoutX="35.0" layoutY="387.0" prefHeight="27.0" prefWidth="70.0" />
+      <LimitedNumberTextField fx:id="phone1" layoutX="35.0" layoutY="387.0" prefHeight="27.0" prefWidth="70.0" />
       <Label layoutX="110.0" layoutY="392.0" text=")" />
-      <TextField fx:id="phone2" layoutX="122.0" layoutY="387.0" prefHeight="27.0" prefWidth="70.0" />
+      <LimitedNumberTextField fx:id="phone2" layoutX="122.0" layoutY="387.0" prefHeight="27.0" prefWidth="70.0" />
       <Label layoutX="195.0" layoutY="392.0" text="-" />
-      <TextField fx:id="phone3" layoutX="207.0" layoutY="387.0" prefHeight="27.0" prefWidth="88.0" />
+      <LimitedNumberTextField fx:id="phone3" layoutX="207.0" layoutY="387.0" prefHeight="27.0" prefWidth="88.0" />
       <ComboBox fx:id="session" layoutX="29.0" layoutY="455.0" prefHeight="27.0" prefWidth="256.0" promptText="- Choose Session -" />
       <Label layoutX="29.0" layoutY="429.0" text="Camp Session" />
       <Label layoutX="349.0" layoutY="429.0" text="Payment Provided" />
-      <TextField fx:id="dollars" alignment="CENTER_RIGHT" layoutX="358.0" layoutY="455.0" prefHeight="27.0" prefWidth="76.0" promptText="0" />
+      <LimitedNumberTextField fx:id="dollars" alignment="CENTER_RIGHT" layoutX="358.0" layoutY="455.0" prefHeight="27.0" prefWidth="76.0" promptText="0" />
       <Button fx:id="save" layoutX="445.0" layoutY="500.0" mnemonicParsing="false" onAction="#saveClicked" text="Save" />
-      <Button fx:id="cancel" layoutX="506.0" layoutY="501.0" mnemonicParsing="false" onAction="#showMenu" text="Cancel" />
+      <Button fx:id="cancel" layoutX="506.0" layoutY="501.0" mnemonicParsing="false" onAction="#cancelClicked" text="Cancel" />
       <Label layoutX="439.0" layoutY="464.0" text="." />
       <Label layoutX="341.0" layoutY="456.0" text="\$" />
       <Label layoutX="447.0" layoutY="460.0" text="00" />

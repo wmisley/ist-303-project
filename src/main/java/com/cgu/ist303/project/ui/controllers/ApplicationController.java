@@ -1,23 +1,21 @@
-package com.cgu.ist303.project.ui;
+package com.cgu.ist303.project.ui.controllers;
 
 import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.registrar.Registrar;
+import com.cgu.ist303.project.ui.UIManager;
+import com.cgu.ist303.project.ui.controls.LimitedNumberTextField;
+import com.cgu.ist303.project.ui.controls.LimitedTextField;
+import com.cgu.ist303.project.ui.controls.NumberTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,72 +26,96 @@ public class ApplicationController implements Initializable {
     private static final Logger log = LogManager.getLogger(ApplicationController.class);
 
     @FXML
-    private TextField camperFirstName;
+    private LimitedTextField camperFirstName;
     @FXML
-    private TextField camperMiddleName;
+    private LimitedTextField camperMiddleName;
     @FXML
-    private TextField camperLastName;
+    private LimitedTextField camperLastName;
     @FXML
-    private TextField parentFirstName;
+    private LimitedTextField parentFirstName;
     @FXML
-    private TextField parentMiddleName;
+    private LimitedTextField parentMiddleName;
     @FXML
-    private TextField parentLastName;
+    private LimitedTextField parentLastName;
     @FXML
-    private TextField streetLine1;
+    private LimitedTextField streetLine1;
     @FXML
-    private TextField streetLine2;
+    private LimitedTextField streetLine2;
     @FXML
-    private TextField city;
+    private LimitedTextField city;
     @FXML
     private ComboBox<String> state;
     @FXML
-    private TextField zip;
+    private LimitedNumberTextField zip;
     @FXML
     private ComboBox<String> gender;
     @FXML
     private ComboBox<String> age;
     @FXML
-    private TextField phone1;
+    private LimitedNumberTextField phone1;
     @FXML
-    private TextField phone2;
+    private LimitedNumberTextField phone2;
     @FXML
-    private TextField phone3;
+    private LimitedNumberTextField phone3;
     @FXML
     private ComboBox<String> session;
     @FXML
-    private TextField dollars;
+    private LimitedNumberTextField dollars;
     
     private Registrar registrar = new Registrar();
 
     public void initialize(URL url, ResourceBundle rb) {
-        DAOFactory.dbPath = "ist303.db";
-
         try {
             registrar.load(2016);
         } catch (Exception e) {
             log.error(e);
         }
 
+        camperFirstName.setMaxlength(25);
+        camperMiddleName.setMaxlength(25);
+        camperLastName.setMaxlength(25);
+        parentFirstName.setMaxlength(25);
+        parentMiddleName.setMaxlength(25);
+        parentLastName.setMaxlength(25);
+        streetLine1.setMaxlength(75);
+        streetLine2.setMaxlength(75);
+        city.setMaxlength(50);
+        zip.setMaxlength(5);
+        phone1.setMaxlength(3);
+        phone2.setMaxlength(3);
+        phone3.setMaxlength(4);
+        dollars.setMaxlength(5);
+
         loadCampSessions();
     }
 
-    private Stage prevStage;
+    private boolean isFormComplete() {
+        String message = "The form is not complete. \n\n";
 
-    public void setPrevStage(Stage stage){
-        this.prevStage = stage;
+        if (camperFirstName.getLength() <= 0) {
+            message += "    - Camper First Name is blank";
+        }
+        if (camperLastName.getLength() <= 0) {
+            message += "    - Camper Last Name is blank";
+        }
+        if (parentFirstName.getLength() <= 0) {
+            message += "    - Responsible Party First Name is blank";
+        }
+        if (parentLastName.getLength() <= 0) {
+            message += "    - Responsible Party Last Name is blank";
+        }
+        if (age.getSelectionModel().getSelectedIndex() < 0) {
+            message += "    - Age is not specified";
+        }
+        if (age.getSelectionModel().getSelectedIndex() < 0) {
+            message += "    - Age is not specified";
+        }
+
+        return true;
     }
 
-    public void showMenu(ActionEvent event) throws IOException {
-        Stage stage = new Stage();
-        stage.setTitle("Shop Management");
-        Pane myPane = FXMLLoader.load(getClass().getResource("/menu.fxml"));
-        Scene scene = new Scene(myPane);
-        stage.setScene(scene);
-
-        prevStage.close();
-
-        stage.show();
+    public void cancelClicked() throws Exception {
+        UIManager.getInstance().showMainMenu();
     }
 
     private void loadCampSessions() {
