@@ -5,6 +5,8 @@ import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.dao.CamperRegistrationDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -120,5 +122,45 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         c.close();
 
         return (regCount > 0);
+    }
+
+    public ObservableList<Camper> queryRegisteredCampers(int year) throws Exception {
+        ObservableList<Camper> list = FXCollections.observableArrayList();
+        Camper camper = null;
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+        stmt = c.createStatement();
+
+        String sql =
+            "SELECT C.*, CR.* " +
+            "FROM CAMPERS C, CAMP_REGISTRATION CR, CAMP_SESSIONS CS " +
+            "WHERE C.CAMPER_ID = CR.CAMPER_ID " +
+                "AND CR.CAMP_SESSION_ID = CS.CAMP_SESSION_ID " +
+                "AND  CS.CAMP_YEAR = %d";
+
+        sql = String.format(sql, year);
+        log.debug(sql);
+        ResultSet rs = stmt.executeQuery(sql);
+
+        while ( rs.next() ) {
+            camper = new Camper();
+            //camper.setCamperId(rs.getInt("CAMPER_ID"));
+            camper.setFirstName(rs.getString("FIRST_NAME"));
+            camper.setMiddleName(rs.getString("MIDDLE_NAME"));
+            camper.setLastName(rs.getString("LAST_NAME"));
+            camper.setPhoneNumber(rs.getString("PHONE_NUMBER"));
+
+            list.add(camper);
+        }
+
+        rs.close();
+        stmt.close();
+        c.close();
+
+        return list;
     }
 }

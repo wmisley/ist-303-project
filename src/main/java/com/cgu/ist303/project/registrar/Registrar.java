@@ -34,7 +34,8 @@ public class Registrar {
         return sessionList;
     }
 
-    public RejectedApplication.RejectionReason processApplication(Camper camper, CampSession session) throws  Exception {
+    public RejectedApplication.RejectionReason processApplication(Camper camper, CampSession session)
+            throws  Exception {
         RejectedApplication.RejectionReason reason =
                 RejectedApplication.RejectionReason.NotRejected;
         int campSessionId = session.getCampSessioId();

@@ -42,6 +42,40 @@ public class UIManager {
         stage.show();
     }
 
+    public void showPaymentScreen() throws Exception {
+        log.debug("Showing payment form");
+
+        Stage stage = new Stage();
+        stage.setTitle("Payment Form");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/payments.fxml"));
+
+        Pane pane = loader.load();
+        Scene scene = new Scene(pane, 600, 550);
+        stage.setScene(scene);
+
+        mainMenuStage.hide();
+        currentStage = stage;
+
+        stage.show();
+    }
+
+    public void showCheckinScreen() throws Exception {
+        log.debug("Showing check-in form");
+
+        Stage stage = new Stage();
+        stage.setTitle("Register Campers");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/checkin.fxml"));
+
+        Pane pane = loader.load();
+        Scene scene = new Scene(pane, 521, 515);
+        stage.setScene(scene);
+
+        mainMenuStage.hide();
+        currentStage = stage;
+
+        stage.show();
+    }
+
     public void showMainMenu() throws Exception {
         log.debug("Showing main menu form");
         currentStage.close();

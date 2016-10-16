@@ -20,4 +20,14 @@ public class MenuController implements Initializable {
         log.debug("User pressed \"Application\" button");
         UIManager.getInstance().showApplicationScreen();
     }
+
+    public void showPayments() throws Exception {
+        log.debug("User pressed \"Payments\" button");
+        UIManager.getInstance().showPaymentScreen();
+    }
+
+    public void showCheckIn() throws Exception {
+        log.debug("User pressed \"Check-in\" button");
+        UIManager.getInstance().showCheckinScreen();
+    }
 }

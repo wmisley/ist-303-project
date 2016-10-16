@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="521.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.CheckinController">
+   <children>
+      <TableView fx:id="campersTable" layoutX="35.0" layoutY="67.0" prefHeight="339.0" prefWidth="452.0" />
+      <Label layoutX="35.0" layoutY="38.0" text="Register Campers" />
+      <Button layoutX="413.0" layoutY="419.0" mnemonicParsing="false" text="Check-in" />
+      <Button layoutX="413.0" layoutY="463.0" mnemonicParsing="false" onAction="#cancelClicked" prefHeight="27.0" prefWidth="74.0" text="Back" />
+   </children>
+</AnchorPane>
