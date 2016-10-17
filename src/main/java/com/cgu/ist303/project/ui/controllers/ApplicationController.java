@@ -261,10 +261,17 @@ public class ApplicationController implements Initializable {
             if (rejectionReason != RejectedApplication.RejectionReason.NotRejected) {
                 promptForRejectionLetter(camper, cs, rejectionReason);
             } else {
-                promptIfRegisterAnotherCamper();
+                promptForAcceptancLetter(camper, cs);
+                //promptIfRegisterAnotherCamper();
             }
         } catch (Exception e) {
             displayErrorMessage("Error registering camper", e);
+        }
+
+        try {
+            cancelClicked();
+        } catch (Exception e) {
+            displayErrorMessage("Could not go back to main menu.", e);
         }
     }
 
@@ -302,6 +309,34 @@ public class ApplicationController implements Initializable {
         }
     }
 
+    private void promptForAcceptancLetter(Camper camper, CampSession cs) {
+        String message = "The application has been accepted and the applicant camper registered.\n\n" +
+                "Would you like to print the letter of acceptance now?";
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("");
+        alert.setHeaderText("");
+        alert.setContentText(message);
+
+        ButtonType buttonYes = new ButtonType("Yes");
+        ButtonType buttonNo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == buttonYes) {
+            LetterGenerator lg = new LetterGenerator();
+
+            try {
+                lg.createAcceptanceLetter("letter.pdf", camper, cs);
+                Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "letter.pdf"});
+
+                cancelClicked();
+            } catch (Exception e) {
+                displayErrorMessage("Could not generate letter of acceptance.", e);
+            }
+        }
+    }
+
     private void promptForRejectionLetter(Camper camper, CampSession cs, RejectedApplication.RejectionReason reason)
         throws Exception {
         String message = "The application has been rejected for the following reason:\n\n%s\n\n" +
@@ -334,12 +369,6 @@ public class ApplicationController implements Initializable {
                 } catch (Exception e) {
                     displayErrorMessage("Could not generate letter and launch Preview.", e);
                 }
-            }
-
-            try {
-                cancelClicked();
-            } catch (Exception e) {
-                displayErrorMessage("Could not go back to main menu", e);
             }
         });
     }

@@ -35,6 +35,36 @@ public class LetterGenerator {
         return address;
     }
 
+    public void createAcceptanceLetter(String filePath, Camper c, CampSession session) throws Exception {
+        String letter = "";
+
+        letter += getReturnAddressText();
+        letter += "\n";
+        letter += getSendAddressText(c, "");
+        letter += "\n";
+        letter += String.format("Dear %s %s,\n", c.getRpFirstName(), c.getRpLastName());
+        letter += "\n";
+
+        letter += String.format("We please to inform you that your application to the camp session starting on %d/%d/%d ",
+                session.getStartMonth(), session.getStartDay(), session.getCampYear());
+        letter += String.format("and ending on %d/%d/%d, has been accepted.\n\n",
+                session.getEndMonth(), session.getEndDay(), session.getCampYear());
+
+        letter += "\n";
+        letter += "Please review the enclosed packet for information and instructions on check-in. ";
+        letter += "We look forward to seeing you on the first day of camp.\n";
+        letter += "\n";
+        letter += "\n";
+        letter += "\n";
+        letter += "Bernard Trumble\n";
+        letter += "Camp Director\n";
+
+        log.debug("Generating acceptance letter:");
+        log.debug(letter);
+
+        createLetterPDFFile(filePath, letter, c);
+    }
+
     public void createRejectionLetter(String filePath, Camper c, CampSession session,
                                       RejectedApplication.RejectionReason reason) throws Exception {
         String letter = "";
@@ -85,10 +115,9 @@ public class LetterGenerator {
         log.debug(letter);
 
         createLetterPDFFile(filePath, letter, c);
-        createLetterPDFEnvelope("envelop.pdf", c);
     }
 
-    public void createLetterPDFFile(String filename, String text, Camper c) throws DocumentException, IOException {
+    private void createLetterPDFFile(String filename, String text, Camper c) throws DocumentException, IOException {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream(filename));
         document.open();
@@ -119,7 +148,7 @@ public class LetterGenerator {
         return cell;
     }
 
-    public void createLetterPDFEnvelope(String filename, Camper c) throws Exception {
+    private void createLetterPDFEnvelope(String filename, Camper c) throws Exception {
         Double width = 72 * 9.5;
         Double height = 72 *4.125;
         Rectangle envelope = new Rectangle(width.intValue(), height.intValue());
