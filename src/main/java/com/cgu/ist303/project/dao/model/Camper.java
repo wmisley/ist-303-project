@@ -18,6 +18,7 @@ public class Camper {
         }
     }
 
+    public static final int CAMPER_ID_NOT_IN_SYSTEM = -1;
     public static final int NOT_SPECIFIED = -1;
     public static final int NOT_IN_AGE_RANGE = -2;
 

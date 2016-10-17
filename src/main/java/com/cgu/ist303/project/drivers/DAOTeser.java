@@ -17,6 +17,16 @@ public class DAOTeser {
     private static final Logger log = LogManager.getLogger(DAOTeser.class);
 
     static public void main(String[] args) {
+        try {
+            Runtime.getRuntime().exec(new String[]{"open", "-a", "Microsoft Word" , "test.txt"});
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    static public void main2(String[] args) {
         final String dbPath = "ist303_test.db";
 
         //Create the database schema and populate camp sessions array for the year

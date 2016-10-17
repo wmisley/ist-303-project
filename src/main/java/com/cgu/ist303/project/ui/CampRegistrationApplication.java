@@ -1,6 +1,8 @@
 package com.cgu.ist303.project.ui;
 
 import com.cgu.ist303.project.dao.DAOFactory;
+import com.cgu.ist303.project.dao.model.CampSession;
+import com.cgu.ist303.project.dao.sqlite.SqliteDBCreator;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,10 +16,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class CampRegistrationApplication extends Application {
+    private static final Logger log = LogManager.getLogger(CampRegistrationApplication.class);
 
     public static void main(String[] args) {
         launch(args);
@@ -30,7 +37,23 @@ public class CampRegistrationApplication extends Application {
         //TODO: Uncomment this when the login dialog is needed
         //loginPrompt();
 
+        File f = new File(DAOFactory.dbPath);
+
+        if(!f.exists()) {
+            log.warn("Database does not exist at {}", DAOFactory.dbPath);
+            createDb(DAOFactory.dbPath);
+        }
+
         UIManager.getInstance().showMainMenu(primaryStage);
+    }
+
+    public ArrayList<CampSession> createDb(String dbPath) {
+        log.info("Creating sqlite3 database at {}", dbPath);
+
+        SqliteDBCreator db = new SqliteDBCreator();
+        db.deleteDabaseFile(dbPath);
+        db.createTables(dbPath);
+        return db.createCampSessions(dbPath);
     }
 
     public void loginPrompt() {

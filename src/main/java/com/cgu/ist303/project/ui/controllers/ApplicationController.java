@@ -2,6 +2,7 @@ package com.cgu.ist303.project.ui.controllers;
 
 import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.*;
+import com.cgu.ist303.project.registrar.LetterGenerator;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
 import com.cgu.ist303.project.ui.controls.LimitedNumberTextField;
@@ -64,7 +65,7 @@ public class ApplicationController implements Initializable {
 
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            registrar.load(2016);
+            registrar.load(2017);
         } catch (Exception e) {
             log.error(e);
         }
@@ -150,7 +151,7 @@ public class ApplicationController implements Initializable {
         session.setItems(obList);
     }
 
-    private Camper insertCamperRecord() throws Exception {
+    private Camper getCamperFromUIInputs() throws Exception {
         Camper camper = new Camper();
         camper.setFirstName(camperFirstName.getText());
         camper.setMiddleName(camperMiddleName.getText());
@@ -191,58 +192,70 @@ public class ApplicationController implements Initializable {
         camper.setZipCode(zip.getText());
         camper.setPhoneNumber(phone1.getText() + phone2.getText() + phone3.getText());
 
-        CamperDAO camperDAO = DAOFactory.createCamperDAO();
-
-        try {
-            log.debug("Inserting new camper record");
-            int camperId = camperDAO.insertCamper(camper);
-            camper.setCamperId(camperId);
-        } catch (Exception e) {
-            log.error(e);
-
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
-        }
-
         return camper;
     }
 
-    public int registerCamper(Camper camper) throws Exception {
+    private CampSession getCampSessionFromUI() {
+        int index = session.getSelectionModel().getSelectedIndex();
+        CampSession campSession = null;
+
+        if (index >= 0) {
+            campSession = registrar.getSessions().get(index);
+        }
+
+        return campSession;
+    }
+
+    public RejectedApplication.RejectionReason registerCamper(Camper camper) throws Exception {
         int index = session.getSelectionModel().getSelectedIndex();
         int campSessionId = -1;
+        RejectedApplication.RejectionReason rejectReason = RejectedApplication.RejectionReason.NotRejected;
 
         if (index >= 0) {
             CampSession campSession = registrar.getSessions().get(index);
             campSessionId = campSession.getCampSessioId();
 
-            RejectedApplication.RejectionReason rejectReason =
-                    registrar.processApplication(camper, campSession);
+            double payValue = 0.0;
 
-            if (rejectReason == RejectedApplication.RejectionReason.NotRejected) {
-                insertPayment(camper.getCamperId(), campSessionId);
+            if (dollars.getLength() > 0) {
+                payValue = Double.parseDouble(dollars.getText());
             }
+
+            rejectReason = registrar.processApplication(camper, campSession, payValue);
+            log.info("Camper registered for session {}", campSessionId);
         } else {
             throw new Exception("No session selected");
         }
 
-        return campSessionId;
+        return rejectReason;
     }
 
-    public void insertPayment(int camperId, int sessionId) {
-        double payValue = Double.parseDouble(dollars.getText());
-
-        PaymentDAO dao = DAOFactory.createPaymentDAO();
-        Payment payment = new Payment();
-        payment.setCamperId(camperId);
-        payment.setCampSessionId(sessionId);
-        payment.setAmount(payValue);
-
+    private void registerCamper(boolean isFormComplete) {
         try {
-            log.debug("Inserting payment record");
-            dao.insert(payment);
+            RejectedApplication.RejectionReason rejectionReason;
+
+            CampSession cs = getCampSessionFromUI();
+            Camper camper = getCamperFromUIInputs();
+
+            int camperId = registrar.insertCamperRecord(camper);
+            camper.setCamperId(camperId);
+
+            if (isFormComplete) {
+                rejectionReason = registerCamper(camper);
+            } else {
+                rejectionReason = RejectedApplication.RejectionReason.ApplicationIncomplete;
+
+                if (cs != null) {
+                    registrar.rejectIncompleteApplication(camper, cs);
+                }
+            }
+
+            if (rejectionReason != RejectedApplication.RejectionReason.NotRejected) {
+                promptForRejectionLetter(camper, cs, rejectionReason);
+            }
         } catch (Exception e) {
             log.error(e);
+            e.printStackTrace();
 
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setContentText(e.getMessage());
@@ -250,37 +263,50 @@ public class ApplicationController implements Initializable {
         }
     }
 
+    private void promptForRejectionLetter(Camper camper, CampSession cs, RejectedApplication.RejectionReason reason)
+        throws Exception {
+        String message = "The application has been rejected, would you like to print the letter of rejection now?";
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("");
+        alert.setHeaderText("");
+        alert.setContentText(message);
 
-    public void saveClicked() throws Exception {
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+                try {
+                    LetterGenerator lg = new LetterGenerator();
+                    lg.createRejectionLetter("letter.pdf", camper, cs, reason);
+
+                    Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "letter.pdf"});
+                    //Runtime.getRuntime().exec(new String[]{"open", "-a", "Microsoft Word", "letter.wtxt"});
+                } catch (Exception e) {
+                    //TODO: Handle exception for generating letter or launching Word
+                    log.error("Could not generate letter and launch Microsoft Word", e);
+                }
+            }
+        });
+    }
+
+    public void saveClicked() {
         String message = getValidationMessage();
 
         if (!message.equalsIgnoreCase("")) {
             log.debug("Form not complete, prompting user to reject application or complete form");
-            message = "Press OK to reject the application, press Cancel to go back.\n" + message;
 
+            message = "Press OK to reject the application, press Cancel to go back.\n" + message;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Form Not Complete");
             alert.setHeaderText("If the form is not completed, the application will be rejected.");
             alert.setContentText(message);
+
             alert.showAndWait().ifPresent(rs -> {
                 if (rs == ButtonType.OK) {
-                    try {
-                        //TODO: Check if camper exists
-                        Camper camper = insertCamperRecord();
-
-                        //TODO: Check if camper registered
-                        int sessionId = registerCamper(camper);
-                    } catch (Exception e) {
-                        log.error(e);
-
-                        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                        errorAlert.setContentText(e.getMessage());
-                        errorAlert.showAndWait();
-                    }
+                    registerCamper(false);
                 }
             });
-        }
+        } else {
+            registerCamper(true);
 
-        //TODO: Reject application if it isn't compete
+        }
     }
 }

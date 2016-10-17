@@ -1,14 +1,9 @@
 package com.cgu.ist303.project.registrar;
 
-import com.cgu.ist303.project.dao.CampSessionDAO;
-import com.cgu.ist303.project.dao.CamperRegistrationDAO;
-import com.cgu.ist303.project.dao.DAOFactory;
-import com.cgu.ist303.project.dao.RejectedApplicationsDAO;
-import com.cgu.ist303.project.dao.model.CampSession;
+import com.cgu.ist303.project.dao.*;
+import com.cgu.ist303.project.dao.model.*;
 
-import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.CamperRegistration;
-import com.cgu.ist303.project.dao.model.RejectedApplication;
+import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +29,32 @@ public class Registrar {
         return sessionList;
     }
 
-    public RejectedApplication.RejectionReason processApplication(Camper camper, CampSession session)
+    public int insertCamperRecord(Camper camper) throws Exception {
+        log.debug("Inserting new camper record");
+
+        CamperDAO camperDAO = DAOFactory.createCamperDAO();
+
+        int camperId = camperDAO.queryCamperId(camper);
+
+        if (camperId == Camper.CAMPER_ID_NOT_IN_SYSTEM) {
+            camperId = camperDAO.insertCamper(camper);
+        }
+
+        return camperId;
+    }
+
+    public void rejectIncompleteApplication(Camper camper, CampSession session) throws Exception {
+        log.info("Application rejected, form not complete");
+
+        RejectedApplication ra = new RejectedApplication();
+        ra.setCampSessionId(session.getCampSessioId());
+        ra.setCamperId(camper.getCamperId());
+        ra.setReason(RejectedApplication.RejectionReason.ApplicationIncomplete);
+
+        rejecteApplication(ra);
+    }
+
+    public RejectedApplication.RejectionReason processApplication(Camper camper, CampSession session, double payment)
             throws  Exception {
         RejectedApplication.RejectionReason reason =
                 RejectedApplication.RejectionReason.NotRejected;
@@ -46,7 +66,7 @@ public class Registrar {
         ra.setCamperId(camper.getCamperId());
 
 
-        if ( wasReceivedInAllowableTimeframe(session) ) {
+        if ( !wasReceivedInAllowableTimeframe(session) ) {
             log.info("Application rejected, not received within allowable time frame");
             reason = RejectedApplication.RejectionReason.NotReceivedDuringAllowableTimeframe;
             ra.setReason(reason);
@@ -70,9 +90,22 @@ public class Registrar {
             cr.setCamperId(camper.getCamperId());
 
             registerCamper(cr);
+            insertPayment(camper.getCamperId(), session.getCampSessioId(), payment);
         }
 
         return reason;
+    }
+
+    private void insertPayment(int camperId, int sessionId, double payValue) throws Exception {
+        PaymentDAO dao = DAOFactory.createPaymentDAO();
+        Payment payment = new Payment();
+        payment.setCamperId(camperId);
+        payment.setCampSessionId(sessionId);
+        payment.setAmount(payValue);
+
+
+        log.debug("Inserting payment record");
+        dao.insert(payment);
     }
 
     private boolean wasReceivedInAllowableTimeframe(CampSession session) {
