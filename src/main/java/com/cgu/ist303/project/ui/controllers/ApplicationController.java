@@ -106,6 +106,8 @@ public class ApplicationController implements Initializable {
         }
         if (age.getSelectionModel().getSelectedIndex() < 0) {
             message += "\n    - Age is not specified";
+        } else  if (age.getSelectionModel().getSelectedIndex() == 11) {
+            message += "\n    - Age is not specified";
         }
         if (gender.getSelectionModel().getSelectedIndex() < 0) {
             message += "\n    - Gender is not specified";
