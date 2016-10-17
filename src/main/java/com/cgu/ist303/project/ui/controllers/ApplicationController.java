@@ -104,14 +104,19 @@ public class ApplicationController implements Initializable {
         if (parentLastName.getLength() <= 0) {
             message += "\n    - Responsible Party Last Name is blank";
         }
+
         if (age.getSelectionModel().getSelectedIndex() < 0) {
             message += "\n    - Age is not specified";
         } else  if (age.getSelectionModel().getSelectedIndex() == 11) {
             message += "\n    - Age is not specified";
         }
+
         if (gender.getSelectionModel().getSelectedIndex() < 0) {
             message += "\n    - Gender is not specified";
+        } else if (gender.getSelectionModel().getSelectedIndex() >= 2) {
+            message += "\n    - Gender is not specified";
         }
+
         if (streetLine1.getLength() <= 0) {
             message += "\n    - Street Address Line 1 is blank";
         }
