@@ -13,9 +13,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * Created by will4769 on 10/16/16.
- */
 public class LetterGenerator {
     private static final Logger log = LogManager.getLogger(LetterGenerator.class);
 
@@ -61,7 +58,7 @@ public class LetterGenerator {
         }
 
         if (reason == RejectedApplication.RejectionReason.AlreadyRegisterForYear) {
-            letter += String.format("Application %s %s is already registered for a camp session in the same year.\n",
+            letter += String.format("Applicant %s %s is already registered for a camp session in the same year.\n",
                 c.getFirstName(), c.getLastName());
         } else if (reason == RejectedApplication.RejectionReason.NotReceivedDuringAllowableTimeframe) {
             letter += "The application was not received in the allowable timeframe.\n";

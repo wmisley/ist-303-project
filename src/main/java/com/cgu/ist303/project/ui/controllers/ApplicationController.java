@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -252,23 +253,68 @@ public class ApplicationController implements Initializable {
 
             if (rejectionReason != RejectedApplication.RejectionReason.NotRejected) {
                 promptForRejectionLetter(camper, cs, rejectionReason);
+            } else {
+                promptIfRegisterAnotherCamper();
             }
         } catch (Exception e) {
-            log.error(e);
-            e.printStackTrace();
+            displayErrorMessage("Error registering camper", e);
+        }
+    }
 
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+    private void displayErrorMessage(String message, Exception e) {
+        log.error(message, e);
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("");
+        alert.setHeaderText("");
+        alert.setContentText("Unhandled error: " + e.getMessage());
+        alert.showAndWait();
+    }
+
+    private void promptIfRegisterAnotherCamper() {
+        String message = "The application has been approved and registered. Would you like to process another application?";
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("");
+        alert.setHeaderText("");
+        alert.setContentText(message);
+
+        ButtonType buttonYes = new ButtonType("Yes");
+        ButtonType buttonNo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == buttonYes) {
+            //TODO: Clear form
+        } else {
+            try {
+                cancelClicked();
+            } catch (Exception e) {
+                displayErrorMessage("Could not go back to main menu.", e);
+            }
         }
     }
 
     private void promptForRejectionLetter(Camper camper, CampSession cs, RejectedApplication.RejectionReason reason)
         throws Exception {
-        String message = "The application has been rejected, would you like to print the letter of rejection now?";
+        String message = "The application has been rejected for the following reason:\n\n%s\n\n" +
+                "Would you like to print the letter of rejection now?";
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("");
         alert.setHeaderText("");
+
+        if (reason == RejectedApplication.RejectionReason.NotReceivedDuringAllowableTimeframe) {
+            message = String.format(message, "Application not received during allowed time frame.");
+        } else if (reason == RejectedApplication.RejectionReason.ApplicationIncomplete) {
+            message = String.format(message, "Application not complete.");
+        } else if (reason == RejectedApplication.RejectionReason.CamperNotInAgeRange) {
+            message = String.format(message, "Applicant camper is not between the age of 9 and 18.");
+        } else if (reason == RejectedApplication.RejectionReason.GenderLimitReached) {
+            message = String.format(message, "The gender limit for the camp has been reached.");
+        } else if (reason == RejectedApplication.RejectionReason.AlreadyRegisterForYear) {
+            message = String.format(message, "Applicant camper is already registered for a camp session in the same year.");
+        }
+
         alert.setContentText(message);
 
         alert.showAndWait().ifPresent(rs -> {
@@ -278,11 +324,15 @@ public class ApplicationController implements Initializable {
                     lg.createRejectionLetter("letter.pdf", camper, cs, reason);
 
                     Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "letter.pdf"});
-                    //Runtime.getRuntime().exec(new String[]{"open", "-a", "Microsoft Word", "letter.wtxt"});
                 } catch (Exception e) {
-                    //TODO: Handle exception for generating letter or launching Word
-                    log.error("Could not generate letter and launch Microsoft Word", e);
+                    displayErrorMessage("Could not generate letter and launch Preview.", e);
                 }
+            }
+
+            try {
+                cancelClicked();
+            } catch (Exception e) {
+                displayErrorMessage("Could not go back to main menu", e);
             }
         });
     }
@@ -306,7 +356,6 @@ public class ApplicationController implements Initializable {
             });
         } else {
             registerCamper(true);
-
         }
     }
 }

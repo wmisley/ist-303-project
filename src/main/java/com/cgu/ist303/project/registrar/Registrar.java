@@ -84,6 +84,12 @@ public class Registrar {
             ra.setReason(reason);
 
             rejecteApplication(ra);
+        } else if ( !isApplicantAppropriateAge(camper.getAge()) ) {
+            log.info("Application rejected, not appropriate age");
+            reason = RejectedApplication.RejectionReason.CamperNotInAgeRange;
+            ra.setReason(reason);
+
+            rejecteApplication(ra);
         } else {
             CamperRegistration cr = new CamperRegistration();
             cr.setCampSessionId(campSessionId);
@@ -94,6 +100,10 @@ public class Registrar {
         }
 
         return reason;
+    }
+
+    private boolean isApplicantAppropriateAge(int age) {
+        return ((age >= 9) && (age <= 18));
     }
 
     private void insertPayment(int camperId, int sessionId, double payValue) throws Exception {

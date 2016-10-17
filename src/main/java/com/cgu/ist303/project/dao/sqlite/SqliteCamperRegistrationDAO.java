@@ -153,6 +153,17 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
             camper.setMiddleName(rs.getString("MIDDLE_NAME"));
             camper.setLastName(rs.getString("LAST_NAME"));
             camper.setPhoneNumber(rs.getString("PHONE_NUMBER"));
+            camper.setAge(rs.getInt("AGE"));
+
+            int gender = rs.getInt("GENDER");
+
+            if (gender == Camper.Gender.Male.getValue()) {
+                camper.setGender(Camper.Gender.Male);
+            } else if (gender == Camper.Gender.Female.getValue()) {
+                camper.setGender(Camper.Gender.Female);
+            } else {
+                camper.setGender(Camper.Gender.Unspecified);
+            }
 
             list.add(camper);
         }

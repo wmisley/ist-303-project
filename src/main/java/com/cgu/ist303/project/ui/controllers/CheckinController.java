@@ -44,7 +44,7 @@ public class CheckinController implements Initializable {
         ObservableList<Camper> obsList  = null;
 
         try {
-            obsList = regDAO.queryRegisteredCampers(2016);
+            obsList = regDAO.queryRegisteredCampers(2017);
             campersTable.setItems(obsList);
         } catch (Exception e) {
             log.error(e);
