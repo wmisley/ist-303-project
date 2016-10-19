@@ -20,6 +20,8 @@ import java.util.List;
 
 public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
     private static final Logger log = LogManager.getLogger(SqliteCamperRegistrationDAO.class);
+    public static final int ALL_SESSIONS = -1;
+    public static final int NO_SESSIONS = 0;
     public String dbFilepath = "";
 
     public SqliteCamperRegistrationDAO(String sqliteFilepath) {
@@ -123,8 +125,11 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
 
         return (regCount > 0);
     }
-
     public ObservableList<Camper> queryRegisteredCampers(int year) throws Exception {
+        return queryRegisteredCampers(year, ALL_SESSIONS);
+    }
+
+    public ObservableList<Camper> queryRegisteredCampers(int year, int campSessionId) throws Exception {
         ObservableList<Camper> list = FXCollections.observableArrayList();
         Camper camper = null;
         Connection c = null;
@@ -141,6 +146,10 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
             "WHERE C.CAMPER_ID = CR.CAMPER_ID " +
                 "AND CR.CAMP_SESSION_ID = CS.CAMP_SESSION_ID " +
                 "AND  CS.CAMP_YEAR = %d";
+
+        if (campSessionId != ALL_SESSIONS) {
+            sql += String.format(" AND CS.CAMP_SESSION_ID = %d", campSessionId);
+        }
 
         sql = String.format(sql, year);
         log.debug(sql);

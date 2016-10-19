@@ -10,4 +10,5 @@ public interface CamperRegistrationDAO {
     int queryGenderCount(int year, Camper.Gender gender) throws Exception;
     boolean queryIsCamperRegisterdForYear(Camper camper, int year) throws Exception;
     ObservableList<Camper> queryRegisteredCampers(int year) throws Exception;
+    ObservableList<Camper> queryRegisteredCampers(int year, int sessionId) throws Exception;
 }

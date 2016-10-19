@@ -67,7 +67,7 @@ public class UIManager {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/checkin.fxml"));
 
         Pane pane = loader.load();
-        Scene scene = new Scene(pane, 521, 515);
+        Scene scene = new Scene(pane, 582, 515);
         stage.setScene(scene);
 
         mainMenuStage.hide();
