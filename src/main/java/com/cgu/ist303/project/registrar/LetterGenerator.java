@@ -45,7 +45,8 @@ public class LetterGenerator {
         letter += String.format("Dear %s %s,\n", c.getRpFirstName(), c.getRpLastName());
         letter += "\n";
 
-        letter += String.format("We please to inform you that your application to the camp session starting on %d/%d/%d ",
+        letter += String.format("We please to inform you that %s %s's application to the camp session starting on %d/%d/%d ",
+                c.getFirstName(), c.getLastName(),
                 session.getStartMonth(), session.getStartDay(), session.getCampYear());
         letter += String.format("and ending on %d/%d/%d, has been accepted.\n\n",
                 session.getEndMonth(), session.getEndDay(), session.getCampYear());
@@ -79,7 +80,8 @@ public class LetterGenerator {
         letter += "\n";
 
         if (session != null) {
-            letter += String.format("We regret to inform you that your application to the camp session starting on %d/%d/%d ",
+            letter += String.format("We regret to inform you that %s %s's application to the camp session starting on %d/%d/%d ",
+                    c.getFirstName(), c.getLastName(),
                     session.getStartMonth(), session.getStartDay(), session.getCampYear());
             letter += String.format("and ending on %d/%d/%d, has been rejected for the following reason:\n\n",
                     session.getEndMonth(), session.getEndDay(), session.getCampYear());
