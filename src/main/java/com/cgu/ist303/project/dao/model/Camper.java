@@ -168,5 +168,7 @@ public class Camper {
         this.firstName = firstName;
     }
 
-
+    public String getPhoneNumberString() {
+        return "(" + phoneNumber.substring(0, 3) + ")" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6);
+    }
 }

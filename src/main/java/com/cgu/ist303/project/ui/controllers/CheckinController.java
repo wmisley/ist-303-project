@@ -48,7 +48,7 @@ public class CheckinController implements Initializable {
         TableColumn lastNameCol = new TableColumn("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("lastName"));
         TableColumn phoneNumber = new TableColumn("Phone Number");
-        phoneNumber.setCellValueFactory(new PropertyValueFactory<Camper, String>("phoneNumber"));
+        phoneNumber.setCellValueFactory(new PropertyValueFactory<Camper, String>("phoneNumberString"));
         TableColumn age = new TableColumn("Age");
         age.setCellValueFactory(new PropertyValueFactory<Camper, String>("age"));
         TableColumn gender = new TableColumn("Gender");
