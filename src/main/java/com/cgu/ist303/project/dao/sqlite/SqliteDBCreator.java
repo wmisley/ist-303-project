@@ -307,6 +307,22 @@ public class SqliteDBCreator {
         stmt.executeUpdate(sql);
         stmt.close();
     }
+
+    private void createEmergencyContactsTable(Connection c) throws SQLException {
+        Statement stmt = c.createStatement();
+        String sql = "CREATE TABLE EMERGENCY_CONTACTS " +
+                "(CONTACT_ID      INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                " CAMPER_ID       INTEGER NOT NULL, " +
+                " FIRST_NAME      TEXT NOT NULL, " +
+                " MIDDLE_NAME     TEXT NULL, " +
+                " LAST_NAME       TEXT NOT NULL, " +
+                " PRIMARY_PHONE   TEXT NOT NULL, " +
+                " ALTERNATE_PHONE TEXT NULL, " +
+                " FOREIGN KEY(CAMPER_ID) REFERENCES CAMPERS(CAMPER_ID))";
+        log.debug(sql);
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
 }
 
 
