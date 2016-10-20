@@ -16,4 +16,14 @@ public class BaseController {
         alert.setContentText("Unhandled error: " + e.getMessage());
         alert.showAndWait();
     }
+
+    protected void displayAlertMessage(String message) {
+        log.debug("Display alert message to user: {}", message);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("");
+        alert.setHeaderText("");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

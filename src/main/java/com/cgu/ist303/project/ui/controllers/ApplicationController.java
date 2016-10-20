@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class ApplicationController implements Initializable {
+public class ApplicationController extends BaseController implements Initializable {
     private static final Logger log = LogManager.getLogger(ApplicationController.class);
 
     @FXML
@@ -273,16 +273,6 @@ public class ApplicationController implements Initializable {
         } catch (Exception e) {
             displayErrorMessage("Could not go back to main menu.", e);
         }
-    }
-
-    private void displayErrorMessage(String message, Exception e) {
-        log.error(message, e);
-
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("");
-        alert.setHeaderText("");
-        alert.setContentText("Unhandled error: " + e.getMessage());
-        alert.showAndWait();
     }
 
     private void promptIfRegisterAnotherCamper() {

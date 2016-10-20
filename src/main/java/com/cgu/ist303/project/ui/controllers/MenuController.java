@@ -23,7 +23,7 @@ public class MenuController implements Initializable {
 
     public void showPayments() throws Exception {
         log.debug("User pressed \"Payments\" button");
-        UIManager.getInstance().showPaymentScreen();
+        //UIManager.getInstance().showPaymentScreen();
     }
 
     public void showCheckIn() throws Exception {
