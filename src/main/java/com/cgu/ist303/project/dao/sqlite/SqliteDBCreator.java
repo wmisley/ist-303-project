@@ -133,6 +133,7 @@ public class SqliteDBCreator {
             createBunkHouseTable(c);
             createBunkHouseCountTable(c);
             createBunkAssignmentsTable(c);
+            createEmergencyContactsTable(c);
 
             c.close();
         } catch (Exception e) {

@@ -1,6 +1,6 @@
 package com.cgu.ist303.project.dao.sqlite;
 
-import com.cgu.ist303.project.dao.model.Camper;
+import com.cgu.ist303.project.dao.EmergencyContactDAO;
 import com.cgu.ist303.project.dao.model.EmergencyContact;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +18,7 @@ public class SqliteEmergencyContactDAO extends DAOBase implements EmergencyConta
         super(dbPath);
     }
 
-    public int insertCamper(EmergencyContact ec) throws Exception {
+    public int insert(EmergencyContact ec) throws Exception {
         Connection c = null;
         Statement stmt = null;
 
