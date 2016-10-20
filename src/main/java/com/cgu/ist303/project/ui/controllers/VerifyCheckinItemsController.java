@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class VerifyCheckinItemsController implements Initializable {
+public class VerifyCheckinItemsController extends BaseController implements Initializable {
     private static final Logger log = LogManager.getLogger(VerifyCheckinItemsController.class);
 
     @FXML
@@ -142,16 +142,6 @@ public class VerifyCheckinItemsController implements Initializable {
                 displayErrorMessage("Could not generate missing equipment / packet item file", e);
             }
         }
-    }
-
-    private void displayErrorMessage(String message, Exception e) {
-        log.error(message, e);
-
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("");
-        alert.setHeaderText("");
-        alert.setContentText("Unhandled error: " + e.getMessage());
-        alert.showAndWait();
     }
 
     public static class ArrivalPacketItemItem extends ArrivalPacketItem {

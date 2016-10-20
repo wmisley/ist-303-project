@@ -1,7 +1,11 @@
 package com.cgu.ist303.project.ui;
 
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
+import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.ui.controllers.PaymentController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -62,9 +66,18 @@ public class UIManager {
         }
     }
 
-    public void showPayScreen() throws Exception {
+    public void showPayScreen(CamperRegistration cr, TableView<CamperRegistration> table) throws Exception {
         log.debug("Showing pay form");
-        Stage stage = setStage("Payment", "/payments.fxml", 242, 150);
+
+        Stage stage = new Stage();
+        stage.setTitle("Payment");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/payments.fxml"));
+
+        Pane pane = loader.load();
+        PaymentController controller = loader.getController();
+        controller.setCamperRegistration(cr, table);
+        Scene scene = new Scene(pane, 242, 150);
+        stage.setScene(scene);
 
         showNewScreenHidePrevious(stage, false, true);
 

@@ -139,7 +139,8 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         stmt = c.createStatement();
 
         String sql =
-            "SELECT C.*, CR.*, SUM(P.AMOUNT) AS TOTAL_PAYMENT " +
+            "SELECT C.FIRST_NAME, C.MIDDLE_NAME, C.LAST_NAME, C.PHONE_NUMBER, C.AGE, C.GENDER, " +
+            " C.CAMPER_ID AS CID, CR.CAMP_SESSION_ID AS CSID, SUM(P.AMOUNT) AS TOTAL_PAYMENT " +
             "FROM CAMPERS C, CAMP_REGISTRATION CR, CAMP_SESSIONS CS, PAYMENTS P " +
             "WHERE C.CAMPER_ID = CR.CAMPER_ID " +
                 "AND CR.CAMP_SESSION_ID = CS.CAMP_SESSION_ID " +
@@ -160,7 +161,8 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
 
         while ( rs.next() ) {
             camper = new CamperRegistration();
-            //camper.setCamperId(rs.getInt("CAMPER_ID"));
+            camper.setCamperId(rs.getInt("CID"));
+            camper.setCampSessionId(rs.getInt("CSID"));
             camper.setFirstName(rs.getString("FIRST_NAME"));
             camper.setMiddleName(rs.getString("MIDDLE_NAME"));
             camper.setLastName(rs.getString("LAST_NAME"));

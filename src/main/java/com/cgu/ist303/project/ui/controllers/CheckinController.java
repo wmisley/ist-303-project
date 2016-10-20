@@ -174,7 +174,7 @@ public class CheckinController implements Initializable {
                     cr.getLastName());
 
             if (cr.getAmountDue() > 0.0) {
-                UIManager.getInstance().showPayScreen();
+                UIManager.getInstance().showPayScreen(cr, campersTable);
             } else {
                 displayNotice("This camper has paid the full amount. No need to make a payment.");
             }
