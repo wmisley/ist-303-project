@@ -131,10 +131,18 @@ public class CheckinController implements Initializable {
     public void checkinClicked() throws Exception {
         Camper camper = campersTable.getSelectionModel().getSelectedItem();
 
-        log.debug("Camper {} {} was selected for check-in by the user", camper.getFirstName(),
-                camper.getLastName());
+        if (camper != null) {
+            log.debug("Camper {} {} was selected for check-in by the user", camper.getFirstName(),
+                    camper.getLastName());
 
-        UIManager.getInstance().showVerifyCheckinItems();
+            UIManager.getInstance().showVerifyCheckinItems();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Notice");
+            alert.setHeaderText("");
+            alert.setContentText("Please select a camper.");
+            alert.showAndWait();
+        }
     }
 
     public void cancelClicked() throws Exception {
