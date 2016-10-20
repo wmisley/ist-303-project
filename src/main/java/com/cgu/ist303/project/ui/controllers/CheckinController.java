@@ -4,6 +4,7 @@ import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
+import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
@@ -20,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +32,7 @@ public class CheckinController implements Initializable {
     private static final Logger log = LogManager.getLogger(CheckinController.class);
 
     @FXML
-    private TableView<Camper> campersTable;
+    private TableView<CamperRegistration> campersTable;
     @FXML
     private ComboBox<CampSession> sessions;
 
@@ -42,18 +44,22 @@ public class CheckinController implements Initializable {
 
         TableColumn firstNameCol = new TableColumn("First Name");
         firstNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("firstName"));
-        TableColumn middleNameCol = new TableColumn("Middle Name");
-        middleNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("middleName"));
+        TableColumn middleNameCol = new TableColumn("MI");
+        middleNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("middleInitial"));
         TableColumn lastNameCol = new TableColumn("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("lastName"));
         TableColumn phoneNumber = new TableColumn("Phone Number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<Camper, String>("phoneNumberString"));
         TableColumn age = new TableColumn("Age");
         age.setCellValueFactory(new PropertyValueFactory<Camper, String>("age"));
+        age.setStyle("-fx-alignment: CENTER_RIGHT;");
         TableColumn gender = new TableColumn("Gender");
         gender.setCellValueFactory(new PropertyValueFactory<Camper, String>("gender"));
+        TableColumn payment = new TableColumn("Amount Due");
+        payment.setCellValueFactory(new PropertyValueFactory<Camper, String>("formattedAmountDue"));
+        payment.setStyle("-fx-alignment: CENTER_RIGHT;");
 
-        campersTable.getColumns().addAll(firstNameCol, middleNameCol, lastNameCol, phoneNumber, age, gender);
+        campersTable.getColumns().addAll(firstNameCol, middleNameCol, lastNameCol, phoneNumber, age, gender, payment);
 
         try {
             registrar.load(2017);
@@ -76,7 +82,7 @@ public class CheckinController implements Initializable {
 
     private void loadTable(int sessionId) {
         CamperRegistrationDAO regDAO = DAOFactory.createCamperRegistrationDAO();
-        ObservableList<Camper> obsList  = null;
+        ObservableList<CamperRegistration> obsList  = null;
 
         try {
 
@@ -128,14 +134,27 @@ public class CheckinController implements Initializable {
         });
     }
 
+    public void displayNotice(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Notice");
+        alert.setHeaderText("");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     public void checkinClicked() throws Exception {
-        Camper camper = campersTable.getSelectionModel().getSelectedItem();
+        CamperRegistration cr = campersTable.getSelectionModel().getSelectedItem();
 
-        if (camper != null) {
-            log.debug("Camper {} {} was selected for check-in by the user", camper.getFirstName(),
-                    camper.getLastName());
+        if (cr != null) {
+            log.debug("Camper {} {} was selected for check-in by the user", cr.getFirstName(),
+                    cr.getLastName());
 
-            UIManager.getInstance().showVerifyCheckinItems();
+            if (cr.getAmountDue() > 0.0) {
+                displayNotice(String.format("The camper can not check-in until they pay $%s",
+                        String.format("%,.2f", cr.getAmountDue())));
+            } else {
+                UIManager.getInstance().showVerifyCheckinItems();
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notice");

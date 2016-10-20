@@ -1,9 +1,9 @@
 package com.cgu.ist303.project.dao.sqlite;
 
 
-import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.dao.model.CamperRegistrationRecord;
 import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,8 +14,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
@@ -28,7 +26,7 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         dbFilepath = sqliteFilepath;
     }
 
-    public void insert(CamperRegistration reg) throws Exception {
+    public void insert(CamperRegistrationRecord reg) throws Exception {
         Connection c = null;
         Statement stmt = null;
 
@@ -125,13 +123,13 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
 
         return (regCount > 0);
     }
-    public ObservableList<Camper> queryRegisteredCampers(int year) throws Exception {
+    public ObservableList<CamperRegistration> queryRegisteredCampers(int year) throws Exception {
         return queryRegisteredCampers(year, ALL_SESSIONS);
     }
 
-    public ObservableList<Camper> queryRegisteredCampers(int year, int campSessionId) throws Exception {
-        ObservableList<Camper> list = FXCollections.observableArrayList();
-        Camper camper = null;
+    public ObservableList<CamperRegistration> queryRegisteredCampers(int year, int campSessionId) throws Exception {
+        ObservableList<CamperRegistration> list = FXCollections.observableArrayList();
+        CamperRegistration camper = null;
         Connection c = null;
         Statement stmt = null;
 
@@ -141,28 +139,34 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         stmt = c.createStatement();
 
         String sql =
-            "SELECT C.*, CR.* " +
-            "FROM CAMPERS C, CAMP_REGISTRATION CR, CAMP_SESSIONS CS " +
+            "SELECT C.*, CR.*, SUM(P.AMOUNT) AS TOTAL_PAYMENT " +
+            "FROM CAMPERS C, CAMP_REGISTRATION CR, CAMP_SESSIONS CS, PAYMENTS P " +
             "WHERE C.CAMPER_ID = CR.CAMPER_ID " +
                 "AND CR.CAMP_SESSION_ID = CS.CAMP_SESSION_ID " +
-                "AND  CS.CAMP_YEAR = %d";
+                "AND  CS.CAMP_YEAR = %d " +
+                "AND P.CAMPER_ID = C.CAMPER_ID " +
+                "AND P.CAMP_SESSION_ID = CS.CAMP_SESSION_ID ";
+
 
         if (campSessionId != ALL_SESSIONS) {
-            sql += String.format(" AND CS.CAMP_SESSION_ID = %d", campSessionId);
+            sql += String.format(" AND CS.CAMP_SESSION_ID = %d ", campSessionId);
         }
+
+        sql += "GROUP BY C.CAMPER_ID";
 
         sql = String.format(sql, year);
         log.debug(sql);
         ResultSet rs = stmt.executeQuery(sql);
 
         while ( rs.next() ) {
-            camper = new Camper();
+            camper = new CamperRegistration();
             //camper.setCamperId(rs.getInt("CAMPER_ID"));
             camper.setFirstName(rs.getString("FIRST_NAME"));
             camper.setMiddleName(rs.getString("MIDDLE_NAME"));
             camper.setLastName(rs.getString("LAST_NAME"));
             camper.setPhoneNumber(rs.getString("PHONE_NUMBER"));
             camper.setAge(rs.getInt("AGE"));
+            camper.setPayment(rs.getDouble("TOTAL_PAYMENT"));
 
             int gender = rs.getInt("GENDER");
 

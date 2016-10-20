@@ -3,7 +3,7 @@ package com.cgu.ist303.project.drivers;
 import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.dao.model.CamperRegistrationRecord;
 import com.cgu.ist303.project.dao.sqlite.SqliteDBCreator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +52,7 @@ public class DAOTeser {
     public void registerCamper(String dbPath, ArrayList<CampSession> sessions, int camperId) {
         DAOFactory.dbPath = dbPath;
         CamperRegistrationDAO regDAO = DAOFactory.createCamperRegistrationDAO();
-        CamperRegistration reg = new CamperRegistration();
+        CamperRegistrationRecord reg = new CamperRegistrationRecord();
         reg.setCamperId(camperId);
         reg.setCampSessionId(sessions.get(0).getCampSessioId());
 

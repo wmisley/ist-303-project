@@ -84,7 +84,7 @@ public class UIManager {
 
     public void showCheckinScreen() throws Exception {
         log.debug("Showing check-in form");
-        Stage stage = setStage("Register Campers", "/checkin.fxml", 582, 515);
+        Stage stage = setStage("Register Campers", "/checkin.fxml", 653, 515);
 
         showNewScreenHidePrevious(stage);
 

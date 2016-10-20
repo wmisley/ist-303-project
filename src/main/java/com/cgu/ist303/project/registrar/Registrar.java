@@ -3,7 +3,6 @@ package com.cgu.ist303.project.registrar;
 import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.*;
 
-import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,7 +90,7 @@ public class Registrar {
 
             rejecteApplication(ra);
         } else {
-            CamperRegistration cr = new CamperRegistration();
+            CamperRegistrationRecord cr = new CamperRegistrationRecord();
             cr.setCampSessionId(campSessionId);
             cr.setCamperId(camper.getCamperId());
 
@@ -167,7 +166,7 @@ public class Registrar {
         return (genderCount >= session.getGenderLimit());
     }
 
-    private void registerCamper(CamperRegistration cr) throws Exception {
+    private void registerCamper(CamperRegistrationRecord cr) throws Exception {
         CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
         dao.insert(cr);
     }

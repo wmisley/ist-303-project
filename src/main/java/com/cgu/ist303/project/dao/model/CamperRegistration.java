@@ -1,29 +1,32 @@
 package com.cgu.ist303.project.dao.model;
 
 /**
- * Created by will4769 on 9/29/16.
+ * Created by will4769 on 10/19/16.
  */
-public class CamperRegistration {
-    private int campSessionId = 0;
-
-    public int getCamperId() {
-        return camperId;
+public class CamperRegistration extends Camper {
+    public double getPayment() {
+        return payment;
     }
 
-    public void setCamperId(int camperId) {
-        this.camperId = camperId;
+    public void setPayment(double payment) {
+        this.payment = payment;
     }
 
-    public int getCampSessionId() {
-        return campSessionId;
+    private double payment = 0.0;
+
+    public double getAmountDue() {
+        return 1000.0 - getPayment();
     }
 
-    public void setCampSessionId(int campSessionId) {
-        this.campSessionId = campSessionId;
+    public String getFormattedAmountDue() {
+        return String.format("$%,.2f", getAmountDue());
     }
 
-    private int camperId = 0;
-
-    public CamperRegistration() {
+    public String getMiddleInitial() {
+        if (getMiddleName().length() >=  1) {
+            return getMiddleName().substring(0, 1);
+        } else {
+            return "-";
+        }
     }
 }
