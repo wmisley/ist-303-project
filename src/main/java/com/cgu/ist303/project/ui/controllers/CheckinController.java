@@ -35,6 +35,8 @@ public class CheckinController implements Initializable {
     private TableView<CamperRegistration> campersTable;
     @FXML
     private ComboBox<CampSession> sessions;
+    @FXML
+    private Button makePayment;
 
     private Registrar registrar = new Registrar();
 
@@ -161,6 +163,23 @@ public class CheckinController implements Initializable {
             alert.setHeaderText("");
             alert.setContentText("Please select a camper.");
             alert.showAndWait();
+        }
+    }
+
+    public void makePaymentClicked() throws Exception {
+        CamperRegistration cr = campersTable.getSelectionModel().getSelectedItem();
+
+        if (cr != null) {
+            log.debug("Camper {} {} was selected for making a payment by the user", cr.getFirstName(),
+                    cr.getLastName());
+
+            if (cr.getAmountDue() > 0.0) {
+                UIManager.getInstance().showPayScreen();
+            } else {
+                displayNotice("This camper has paid the full amount. No need to make a payment.");
+            }
+        } else {
+            displayNotice("Please select a camper.");
         }
     }
 

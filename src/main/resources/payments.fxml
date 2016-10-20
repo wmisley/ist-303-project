@@ -4,9 +4,13 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="242.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.PaymentController">
    <children>
-      <Button layoutX="283.0" layoutY="187.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="save" layoutX="161.0" layoutY="98.0" mnemonicParsing="false" onAction="#saveClicked" text="Save" />
+      <Label layoutX="19.0" layoutY="23.0" text="Payment Amount" />
+      <TextField fx:id="payment" layoutX="38.0" layoutY="48.0" prefHeight="27.0" prefWidth="135.0" />
+      <Label layoutX="180.0" layoutY="53.0" text=".00" />
+      <Label layoutX="18.0" layoutY="53.0" text="\$" />
+      <Button fx:id="cancel" layoutX="78.0" layoutY="98.0" mnemonicParsing="false" onAction="#cancelClicked" text="Cancel" />
    </children>
 </AnchorPane>

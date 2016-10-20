@@ -3,6 +3,7 @@ package com.cgu.ist303.project.ui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,12 +28,21 @@ public class UIManager {
     }
 
     private void showNewScreenHidePrevious(Stage current) {
-        if (!stageStack.isEmpty()) {
-            Stage prev = prev = stageStack.peek();
+        showNewScreenHidePrevious(current, true, false);
+    }
+
+    private void showNewScreenHidePrevious(Stage current, boolean hidePrevious, boolean isModal) {
+        if ((!stageStack.isEmpty()) && hidePrevious){
+            Stage prev = stageStack.peek();
             prev.hide();
         }
 
         stageStack.push(current);
+
+        if (isModal) {
+            current.initModality(Modality.APPLICATION_MODAL);
+        }
+
         current.show();
     }
 
@@ -50,6 +60,15 @@ public class UIManager {
         } else {
             log.warn("No current stage on stack");
         }
+    }
+
+    public void showPayScreen() throws Exception {
+        log.debug("Showing pay form");
+        Stage stage = setStage("Payment", "/payments.fxml", 242, 150);
+
+        showNewScreenHidePrevious(stage, false, true);
+
+        stage.show();
     }
 
     public void showApplicationScreen() throws Exception {
