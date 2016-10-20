@@ -34,7 +34,11 @@ public class PaymentController extends BaseController implements Initializable{
     }
 
     public void saveClicked() {
-        if (payment.getText().length() > 0) {
+        if (payment.getText().length() <= 0) {
+            displayAlertMessage("No payment amount was entered.");
+        } else if (Double.parseDouble(payment.getText()) <= 0) {
+            displayAlertMessage("A positive dollar amount must be entered.");
+        } else {
             double amount = Double.parseDouble(payment.getText());
 
             PaymentDAO dao = DAOFactory.createPaymentDAO();
@@ -56,8 +60,6 @@ public class PaymentController extends BaseController implements Initializable{
             this.crTable.refresh();
             UIManager.getInstance().closeCurrentScreenShowPrevious();
 
-        } else {
-            displayAlertMessage("No payment amount was entered.");
         }
     }
 

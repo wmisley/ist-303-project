@@ -95,7 +95,8 @@ public class VerifyCheckinItemsController extends BaseController implements Init
         log.info("Arrival packet items user does not have: {}", uncheckedArrivalPacketItems);
 
         if ((uncheckedEquipmentList.size() == 0) && (uncheckedArrivalPacketItems.size() == 0)) {
-            //TODO: Check in camper
+            this.displayAlertMessage("Camper is now checked in.");
+            UIManager.getInstance().closeCurrentScreenShowPrevious();
         } else {
             promptItemsNotChecked(uncheckedEquipmentList, uncheckedArrivalPacketItems);
         }
