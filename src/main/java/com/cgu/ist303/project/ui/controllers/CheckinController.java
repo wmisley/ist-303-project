@@ -37,6 +37,8 @@ public class CheckinController implements Initializable {
     private ComboBox<CampSession> sessions;
     @FXML
     private Button makePayment;
+    @FXML
+    private Button emergencyContacts;
 
     private Registrar registrar = new Registrar();
 
@@ -80,6 +82,10 @@ public class CheckinController implements Initializable {
             errorAlert.setContentText(e.getMessage());
             errorAlert.showAndWait();
         }
+    }
+
+    public void emergencyContactsClicked() throws Exception {
+        UIManager.getInstance().showEmergencyContactsScreen();
     }
 
     private void loadTable(int sessionId) {

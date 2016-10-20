@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="417.0" prefWidth="552.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.EmergencyContactsController">
+   <children>
+      <Label layoutX="22.0" layoutY="23.0" text="Emergency Contact 1" />
+      <TextField layoutX="19.0" layoutY="45.0" promptText="First Name" />
+      <TextField layoutX="193.0" layoutY="45.0" promptText="Middle Name" />
+      <TextField layoutX="367.0" layoutY="45.0" promptText="Last Name" />
+      <Label layoutX="22.0" layoutY="78.0" text="Phone Number" />
+      <TextField layoutX="34.0" layoutY="100.0" prefHeight="27.0" prefWidth="45.0" promptText="###" />
+      <TextField layoutX="95.0" layoutY="100.0" prefHeight="27.0" prefWidth="45.0" promptText="###" />
+      <TextField layoutX="162.0" layoutY="100.0" prefHeight="27.0" prefWidth="53.0" promptText="####" />
+      <Label layoutX="26.0" layoutY="104.0" prefHeight="17.0" prefWidth="5.0" text="(" />
+      <Label layoutX="82.0" layoutY="104.0" prefHeight="17.0" prefWidth="0.0" text=")" />
+      <Label layoutX="149.0" layoutY="104.0" prefHeight="17.0" prefWidth="0.0" text="-" />
+      <TextField layoutX="18.0" layoutY="178.0" promptText="First Name" />
+      <TextField layoutX="192.0" layoutY="178.0" promptText="Middle Name" />
+      <TextField layoutX="366.0" layoutY="178.0" promptText="Last Name" />
+      <TextField layoutX="34.0" layoutY="233.0" prefHeight="27.0" prefWidth="45.0" promptText="###" />
+      <TextField layoutX="94.0" layoutY="233.0" prefHeight="27.0" prefWidth="45.0" promptText="###" />
+      <TextField layoutX="162.0" layoutY="233.0" prefHeight="27.0" prefWidth="53.0" promptText="####" />
+      <Label layoutX="21.0" layoutY="211.0" text="Phone Number" />
+      <Label layoutX="21.0" layoutY="154.0" text="Emergency Contact 2 (optional)" />
+      <Label layoutX="21.0" layoutY="288.0" text="Emergency Contact 3 (optional)" />
+      <TextField layoutX="18.0" layoutY="312.0" promptText="First Name" />
+      <TextField layoutX="192.0" layoutY="312.0" promptText="Middle Name" />
+      <TextField layoutX="366.0" layoutY="312.0" promptText="Last Name" />
+      <Label layoutX="21.0" layoutY="345.0" text="Phone Number" />
+      <TextField layoutX="34.0" layoutY="367.0" prefHeight="27.0" prefWidth="45.0" promptText="###" />
+      <TextField layoutX="94.0" layoutY="367.0" prefHeight="27.0" prefWidth="45.0" promptText="###" />
+      <TextField layoutX="165.0" layoutY="366.0" prefHeight="27.0" prefWidth="53.0" promptText="####" />
+      <Label layoutX="146.0" layoutY="238.0" prefHeight="17.0" prefWidth="0.0" text="-" />
+      <Label layoutX="149.0" layoutY="371.0" prefHeight="17.0" prefWidth="0.0" text="-" />
+      <Label layoutX="25.0" layoutY="371.0" prefHeight="17.0" prefWidth="5.0" text="(" />
+      <Label layoutX="83.0" layoutY="371.0" prefHeight="17.0" prefWidth="0.0" text=")" />
+      <Label layoutX="83.0" layoutY="237.0" prefHeight="17.0" prefWidth="0.0" text=")" />
+      <Label layoutX="25.0" layoutY="237.0" prefHeight="17.0" prefWidth="5.0" text="(" />
+      <Button layoutX="478.0" layoutY="366.0" mnemonicParsing="false" text="Save" />
+      <Button layoutX="403.0" layoutY="366.0" mnemonicParsing="false" text="Cancel" />
+   </children>
+</AnchorPane>

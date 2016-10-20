@@ -93,9 +93,9 @@ public class UIManager {
         stage.show();
     }
 
-    public void showPaymentScreen() throws Exception {
-        log.debug("Showing payment form");
-        Stage stage = setStage("Payment Form", "/payments.fxml", 600, 550);
+    public void showEmergencyContactsScreen() throws Exception {
+        log.debug("Emergency Contacts");
+        Stage stage = setStage("Emergency Contacts", "/emergencycontacts.fxml", 552, 417);
 
         showNewScreenHidePrevious(stage);
 
