@@ -4,12 +4,12 @@
 <?import javafx.scene.layout.*?>
 
 <?import org.controlsfx.control.CheckListView?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="456.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.VerifyCheckinItemsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="374.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.VerifyCheckinItemsController">
    <children>
-      <CheckListView fx:id="packet" layoutX="27.0" layoutY="39.0" prefHeight="157.0" prefWidth="313.0" />
+      <CheckListView fx:id="packet" layoutX="27.0" layoutY="39.0" prefHeight="78.0" prefWidth="313.0" />
       <Label layoutX="27.0" layoutY="14.0" text="Arrival Packet" />
-      <Label layoutX="27.0" layoutY="211.0" text="Equipment" />
-      <CheckListView fx:id="equipment" layoutX="27.0" layoutY="239.0" prefHeight="157.0" prefWidth="313.0" />
+      <Label layoutX="27.0" layoutY="130.0" text="Equipment" />
+      <CheckListView fx:id="equipment" layoutX="27.0" layoutY="158.0" prefHeight="238.0" prefWidth="313.0" />
       <Button fx:id="ok" layoutX="280.0" layoutY="410.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="OK" onAction="#okClicked" />
       <Button fx:id="cancel" layoutX="195.0" layoutY="410.0" mnemonicParsing="false" onAction="#cancelClicked" prefHeight="27.0" prefWidth="66.0" text="Cancel" />
    </children>

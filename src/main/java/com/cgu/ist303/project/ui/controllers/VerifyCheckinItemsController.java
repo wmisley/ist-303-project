@@ -37,12 +37,23 @@ public class VerifyCheckinItemsController implements Initializable {
 
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<EquipmentItem> equipmentList = FXCollections.observableArrayList();
-        equipmentList.add(new EquipmentItem("Riding Helmet"));
+        equipmentList.add(new EquipmentItem("Backpack"));
         equipmentList.add(new EquipmentItem("Boots"));
-        equipmentList.add(new EquipmentItem("Sleeping Bag"));
-        equipmentList.add(new EquipmentItem("Water Bottle"));
-        equipmentList.add(new EquipmentItem("Sun Screen"));
         equipmentList.add(new EquipmentItem("Bug Spray"));
+        equipmentList.add(new EquipmentItem("Compass or GPS"));
+        equipmentList.add(new EquipmentItem("Deodorant"));
+        equipmentList.add(new EquipmentItem("First aid kit"));
+        equipmentList.add(new EquipmentItem("Riding Helmet"));
+        equipmentList.add(new EquipmentItem("Shorts (13 pair)"));
+        equipmentList.add(new EquipmentItem("Shirts (13)"));
+        equipmentList.add(new EquipmentItem("Sleeping Bag"));
+        equipmentList.add(new EquipmentItem("Socks (13 pair)"));
+        equipmentList.add(new EquipmentItem("Sun Screen"));
+        equipmentList.add(new EquipmentItem("Toothbrush"));
+        equipmentList.add(new EquipmentItem("Towel"));
+        equipmentList.add(new EquipmentItem("Underwear (13 pair)"));
+        equipmentList.add(new EquipmentItem("Water Bottle"));
+        equipmentList.add(new EquipmentItem("Whistle"));
         equipment.setItems(equipmentList);
 
         ObservableList<ArrivalPacketItemItem> packetItemsList = FXCollections.observableArrayList();
