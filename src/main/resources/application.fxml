@@ -7,6 +7,7 @@
 
 <?import com.cgu.ist303.project.ui.controls.LimitedTextField?>
 <?import com.cgu.ist303.project.ui.controls.LimitedNumberTextField?>
+
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="592.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.ApplicationController">
    <children>
       <Label layoutX="28.0" layoutY="24.0" text="Camper Name" />

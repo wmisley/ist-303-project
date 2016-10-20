@@ -7,16 +7,14 @@ import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
+import com.cgu.ist303.project.ui.model.EquipmentItem;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -130,9 +129,15 @@ public class CheckinController implements Initializable {
     }
 
     public void checkinClicked() throws Exception {
+        Camper camper = campersTable.getSelectionModel().getSelectedItem();
+
+        log.debug("Camper {} {} was selected for check-in by the user", camper.getFirstName(),
+                camper.getLastName());
+
+        UIManager.getInstance().showVerifyCheckinItems();
     }
 
     public void cancelClicked() throws Exception {
-        UIManager.getInstance().showMainMenu();
+        UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
 }

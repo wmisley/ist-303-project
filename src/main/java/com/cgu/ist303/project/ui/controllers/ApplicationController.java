@@ -140,7 +140,7 @@ public class ApplicationController implements Initializable {
     }
 
     public void cancelClicked() throws Exception {
-        UIManager.getInstance().showMainMenu();
+        UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
 
     private void loadCampSessions() {
