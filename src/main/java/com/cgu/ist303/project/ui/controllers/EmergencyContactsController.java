@@ -93,6 +93,7 @@ public class EmergencyContactsController extends BaseController implements Initi
     }
 
     public void cancelClicked() {
+        log.debug("Cancel clicked");
         UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
 }

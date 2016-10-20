@@ -140,6 +140,7 @@ public class ApplicationController extends BaseController implements Initializab
     }
 
     public void cancelClicked() throws Exception {
+        log.debug("Cancel clicked");
         UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
 
@@ -287,16 +288,6 @@ public class ApplicationController extends BaseController implements Initializab
         alert.getButtonTypes().setAll(buttonYes, buttonNo);
 
         Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.get() == buttonYes) {
-            //TODO: Clear form
-        } else {
-            try {
-                cancelClicked();
-            } catch (Exception e) {
-                displayErrorMessage("Could not go back to main menu.", e);
-            }
-        }
     }
 
     private void promptForAcceptancLetter(Camper camper, CampSession cs) {
@@ -319,8 +310,6 @@ public class ApplicationController extends BaseController implements Initializab
             try {
                 lg.createAcceptanceLetter("letter.pdf", camper, cs);
                 Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "letter.pdf"});
-
-                cancelClicked();
             } catch (Exception e) {
                 displayErrorMessage("Could not generate letter of acceptance.", e);
             }
