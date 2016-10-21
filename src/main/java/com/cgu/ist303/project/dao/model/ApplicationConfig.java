@@ -5,4 +5,6 @@ package com.cgu.ist303.project.dao.model;
  */
 public class ApplicationConfig {
     //Abbas
+    String mode="";
+
 }
