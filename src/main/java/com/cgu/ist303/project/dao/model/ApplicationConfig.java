@@ -7,5 +7,7 @@ public class ApplicationConfig {
     //Abbas
     String mode="";
     int id=0;
+    int idM=1;
 
 }
+
