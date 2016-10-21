@@ -38,7 +38,7 @@ public class SqliteDBCreator {
         TribeDAO tribeDAO = DAOFactory.createTribeDAO();
 
         Tribe tribe = new Tribe();
-        tribe.setCampYear(2016);
+        tribe.setCampYear(2017);
         tribe.setTribeName("Tribe 1");
 
         try {
@@ -46,19 +46,19 @@ public class SqliteDBCreator {
             tribes.add(tribe);
 
             tribe = new Tribe();
-            tribe.setCampYear(2016);
+            tribe.setCampYear(2017);
             tribe.setTribeName("Tribe 2");
             tribe.setTribeId(tribeDAO.insert(tribe));
             tribes.add(tribe);
 
             tribe = new Tribe();
-            tribe.setCampYear(2016);
+            tribe.setCampYear(2017);
             tribe.setTribeName("Tribe 3");
             tribe.setTribeId(tribeDAO.insert(tribe));
             tribes.add(tribe);
 
             tribe = new Tribe();
-            tribe.setCampYear(2016);
+            tribe.setCampYear(2017);
             tribe.setTribeName("Tribe 4");
             tribe.setTribeId(tribeDAO.insert(tribe));
             tribes.add(tribe);
@@ -77,34 +77,30 @@ public class SqliteDBCreator {
         //TODO: Camps are in the 2nd and 3rd week of the month
         //TODO: Need to verify starts on Sunday, ends on Saturday
         CampSession session = new CampSession();
-        session.setCampYear(2016); session.setGenderLimit(36);
-        session.setStartMonth(6);  session.setStartDay(5);
-        session.setEndMonth(6);    session.setEndDay(18);
+        session.setCampYear(2017); session.setGenderLimit(36);
+        session.setStartMonth(6);  session.setStartDay(4);
+        session.setEndMonth(6);    session.setEndDay(17);
 
         try {
             int sessionId = sessionDAO.insert(session);
             session.setCampSessioId(sessionId);
             sessions.add(session);
-        } catch (Exception e) { log.error(e); }
 
-        session = new CampSession();
-        session.setCampYear(2016); session.setGenderLimit(36);
-        session.setStartMonth(7);  session.setStartDay(3);
-        session.setEndMonth(7);    session.setEndDay(16);
+            session = new CampSession();
+            session.setCampYear(2017); session.setGenderLimit(36);
+            session.setStartMonth(7);  session.setStartDay(2);
+            session.setEndMonth(7);    session.setEndDay(15);
 
-        try {
-            int sessionId = sessionDAO.insert(session);
+            sessionId = sessionDAO.insert(session);
             session.setCampSessioId(sessionId);
             sessions.add(session);
-        } catch (Exception e) { log.error(e); }
 
-        session = new CampSession();
-        session.setCampYear(2016); session.setGenderLimit(36);
-        session.setStartMonth(8);  session.setStartDay(7);
-        session.setEndMonth(8);    session.setEndDay(20);
+            session = new CampSession();
+            session.setCampYear(2017); session.setGenderLimit(36);
+            session.setStartMonth(8);  session.setStartDay(6);
+            session.setEndMonth(8);    session.setEndDay(19);
 
-        try {
-            int sessionId = sessionDAO.insert(session);
+            sessionId = sessionDAO.insert(session);
             session.setCampSessioId(sessionId);
             sessions.add(session);
         } catch (Exception e) { log.error(e); }
@@ -137,6 +133,7 @@ public class SqliteDBCreator {
             createBunkHouseTable(c);
             createBunkHouseCountTable(c);
             createBunkAssignmentsTable(c);
+            createEmergencyContactsTable(c);
 
             c.close();
         } catch (Exception e) {
@@ -306,6 +303,22 @@ public class SqliteDBCreator {
                 " CONSTRAINT BUNK_HOUSE_ASSIGNMENTS_PK PRIMARY KEY (BUNK_HOUSE_ID, CAMPER_ID, CAMP_SESSION_ID), " +
                 " FOREIGN KEY(BUNK_HOUSE_ID) REFERENCES BUNK_HOUSES(BUNK_HOUSE_ID), " +
                 " FOREIGN KEY(CAMP_SESSION_ID) REFERENCES CAMP_SESSIONS(CAMP_SESSION_ID), " +
+                " FOREIGN KEY(CAMPER_ID) REFERENCES CAMPERS(CAMPER_ID))";
+        log.debug(sql);
+        stmt.executeUpdate(sql);
+        stmt.close();
+    }
+
+    private void createEmergencyContactsTable(Connection c) throws SQLException {
+        Statement stmt = c.createStatement();
+        String sql = "CREATE TABLE EMERGENCY_CONTACTS " +
+                "(CONTACT_ID      INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                " CAMPER_ID       INTEGER NOT NULL, " +
+                " FIRST_NAME      TEXT NOT NULL, " +
+                " MIDDLE_NAME     TEXT NULL, " +
+                " LAST_NAME       TEXT NOT NULL, " +
+                " PRIMARY_PHONE   TEXT NOT NULL, " +
+                " ALTERNATE_PHONE TEXT NULL, " +
                 " FOREIGN KEY(CAMPER_ID) REFERENCES CAMPERS(CAMPER_ID))";
         log.debug(sql);
         stmt.executeUpdate(sql);

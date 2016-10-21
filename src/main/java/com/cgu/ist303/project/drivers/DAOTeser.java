@@ -3,7 +3,7 @@ package com.cgu.ist303.project.drivers;
 import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.dao.model.CamperRegistrationRecord;
 import com.cgu.ist303.project.dao.sqlite.SqliteDBCreator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +17,16 @@ public class DAOTeser {
     private static final Logger log = LogManager.getLogger(DAOTeser.class);
 
     static public void main(String[] args) {
+        try {
+            Runtime.getRuntime().exec(new String[]{"open", "-a", "Microsoft Word" , "test.txt"});
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    static public void main2(String[] args) {
         final String dbPath = "ist303_test.db";
 
         //Create the database schema and populate camp sessions array for the year
@@ -42,7 +52,7 @@ public class DAOTeser {
     public void registerCamper(String dbPath, ArrayList<CampSession> sessions, int camperId) {
         DAOFactory.dbPath = dbPath;
         CamperRegistrationDAO regDAO = DAOFactory.createCamperRegistrationDAO();
-        CamperRegistration reg = new CamperRegistration();
+        CamperRegistrationRecord reg = new CamperRegistrationRecord();
         reg.setCamperId(camperId);
         reg.setCampSessionId(sessions.get(0).getCampSessioId());
 

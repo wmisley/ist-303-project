@@ -7,4 +7,5 @@ import com.cgu.ist303.project.dao.model.Camper;
  */
 public interface CamperDAO {
     int insertCamper(Camper camper) throws Exception;
+    int queryCamperId(Camper camper) throws Exception;
 }

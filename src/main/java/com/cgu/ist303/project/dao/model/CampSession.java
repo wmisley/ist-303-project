@@ -68,4 +68,9 @@ public class CampSession {
     public void setGenderLimit(int genderLimit) {
         this.genderLimit = genderLimit;
     }
+
+    public String getShortDateString() {
+        return String.format("%d/%d to %d/%d", getStartMonth(), getStartDay(),
+                getEndMonth(), getEndDay());
+    }
 }
