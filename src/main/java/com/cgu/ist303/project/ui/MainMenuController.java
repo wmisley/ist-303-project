@@ -61,7 +61,7 @@ public class MainMenuController implements Initializable {
     private Registrar registrar = new Registrar();
 
     public void initialize(URL url, ResourceBundle rb) {
-        DAOFactory.dbPath = "ist303.db";
+        DAOFactory.dbPath = "ist303_test.db";
 
         try {
             registrar.load(2016);
