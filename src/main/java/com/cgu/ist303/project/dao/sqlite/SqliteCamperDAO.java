@@ -1,5 +1,6 @@
 package com.cgu.ist303.project.dao.sqlite;
 
+import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.CamperDAO;
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqliteCamperDAO implements CamperDAO {
     private static final Logger log = LogManager.getLogger(SqliteCamperDAO.class);
@@ -16,6 +19,38 @@ public class SqliteCamperDAO implements CamperDAO {
 
     public SqliteCamperDAO(String sqliteFilepath) {
         dbFilepath = sqliteFilepath;
+    }
+
+    public int queryCamperId(Camper camper) throws Exception {
+        int camperId = -1;
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+        stmt = c.createStatement();
+
+        String sql = "SELECT CAMPER_ID " +
+                     "FROM CAMPERS " +
+                     "WHERE FIRST_NAME = '%s' " +
+                     "    AND MIDDLE_NAME = '%s' " +
+                     "    AND LAST_NAME = '%s' " +
+                     "    AND PHONE_NUMBER = '%s'";
+
+        sql = String.format(sql, camper.getFirstName(), camper.getMiddleName(),
+                camper.getLastName(), camper.getPhoneNumber());
+        ResultSet rs = stmt.executeQuery(sql);
+
+        while ( rs.next() ) {
+            camperId = rs.getInt("CAMPER_ID");
+        }
+
+        rs.close();
+        stmt.close();
+        c.close();
+
+        return camperId;
     }
 
     public int insertCamper(Camper camper) throws Exception {

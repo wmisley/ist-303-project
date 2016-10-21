@@ -55,3 +55,15 @@ https://www.techonthenet.com/sqlite/index.php
 https://www.tutorialspoint.com/sqlite/index.htm
 
 https://www.sqlite.org/docs.html
+
+JavaFX
+
+To install Scene Builder for JavaFX, download and install:
+
+http://www.oracle.com/technetwork/java/javafxscenebuilder-1x-archive-2199384.html
+
+In IntelliJ
+
+IntelliJ IDEA > Preferences > Language and Frameworks > JavaFX
+
+Then set the path to the Scene Builder that was downloaded
