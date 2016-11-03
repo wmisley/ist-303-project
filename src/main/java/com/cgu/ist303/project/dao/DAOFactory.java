@@ -14,4 +14,5 @@ public class DAOFactory {
     static public PaymentDAO createPaymentDAO() { return new SqlitePaymentDAO(dbPath); }
     static public RejectedApplicationsDAO createRejectedApplicationsDAO() { return new SqliteRejectedApplicationDAO(dbPath); }
     static public EmergencyContactDAO createEmergencyContactDAO() { return new SqliteEmergencyContactDAO(dbPath); }
+    static public BunkHouseDAO createBunkHouseDAO() { return new SqliteBunkHouseDAO(dbPath); }
 }

@@ -1,6 +1,8 @@
 package com.cgu.ist303.project.dao.sqlite;
 
+import com.cgu.ist303.project.dao.BunkHouseDAO;
 import com.cgu.ist303.project.dao.TribeDAO;
+import com.cgu.ist303.project.dao.model.BunkHouse;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.CampSessionDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
@@ -19,57 +21,102 @@ import java.util.ArrayList;
 public class SqliteDBCreator {
     private static final Logger log = LogManager.getLogger(SqliteDBCreator.class);
 
-    static public void testermain(String[] args) {
-        final String dbPath = "ist303.db";
-
+    public void createDb(String dbPath) throws Exception {
         log.info("Creating sqlite3 database at {}", dbPath);
 
-        SqliteDBCreator db = new SqliteDBCreator();
-        db.deleteDabaseFile(dbPath);
-        db.createTables(dbPath);
+        deleteDabaseFile(dbPath);
+        createTables(dbPath);
+        ArrayList<CampSession> sessions =  createCampSessions(dbPath);
 
-        ArrayList<CampSession> sessions = db.createCampSessions(dbPath);
+        for (CampSession session : sessions) {
+            createTribes(dbPath, session.getCampSessioId());
+            createBunkHouses(dbPath, session.getCampSessioId());
+        }
     }
 
-    public ArrayList<Tribe> createTribes(String dbPath) {
+    private void createBunkHouses(String dbPath, int sessionId) throws Exception{
+        DAOFactory.dbPath = dbPath;
+        BunkHouseDAO bhDAO = DAOFactory.createBunkHouseDAO();
+
+        BunkHouse bh = new BunkHouse();
+        bh.setCampSessionId(sessionId);
+        bh.setGender(BunkHouse.Gender.Male);
+        bh.setBundHouseName("Bunk House 1");
+        bh.setMaxOccupants(12);
+        bhDAO.insert(bh);
+
+        bh = new BunkHouse();
+        bh.setCampSessionId(sessionId);
+        bh.setGender(BunkHouse.Gender.Male);
+        bh.setBundHouseName("Bunk House 2");
+        bh.setMaxOccupants(12);
+        bhDAO.insert(bh);
+
+        bh = new BunkHouse();
+        bh.setCampSessionId(sessionId);
+        bh.setGender(BunkHouse.Gender.Male);
+        bh.setBundHouseName("Bunk House 3");
+        bh.setMaxOccupants(12);
+        bhDAO.insert(bh);
+
+
+        bh = new BunkHouse();
+        bh.setCampSessionId(sessionId);
+        bh.setGender(BunkHouse.Gender.Female);
+        bh.setBundHouseName("Bunk House 4");
+        bh.setMaxOccupants(12);
+        bhDAO.insert(bh);
+
+        bh = new BunkHouse();
+        bh.setCampSessionId(sessionId);
+        bh.setGender(BunkHouse.Gender.Female);
+        bh.setBundHouseName("Bunk House 5");
+        bh.setMaxOccupants(12);
+        bhDAO.insert(bh);
+
+        bh = new BunkHouse();
+        bh.setCampSessionId(sessionId);
+        bh.setGender(BunkHouse.Gender.Female);
+        bh.setBundHouseName("Bunk House 6");
+        bh.setMaxOccupants(12);
+        bhDAO.insert(bh);
+    }
+
+    private ArrayList<Tribe> createTribes(String dbPath, int campSessionId) throws Exception {
         ArrayList<Tribe> tribes = new ArrayList<Tribe>();
 
         DAOFactory.dbPath = dbPath;
         TribeDAO tribeDAO = DAOFactory.createTribeDAO();
 
         Tribe tribe = new Tribe();
-        tribe.setCampYear(2017);
+        tribe.setCampSessionId(campSessionId);
         tribe.setTribeName("Tribe 1");
 
-        try {
-            tribe.setTribeId(tribeDAO.insert(tribe));
-            tribes.add(tribe);
+        tribe.setTribeId(tribeDAO.insert(tribe));
+        tribes.add(tribe);
 
-            tribe = new Tribe();
-            tribe.setCampYear(2017);
-            tribe.setTribeName("Tribe 2");
-            tribe.setTribeId(tribeDAO.insert(tribe));
-            tribes.add(tribe);
+        tribe = new Tribe();
+        tribe.setCampSessionId(campSessionId);
+        tribe.setTribeName("Tribe 2");
+        tribe.setTribeId(tribeDAO.insert(tribe));
+        tribes.add(tribe);
 
-            tribe = new Tribe();
-            tribe.setCampYear(2017);
-            tribe.setTribeName("Tribe 3");
-            tribe.setTribeId(tribeDAO.insert(tribe));
-            tribes.add(tribe);
+        tribe = new Tribe();
+        tribe.setCampSessionId(campSessionId);
+        tribe.setTribeName("Tribe 3");
+        tribe.setTribeId(tribeDAO.insert(tribe));
+        tribes.add(tribe);
 
-            tribe = new Tribe();
-            tribe.setCampYear(2017);
-            tribe.setTribeName("Tribe 4");
-            tribe.setTribeId(tribeDAO.insert(tribe));
-            tribes.add(tribe);
-        } catch (Exception e) {
-            log.error(e);
-        }
+        tribe = new Tribe();
+        tribe.setCampSessionId(campSessionId);
+        tribe.setTribeName("Tribe 4");
+        tribe.setTribeId(tribeDAO.insert(tribe));
+        tribes.add(tribe);
 
         return tribes;
     }
 
-    public ArrayList<CampSession> createCampSessions(String dbPath) {
+    private ArrayList<CampSession> createCampSessions(String dbPath) {
         ArrayList<CampSession> sessions = new ArrayList<CampSession>();
         DAOFactory.dbPath = dbPath;
         CampSessionDAO sessionDAO = DAOFactory.createCampSessionDAO();
@@ -114,7 +161,7 @@ public class SqliteDBCreator {
     }
 
 
-    public void createTables(String dbPath)  {
+    private void createTables(String dbPath)  {
         Connection c = null;
         try {
             Class.forName("org.sqlite.JDBC");
@@ -131,7 +178,6 @@ public class SqliteDBCreator {
             createTribesTable(c);
             createTribeAssignmentsTable(c);
             createBunkHouseTable(c);
-            createBunkHouseCountTable(c);
             createBunkAssignmentsTable(c);
             createEmergencyContactsTable(c);
 
@@ -247,10 +293,11 @@ public class SqliteDBCreator {
     private void createTribesTable(Connection c) throws SQLException {
         Statement stmt = c.createStatement();
         String sql = "CREATE TABLE TRIBES " +
-                "(TRIBE_ID    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                " TRIBE_NAME  TEXT NOT NULL, " +
-                " CAMP_YEAR   INTEGER NOT NULL, " +
-                " CONSTRAINT TRIBES_UNIQUE UNIQUE (TRIBE_NAME, CAMP_YEAR))";
+                "(TRIBE_ID        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                " TRIBE_NAME      TEXT NOT NULL, " +
+                " CAMP_SESSION_ID INTEGER NOT NULL, " +
+                " CONSTRAINT TRIBES_UNIQUE UNIQUE (TRIBE_NAME, CAMP_SESSION_ID), " +
+                " FOREIGN KEY(CAMP_SESSION_ID) REFERENCES CAMP_SESSIONS(CAMP_SESSION_ID))";
         log.debug(sql);
         stmt.executeUpdate(sql);
         stmt.close();
@@ -260,10 +307,8 @@ public class SqliteDBCreator {
         Statement stmt = c.createStatement();
         String sql = "CREATE TABLE TRIBE_ASSIGNMENTS " +
                 "(CAMPER_ID        INTEGER NOT NULL," +
-                " CAMP_SESSION_ID  INTEGER NOT NULL, " +
                 " TRIBE_ID         INTEGER NOT NULL, " +
-                " CONSTRAINT TRIBE_ASSIGNMENTS_PK PRIMARY KEY (CAMP_SESSION_ID, CAMPER_ID, TRIBE_ID)," +
-                " FOREIGN KEY(CAMP_SESSION_ID) REFERENCES CAMP_SESSIONS(CAMP_SESSION_ID)," +
+                " CONSTRAINT TRIBE_ASSIGNMENTS_PK PRIMARY KEY (CAMPER_ID, TRIBE_ID)," +
                 " FOREIGN KEY(TRIBE_ID) REFERENCES TRIBES(TRIBE_ID)," +
                 " FOREIGN KEY(CAMPER_ID) REFERENCES CAMPERS(CAMPER_ID))";
         log.debug(sql);
@@ -275,20 +320,12 @@ public class SqliteDBCreator {
         Statement stmt = c.createStatement();
         String sql = "CREATE TABLE BUNK_HOUSES " +
                 "(BUNK_HOUSE_ID    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                " BUNK_HOUSE_NAME  TEXT NOT NULL UNIQUE)";
-        log.debug(sql);
-        stmt.executeUpdate(sql);
-        stmt.close();
-    }
-
-    private void createBunkHouseCountTable(Connection c) throws SQLException {
-        Statement stmt = c.createStatement();
-        String sql = "CREATE TABLE BUNK_HOUSE_COUNTS " +
-                "(BUNK_HOUSE_ID    INTEGER NOT NULL, " +
-                " CAMP_YEAR        INTEGER NOT NULL, " +
-                " BUNK_HOUSE_COUNT INTEGER NOT NULL, " +
-                " CONSTRAINT BUNK_HOUSE_COUNTS_PK PRIMARY KEY (BUNK_HOUSE_ID, CAMP_YEAR) " +
-                " FOREIGN KEY(BUNK_HOUSE_ID) REFERENCES BUNK_HOUSES(BUNK_HOUSE_ID))";
+                " BUNK_HOUSE_NAME  TEXT NOT NULL, " +
+                " GENDER           INTEGER NOT NULL, " +
+                " CAMP_SESSION_ID  INTEGER NOT NULL, " +
+                " MAX_OCCUPANTS    INTEGER NOT NULL, " +
+                " CONSTRAINT BUNK_HOUSES_UNIQUE UNIQUE (BUNK_HOUSE_NAME, CAMP_SESSION_ID), " +
+                " FOREIGN KEY(CAMP_SESSION_ID) REFERENCES CAMP_SESSIONS(CAMP_SESSION_ID))";
         log.debug(sql);
         stmt.executeUpdate(sql);
         stmt.close();

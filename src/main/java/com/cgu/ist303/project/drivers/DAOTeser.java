@@ -26,29 +26,6 @@ public class DAOTeser {
         }
     }
 
-    static public void main2(String[] args) {
-        final String dbPath = "ist303_test.db";
-
-        //Create the database schema and populate camp sessions array for the year
-        DAOTeser test = new DAOTeser();
-        ArrayList<CampSession> sessions = test.createDb(dbPath);
-
-        //Test code to save a camper to the database
-        int camperId = test.saveCamper(dbPath);
-
-        //Test code to save a camper registration to the database
-        test.registerCamper(dbPath, sessions, camperId);
-    }
-
-    public ArrayList<CampSession> createDb(String dbPath) {
-        log.info("Creating sqlite3 database at {}", dbPath);
-
-        SqliteDBCreator db = new SqliteDBCreator();
-        db.deleteDabaseFile(dbPath);
-        db.createTables(dbPath);
-        return db.createCampSessions(dbPath);
-    }
-
     public void registerCamper(String dbPath, ArrayList<CampSession> sessions, int camperId) {
         DAOFactory.dbPath = dbPath;
         CamperRegistrationDAO regDAO = DAOFactory.createCamperRegistrationDAO();
