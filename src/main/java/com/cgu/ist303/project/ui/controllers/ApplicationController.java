@@ -15,6 +15,8 @@ import javafx.scene.control.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -309,7 +311,15 @@ public class ApplicationController extends BaseController implements Initializab
 
             try {
                 lg.createAcceptanceLetter("letter.pdf", camper, cs);
-                Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "letter.pdf"});
+
+                String os = System.getProperty("os.name").toLowerCase();
+
+                if (os.indexOf("mac") > 0) {
+                    Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "letter.pdf"});
+                } else {
+                    File myFile = new File("letter.pdf");
+                    Desktop.getDesktop().open(myFile);
+                }
             } catch (Exception e) {
                 displayErrorMessage("Could not generate letter of acceptance.", e);
             }

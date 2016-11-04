@@ -145,4 +145,13 @@ public class UIManager {
 
         stage.show();
     }
-}
+    public void showTribeRosterScreen() throws Exception {
+        log.debug("Showing Tribe-Roster");
+        Stage stage = setStage("Tribe Roster", "/TribeRoster.fxml", 653, 515);
+
+        showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
+    }

@@ -4,7 +4,9 @@ package com.cgu.ist303.project.dao.model;
  * Created by will4769 on 9/29/16.
  */
 public class Tribe {
-    public int tribeId = 0;
+    private int tribeId = 0;
+    private int campSessionId = 0;
+    private String tribeName = "";
 
     public String getTribeName() {
         return tribeName;
@@ -22,16 +24,13 @@ public class Tribe {
         this.tribeId = tribeId;
     }
 
-    public int getCampYear() {
-        return campYear;
+    public int getCampSessionId() {
+        return campSessionId;
     }
 
-    public void setCampYear(int campYear) {
-        this.campYear = campYear;
+    public void setCampSessionId(int campSessionId) {
+        this.campSessionId = campSessionId;
     }
-
-    public int campYear = 0;
-    public String tribeName = "";
 
     public Tribe() {
     }

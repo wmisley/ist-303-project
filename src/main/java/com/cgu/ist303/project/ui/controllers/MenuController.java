@@ -21,8 +21,13 @@ public class MenuController implements Initializable {
         UIManager.getInstance().showApplicationScreen();
     }
 
+
     public void showCheckIn() throws Exception {
         log.debug("User pressed \"Check-in\" button");
         UIManager.getInstance().showCheckinScreen();
+    }
+    public void showTribeRoster() throws Exception {
+        log.debug("User pressed \"Tribe\" button");
+        UIManager.getInstance().showTribeRosterScreen();
     }
 }

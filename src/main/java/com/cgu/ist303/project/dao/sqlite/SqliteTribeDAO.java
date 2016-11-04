@@ -28,11 +28,11 @@ public class SqliteTribeDAO implements TribeDAO {
 
         stmt = c.createStatement();
         String sql = "INSERT INTO TRIBES " +
-                "(TRIBE_NAME, CAMP_YEAR) " +
+                "(TRIBE_NAME, CAMP_SESSION_ID) " +
                 "     VALUES " +
                 "('%s', %d);";
 
-        sql = String.format(sql, tribe.getTribeName(), tribe.campYear);
+        sql = String.format(sql, tribe.getTribeName(), tribe.getCampSessionId());
 
         log.debug(sql);
 

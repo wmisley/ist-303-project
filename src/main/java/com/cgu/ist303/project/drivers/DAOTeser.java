@@ -4,11 +4,13 @@ import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistrationRecord;
+import com.cgu.ist303.project.dao.model.TribeAssignment;
 import com.cgu.ist303.project.dao.sqlite.SqliteDBCreator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by will4769 on 9/29/16.
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 public class DAOTeser {
     private static final Logger log = LogManager.getLogger(DAOTeser.class);
 
-    static public void main(String[] args) {
+    static public void main2(String[] args) {
         try {
             Runtime.getRuntime().exec(new String[]{"open", "-a", "Microsoft Word" , "test.txt"});
             Thread.sleep(3000);
@@ -26,27 +28,19 @@ public class DAOTeser {
         }
     }
 
-    static public void main2(String[] args) {
-        final String dbPath = "ist303_test.db";
+    static public void main(String[] args) {
+        try {
+            DAOFactory.dbPath = "ist303-term2.db";
+            TribeAssignmentDAO taDAO = DAOFactory.createTribeAssignmentDAO();
+            List<TribeAssignment> list = taDAO.query(2);
 
-        //Create the database schema and populate camp sessions array for the year
-        DAOTeser test = new DAOTeser();
-        ArrayList<CampSession> sessions = test.createDb(dbPath);
-
-        //Test code to save a camper to the database
-        int camperId = test.saveCamper(dbPath);
-
-        //Test code to save a camper registration to the database
-        test.registerCamper(dbPath, sessions, camperId);
-    }
-
-    public ArrayList<CampSession> createDb(String dbPath) {
-        log.info("Creating sqlite3 database at {}", dbPath);
-
-        SqliteDBCreator db = new SqliteDBCreator();
-        db.deleteDabaseFile(dbPath);
-        db.createTables(dbPath);
-        return db.createCampSessions(dbPath);
+            for (TribeAssignment ta : list) {
+                log.info("ID:{}, Name:{}", ta.getTribe().getTribeId(), ta.getTribe().getTribeId());
+            }
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void registerCamper(String dbPath, ArrayList<CampSession> sessions, int camperId) {

@@ -33,7 +33,8 @@ public class CampRegistrationApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         //DAOFactory.dbPath = "ist303.db";
-        DAOFactory.dbPath = "ist303-presentation.db";
+        //DAOFactory.dbPath = "ist303-presentation.db";
+        DAOFactory.dbPath = "ist303-term2.db";
 
         //TODO: Uncomment this when the login dialog is needed
         //loginPrompt();
@@ -48,13 +49,15 @@ public class CampRegistrationApplication extends Application {
         UIManager.getInstance().showMainMenu(primaryStage);
     }
 
-    public ArrayList<CampSession> createDb(String dbPath) {
+    public void createDb(String dbPath) {
         log.info("Creating sqlite3 database at {}", dbPath);
 
-        SqliteDBCreator db = new SqliteDBCreator();
-        db.deleteDabaseFile(dbPath);
-        db.createTables(dbPath);
-        return db.createCampSessions(dbPath);
+        try {
+            SqliteDBCreator db = new SqliteDBCreator();
+            db.createDb(dbPath);
+        } catch (Exception e) {
+            log.error("Unable to create database", e);
+        }
     }
 
     public void loginPrompt() {
