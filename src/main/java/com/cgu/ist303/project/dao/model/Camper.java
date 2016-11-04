@@ -168,6 +168,16 @@ public class Camper {
         this.firstName = firstName;
     }
 
+    public void setGenderValue(int genderValue) {
+        if (genderValue == Camper.Gender.Male.getValue()) {
+            setGender(Camper.Gender.Male);
+        } else if (genderValue == Camper.Gender.Female.getValue()) {
+            setGender(Camper.Gender.Female);
+        } else {
+            setGender(Camper.Gender.Unspecified);
+        }
+    }
+
     public String getPhoneNumberString() {
         if (phoneNumber.length() >=10) {
             return "(" + phoneNumber.substring(0, 3) + ")" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6);
