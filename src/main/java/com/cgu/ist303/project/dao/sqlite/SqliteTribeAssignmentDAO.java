@@ -10,10 +10,7 @@ import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 
@@ -63,14 +60,18 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         stmt = c.createStatement();
 
         String sql =
-                "SELECT * " +
+                "SELECT T.TRIBE_ID as TRIBE_ID, T.TRIBE_NAME as TRIBE_NAME " +
                 "FROM TRIBES T LEFT OUTER JOIN TRIBE_ASSIGNMENTS TA ON TA.TRIBE_ID = T.TRIBE_ID " +
                 "WHERE T.CAMP_SESSION_ID = %d ";
 
         sql = String.format(sql, sessionId);
         log.debug(sql);
         ResultSet rs = stmt.executeQuery(sql);
-
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int count = rsmd.getColumnCount();
+        for(int i =1; i <= count; i++){
+            log.debug(rsmd.getColumnName(i));
+        }
         while ( rs.next() ) {
             Camper camper = new CamperRegistration();
 
