@@ -59,11 +59,13 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         c.setAutoCommit(false);
         stmt = c.createStatement();
 
-        String sql =
-                "SELECT T.TRIBE_ID as TRIBE_ID, T.TRIBE_NAME as TRIBE_NAME " +
-                "FROM TRIBES T LEFT OUTER JOIN TRIBE_ASSIGNMENTS TA ON TA.TRIBE_ID = T.TRIBE_ID " +
-                "WHERE T.CAMP_SESSION_ID = %d ";
+//        String sql =
+//                "SELECT T.TRIBE_ID as TRIBE_ID, TRIBE_NAME, C.CAMPER_ID, C.FIRST_NAME, C.AGE " +
+//                "FROM TRIBE_ASSIGNMENTS TA LEFT OUTER JOIN TRIBES T ON TA.TRIBE_ID = T.TRIBE_ID " +
+//                "LEFT OUTER JOIN CAMPERS C ON C.CAMPER_ID = TA.CAMPER_ID " +
+//                "WHERE T.CAMP_SESSION_ID = %d ";
 
+        String sql = "SELECT * FROM TRIBE_ASSIGNMENTS WHERE CAMPER_ID = 1";
         sql = String.format(sql, sessionId);
         log.debug(sql);
         ResultSet rs = stmt.executeQuery(sql);
@@ -73,33 +75,40 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
             log.debug(rsmd.getColumnName(i));
         }
         while ( rs.next() ) {
-            Camper camper = new CamperRegistration();
-
-            /*
-            int camperId = rs.getInt("CAMPER_ID");
-
-            if (!rs.wasNull()) {
-                camper.setCamperId(camperId);
-                camper.setFirstName(rs.getString("FIRST_NAME"));
-                camper.setMiddleName(rs.getString("MIDDLE_NAME"));
-                camper.setLastName(rs.getString("LAST_NAME"));
-                camper.setAge(rs.getInt("AGE"));
-                camper.setGenderValue(rs.getInt("GENDER"));
-            } else {
-                camper = null;
-            }
-            */
-
-            Tribe t = new Tribe();
-            t.setTribeId(rs.getInt("TRIBE_ID"));
-            //t.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
-            t.setTribeName(rs.getString("TRIBE_NAME"));
-
-            TribeAssignment ta = new TribeAssignment();
-            ta.setCamper(camper);
-            ta.setTribe(t);
-
-            list.add(ta);
+            log.debug(rs.getString("CAMPER_ID"));
+            log.debug(rs.getString("FIRST_NAME"));
+            log.debug(rs.getString("LAST_NAME"));
+//            Camper camper = new CamperRegistration();
+//            camper.setFirstName(rs.getString(4));
+//            log.debug("camper from db : " + rs.getString(4));
+//            log.debug("camper name : " + camper.getFirstName());
+//            camper.setAge(rs.getInt(5));
+//            log.debug("camper name : " + camper.getAge());
+//
+//            int camperId = rs.getInt("CAMPER_ID");
+//            /*
+//            if (!rs.wasNull()) {
+//                camper.setCamperId(camperId);
+//                camper.setFirstName(rs.getString("FIRST_NAME"));
+//                camper.setMiddleName(rs.getString("MIDDLE_NAME"));
+//                camper.setLastName(rs.getString("LAST_NAME"));
+//                camper.setAge(rs.getInt("AGE"));
+//                camper.setGenderValue(rs.getInt("GENDER"));
+//            } else {
+//                camper = null;
+//            }
+//            */
+//
+//            Tribe t = new Tribe();
+//            t.setTribeId(rs.getInt("TRIBE_ID"));
+//            //t.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
+//            t.setTribeName(rs.getString("TRIBE_NAME"));
+//
+//            TribeAssignment ta = new TribeAssignment();
+//            ta.setCamper(camper);
+//            ta.setTribe(t);
+//
+//            list.add(ta);
         }
 
         rs.close();

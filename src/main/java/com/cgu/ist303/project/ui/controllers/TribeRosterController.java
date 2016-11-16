@@ -7,12 +7,16 @@ import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.Tribe;
 import com.cgu.ist303.project.dao.model.TribeAssignment;
 import com.cgu.ist303.project.registrar.Registrar;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,14 +44,29 @@ public class TribeRosterController implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
 
-        TableColumn campersNameCol = new TableColumn("Camper's Name");
-        campersNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("camperName"));
+        TableColumn<TribeAssignment, String> campersNameCol = new TableColumn<TribeAssignment, String>("Camper's Name");
+        campersNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<TribeAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getCamper().getFirstName());
+            }
+        });
         campersNameCol.setPrefWidth(246);
-        TableColumn age = new TableColumn("Age");
-        age.setCellValueFactory(new PropertyValueFactory<Camper, String>("age"));
+        TableColumn<TribeAssignment, Number> age = new TableColumn<TribeAssignment, Number>("Age");
+        age.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, Number>, ObservableValue<Number>>() {
+            @Override
+            public ObservableValue<Number> call(TableColumn.CellDataFeatures<TribeAssignment, Number> param) {
+                return new SimpleIntegerProperty(param.getValue().getCamper().getAge());
+            }
+        });
         age.setPrefWidth(101);
-        TableColumn assignedTribe = new TableColumn("Assigned Tribe");
-        assignedTribe.setCellValueFactory(new PropertyValueFactory<Tribe, String>("assignedTribe"));
+        TableColumn<TribeAssignment, String> assignedTribe = new TableColumn<TribeAssignment, String>("Assigned Tribe");
+        assignedTribe.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<TribeAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getTribe().getTribeName());
+            }
+        });
         assignedTribe.setPrefWidth(238);
 
         tribeRostertable.getColumns().addAll(campersNameCol,age,assignedTribe);
@@ -97,6 +116,9 @@ public class TribeRosterController implements Initializable {
 
         try{
             List<TribeAssignment> list = tribeAssignmentDao.query(campSessioId);
+            for(TribeAssignment assign : list){
+                log.debug(assign.getTribe().getTribeName());
+            }
             obList = FXCollections.observableList(list);
             tribeRostertable.getItems().clear();
             tribeRostertable.setItems(obList);
