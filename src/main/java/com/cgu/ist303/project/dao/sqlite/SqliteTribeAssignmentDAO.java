@@ -71,7 +71,7 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         ResultSet rs = stmt.executeQuery(sql);
 
         while ( rs.next() ) {
-            Camper camper = new CamperRegistration();
+            Camper camper = new Camper();
             camper.setFirstName(rs.getString(4));
             camper.setAge(rs.getInt(5));
 
