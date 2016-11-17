@@ -1,6 +1,5 @@
 package com.cgu.ist303.project.ui;
 
-import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.ui.controllers.PaymentController;
 import com.cgu.ist303.project.ui.controllers.VerifyCheckinItemsController;
@@ -158,7 +157,7 @@ public class UIManager {
 
     public void showTribeRosterScreen() throws Exception { 
         log.debug("Showing Tribe-Roster");
-        Stage stage = setStage("Tribe Roster", "/TribeRoster.fxml", 653, 515);
+        Stage stage = setStage("Tribe Roster", "/triberoster.fxml", 653, 515);
 
         showNewScreenHidePrevious(stage);
 
