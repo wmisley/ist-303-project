@@ -1,12 +1,11 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
-import com.cgu.ist303.project.dao.model.CampSession;
-import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.Tribe;
-import com.cgu.ist303.project.dao.model.TribeAssignment;
+import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.registrar.Registrar;
+import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -38,7 +37,11 @@ public class TribeRosterController implements Initializable {
     @FXML
     private ComboBox<CampSession> sessions;
     @FXML
-    private Button printRoster;
+    private Button print;
+    @FXML
+    private Button back;
+    @FXML
+    private Button assign;
 
     private Registrar registrar = new Registrar();
 
@@ -71,18 +74,13 @@ public class TribeRosterController implements Initializable {
 
         tribeRostertable.getColumns().addAll(campersNameCol,age,assignedTribe);
 
-        try{
+        try {
             registrar.load(2017);
             loadCampSession();
 
-        }catch (Exception e){
-            e.printStackTrace();
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+        } catch (Exception e) {
+            displayError(e);
         }
-
     }
 
     private void loadCampSession() {
@@ -115,31 +113,58 @@ public class TribeRosterController implements Initializable {
         TribeAssignmentDAO tribeAssignmentDao = DAOFactory.createTribeAssignmentDAO();
         ObservableList<TribeAssignment> obList = null;
 
-        try{
+        try {
             List<TribeAssignment> list = tribeAssignmentDao.query(campSessioId);
-            for(TribeAssignment assign : list){
+            for (TribeAssignment assign : list) {
                 log.debug(assign.getTribe().getTribeName());
             }
             obList = FXCollections.observableList(list);
             tribeRostertable.getItems().clear();
             tribeRostertable.setItems(obList);
-        }catch (Exception e){
-            e.printStackTrace();
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+        } catch (Exception e) {
+            displayError(e);
         }
     }
 
     private CampSession getCampSessionFromUI() {
         int index = sessions.getSelectionModel().getSelectedIndex();
         CampSession campSession = null;
-        if (index >= 0){
+
+        if (index >= 0) {
             campSession = registrar.getSessions().get(index);
         }
-        return campSession;
 
+        return campSession;
+    }
+
+    public void backClicked() {
+        log.debug("Back clicked");
+
+        UIManager.getInstance().closeCurrentScreenShowPrevious();
+    }
+
+    public void assignClicked() {
+        log.debug("Assign clicked");
+
+        try {
+            CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
+            ObservableList<CamperRegistration> list = dao.queryRegisteredCampers(2017,
+                    getCampSessionFromUI().getCampSessioId(), true);
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void displayError(Exception e) {
+        e.printStackTrace();
+        log.error(e);
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.showAndWait();
+    }
+
+    public void printClicked() {
+        log.debug("Print clicked");
     }
 }
 //private void promptForRosterPrint(){

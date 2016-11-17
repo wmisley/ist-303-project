@@ -8,8 +8,9 @@ import javafx.collections.ObservableList;
 
 public interface CamperRegistrationDAO {
     void insert(CamperRegistrationRecord registration) throws Exception;
+    void checkInCamper(int camperId, int sessionId) throws Exception;
     int queryGenderCount(int year, Camper.Gender gender) throws Exception;
     boolean queryIsCamperRegisterdForYear(Camper camper, int year) throws Exception;
     ObservableList<CamperRegistration> queryRegisteredCampers(int year) throws Exception;
-    ObservableList<CamperRegistration> queryRegisteredCampers(int year, int sessionId) throws Exception;
+    ObservableList<CamperRegistration> queryRegisteredCampers(int year, int sessionId, boolean isSortByAge) throws Exception;
 }

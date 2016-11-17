@@ -1,6 +1,5 @@
 package com.cgu.ist303.project.ui.controllers;
 
-import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.registrar.LetterGenerator;
 import com.cgu.ist303.project.registrar.Registrar;

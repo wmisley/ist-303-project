@@ -52,6 +52,31 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         c.close();
     }
 
+    public void checkInCamper(int camperId, int sessionId) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql = "UPDATE CAMP_REGISTRATION "  +
+                     "SET IS_CHECKED_IN = 1 " +
+                     "WHERE CAMPER_ID = %d " +
+                     "   AND CAMP_SESSION_ID = %d";
+
+        sql = String.format(sql, camperId,  sessionId);
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+        c.commit();
+
+        stmt.close();
+        c.close();
+    }
+
+
     public int queryGenderCount(int campSessionId, Camper.Gender gender) throws Exception {
         Connection c = null;
         Statement stmt = null;
@@ -124,10 +149,10 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         return (regCount > 0);
     }
     public ObservableList<CamperRegistration> queryRegisteredCampers(int year) throws Exception {
-        return queryRegisteredCampers(year, ALL_SESSIONS);
+        return queryRegisteredCampers(year, ALL_SESSIONS, false);
     }
 
-    public ObservableList<CamperRegistration> queryRegisteredCampers(int year, int campSessionId) throws Exception {
+    public ObservableList<CamperRegistration> queryRegisteredCampers(int year, int campSessionId, boolean isSortByAge) throws Exception {
         ObservableList<CamperRegistration> list = FXCollections.observableArrayList();
         CamperRegistration camper = null;
         Connection c = null;
@@ -140,13 +165,17 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
 
         String sql =
             "SELECT C.FIRST_NAME, C.MIDDLE_NAME, C.LAST_NAME, C.PHONE_NUMBER, C.AGE, C.GENDER, " +
-            " C.CAMPER_ID AS CID, CR.CAMP_SESSION_ID AS CSID, SUM(P.AMOUNT) AS TOTAL_PAYMENT " +
+            " C.CAMPER_ID AS CID, CR.CAMP_SESSION_ID AS CSID, SUM(P.AMOUNT) AS TOTAL_PAYMENT, CR.IS_CHECKED_IN " +
             "FROM CAMPERS C, CAMP_REGISTRATION CR, CAMP_SESSIONS CS, PAYMENTS P " +
             "WHERE C.CAMPER_ID = CR.CAMPER_ID " +
                 "AND CR.CAMP_SESSION_ID = CS.CAMP_SESSION_ID " +
                 "AND  CS.CAMP_YEAR = %d " +
                 "AND P.CAMPER_ID = C.CAMPER_ID " +
                 "AND P.CAMP_SESSION_ID = CS.CAMP_SESSION_ID ";
+
+        if (isSortByAge) {
+            sql += " ORDER BY C.AGE";
+        }
 
 
         if (campSessionId != ALL_SESSIONS) {
@@ -169,6 +198,7 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
             camper.setPhoneNumber(rs.getString("PHONE_NUMBER"));
             camper.setAge(rs.getInt("AGE"));
             camper.setPayment(rs.getDouble("TOTAL_PAYMENT"));
+            camper.setCheckedIn(rs.getInt("IS_CHECKED_IN") == 1);
 
             int gender = rs.getInt("GENDER");
 

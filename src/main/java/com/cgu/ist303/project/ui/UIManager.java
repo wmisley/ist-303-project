@@ -1,8 +1,8 @@
 package com.cgu.ist303.project.ui;
 
-import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.ui.controllers.PaymentController;
+import com.cgu.ist303.project.ui.controllers.VerifyCheckinItemsController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
@@ -137,21 +137,30 @@ public class UIManager {
         showNewScreenHidePrevious(stage);
     }
 
-    public void showVerifyCheckinItems() throws Exception {
+    public void showVerifyCheckinItems(int camperId, int sessionId) throws Exception {
         log.debug("Showing verify check-in items form");
-        Stage stage = setStage("Check List", "/verifycheckinitems.fxml", 376, 456);
+
+        Stage stage = new Stage();
+        stage.setTitle("Check List");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/verifycheckinitems.fxml"));
+
+        Pane pane = loader.load();
+        VerifyCheckinItemsController controller = loader.getController();
+        controller.setSessionInfo(camperId, sessionId);
+        Scene scene = new Scene(pane, 376, 456);
+        stage.setScene(scene);
 
         showNewScreenHidePrevious(stage);
 
         stage.show();
     }
+
     public void showTribeRosterScreen() throws Exception { 
         log.debug("Showing Tribe-Roster");
-        Stage stage = setStage("Tribe Roster", "/TribeRoster.fxml", 653, 515);
+        Stage stage = setStage("Tribe Roster", "/triberoster.fxml", 600, 450);
 
         showNewScreenHidePrevious(stage);
 
         stage.show();
     }
-
-    }
+}

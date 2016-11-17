@@ -10,7 +10,10 @@ import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 
 
@@ -60,22 +63,20 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         stmt = c.createStatement();
 
         String sql =
-                "SELECT T.TRIBE_ID as TRIBE_ID, TRIBE_NAME, C.CAMPER_ID, C.FIRST_NAME, C.AGE " +
+                "SELECT * " +
                 "FROM TRIBES T LEFT OUTER JOIN TRIBE_ASSIGNMENTS TA ON TA.TRIBE_ID = T.TRIBE_ID " +
-                "LEFT OUTER JOIN CAMPERS C ON C.CAMPER_ID = TA.CAMPER_ID " +
                 "WHERE T.CAMP_SESSION_ID = %d ";
 
-//        String sql = "SELECT * FROM TRIBE_ASSIGNMENTS WHERE CAMPER_ID = 1";
         sql = String.format(sql, sessionId);
         log.debug(sql);
         ResultSet rs = stmt.executeQuery(sql);
 
         while ( rs.next() ) {
-            Camper camper = new Camper();
-            camper.setFirstName(rs.getString(4));
-            camper.setAge(rs.getInt(5));
+            Camper camper = new CamperRegistration();
 
             /*
+            int camperId = rs.getInt("CAMPER_ID");
+
             if (!rs.wasNull()) {
                 camper.setCamperId(camperId);
                 camper.setFirstName(rs.getString("FIRST_NAME"));
@@ -90,6 +91,7 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
 
             Tribe t = new Tribe();
             t.setTribeId(rs.getInt("TRIBE_ID"));
+            //t.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
             t.setTribeName(rs.getString("TRIBE_NAME"));
 
             TribeAssignment ta = new TribeAssignment();
