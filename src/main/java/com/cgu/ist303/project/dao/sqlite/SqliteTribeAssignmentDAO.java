@@ -63,7 +63,7 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         stmt = c.createStatement();
 
         String sql =
-                "SELECT T.TRIBE_ID AS TID, T.TRIBE_NAME " +
+                "SELECT * " +
                 "FROM TRIBES T LEFT OUTER JOIN TRIBE_ASSIGNMENTS TA ON TA.TRIBE_ID = T.TRIBE_ID " +
                 "WHERE T.CAMP_SESSION_ID = %d ";
 
@@ -90,7 +90,7 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
             */
 
             Tribe t = new Tribe();
-            t.setTribeId(rs.getInt("TID"));
+            t.setTribeId(rs.getInt("TRIBE_ID"));
             //t.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
             t.setTribeName(rs.getString("TRIBE_NAME"));
 
