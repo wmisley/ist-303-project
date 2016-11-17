@@ -52,18 +52,17 @@ public class TribeRosterController implements Initializable {
 
         tribeRostertable.getColumns().addAll(campersNameCol,age,assignedTribe);
 
-        try{
+        try {
             registrar.load(2017);
             loadCampSession();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.error(e);
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setContentText(e.getMessage());
             errorAlert.showAndWait();
         }
-
     }
 
     private void loadCampSession() {
@@ -95,12 +94,12 @@ public class TribeRosterController implements Initializable {
         TribeAssignmentDAO tribeAssignmentDao = DAOFactory.createTribeAssignmentDAO();
         ObservableList<TribeAssignment> obList = null;
 
-        try{
+        try {
             List<TribeAssignment> list = tribeAssignmentDao.query(campSessioId);
             obList = FXCollections.observableList(list);
             tribeRostertable.getItems().clear();
             tribeRostertable.setItems(obList);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.error(e);
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -112,11 +111,12 @@ public class TribeRosterController implements Initializable {
     private CampSession getCampSessionFromUI() {
         int index = sessions.getSelectionModel().getSelectedIndex();
         CampSession campSession = null;
-        if (index >= 0){
+
+        if (index >= 0) {
             campSession = registrar.getSessions().get(index);
         }
-        return campSession;
 
+        return campSession;
     }
 }
 

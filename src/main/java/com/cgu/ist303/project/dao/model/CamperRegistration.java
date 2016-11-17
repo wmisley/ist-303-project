@@ -7,6 +7,16 @@ public class CamperRegistration extends Camper {
     private double payment = 0.0;
     private int campSessionId = 0;
 
+    public boolean isCheckedIn() {
+        return isCheckedIn;
+    }
+
+    public void setCheckedIn(boolean checkedIn) {
+        isCheckedIn = checkedIn;
+    }
+
+    private boolean isCheckedIn = false;
+
     public int getCampSessionId() {
         return campSessionId;
     }

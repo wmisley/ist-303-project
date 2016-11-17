@@ -9,6 +9,7 @@ import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
 import com.cgu.ist303.project.ui.model.EquipmentItem;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.PropertySheet;
 
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -82,6 +84,18 @@ public class CheckinController implements Initializable {
             errorAlert.setContentText(e.getMessage());
             errorAlert.showAndWait();
         }
+
+        /*
+        campersTable.setRowFactory(tv -> {
+            TableRow<CamperRegistration> row = new TableRow<>();
+
+             row.disableProperty().bind(
+                      Bindings.selectInteger(row.itemProperty(), "value")
+                     .lessThan(5));
+            return row;
+
+        });
+        */
     }
 
     public void emergencyContactsClicked() throws Exception {
@@ -161,7 +175,7 @@ public class CheckinController implements Initializable {
                 displayNotice(String.format("The camper can not check-in until they pay $%s",
                         String.format("%,.2f", cr.getAmountDue())));
             } else {
-                UIManager.getInstance().showVerifyCheckinItems();
+                UIManager.getInstance().showVerifyCheckinItems(cr.getCamperId(), cr.getCampSessionId());
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -1,5 +1,7 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
+import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.ArrivalPacketItem;
 import com.cgu.ist303.project.dao.model.Equipment;
 import com.cgu.ist303.project.registrar.MissingItemListGenerator;
@@ -35,6 +37,9 @@ public class VerifyCheckinItemsController extends BaseController implements Init
     @FXML
     private Button cancel;
 
+    private int camperId = 0;
+    private int sessionId = 0;
+
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<EquipmentItem> equipmentList = FXCollections.observableArrayList();
         equipmentList.add(new EquipmentItem("Backpack"));
@@ -61,6 +66,11 @@ public class VerifyCheckinItemsController extends BaseController implements Init
         packetItemsList.add(new ArrivalPacketItemItem("Legal Forms"));
         packetItemsList.add(new ArrivalPacketItemItem("Emergency Contact Information"));
         packet.setItems(packetItemsList);
+    }
+
+    public void setSessionInfo(int cId, int sId) {
+        camperId = cId;
+        sessionId = sId;
     }
 
     private ObservableList<EquipmentItem> getUncheckedEquipment() {
@@ -95,11 +105,23 @@ public class VerifyCheckinItemsController extends BaseController implements Init
         log.info("Arrival packet items user does not have: {}", uncheckedArrivalPacketItems);
 
         if ((uncheckedEquipmentList.size() == 0) && (uncheckedArrivalPacketItems.size() == 0)) {
-            this.displayAlertMessage("Camper is now checked in.");
-            UIManager.getInstance().closeCurrentScreenShowPrevious();
+            try {
+                checkInCamper();
+
+                this.displayAlertMessage("Camper is now checked in.");
+                UIManager.getInstance().closeCurrentScreenShowPrevious();
+            } catch (Exception e) {
+                log.error("Could not check in camper");
+                displayErrorMessage("Could not check in camper", e);
+            }
         } else {
             promptItemsNotChecked(uncheckedEquipmentList, uncheckedArrivalPacketItems);
         }
+    }
+
+    private void checkInCamper() throws Exception {
+        CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
+        dao.checkInCamper(camperId, sessionId);
     }
 
     public void cancelClicked() throws Exception {

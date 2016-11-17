@@ -232,6 +232,7 @@ public class SqliteDBCreator {
         String sql = "CREATE TABLE CAMP_REGISTRATION " +
                 "(CAMP_SESSION_ID   INTEGER NOT NULL," +
                 " CAMPER_ID         INTEGER NOT NULL, " +
+                " IS_CHECKED_IN     INTEGER NOT NULL DEFAULT 0, " +
                 " CONSTRAINT CAMPER_SESSION_PK PRIMARY KEY (CAMP_SESSION_ID, CAMPER_ID), " +
                 " FOREIGN KEY(CAMP_SESSION_ID) REFERENCES CAMP_SESSIONS(CAMP_SESSION_ID), " +
                 " FOREIGN KEY(CAMPER_ID) REFERENCES CAMPERS(CAMPER_ID)) ";
