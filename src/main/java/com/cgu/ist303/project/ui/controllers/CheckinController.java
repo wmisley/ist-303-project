@@ -108,7 +108,7 @@ public class CheckinController implements Initializable {
 
         try {
 
-            obsList = regDAO.queryRegisteredCampers(2017, sessionId);
+            obsList = regDAO.queryRegisteredCampers(2017, sessionId, false);
             campersTable.getItems().clear();
             campersTable.setItems(obsList);
         } catch (Exception e) {

@@ -1,11 +1,9 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
-import com.cgu.ist303.project.dao.model.CampSession;
-import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.Tribe;
-import com.cgu.ist303.project.dao.model.TribeAssignment;
+import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -81,11 +79,7 @@ public class TribeRosterController implements Initializable {
             loadCampSession();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            displayError(e);
         }
     }
 
@@ -120,18 +114,14 @@ public class TribeRosterController implements Initializable {
 
         try {
             List<TribeAssignment> list = tribeAssignmentDao.query(campSessioId);
-            for(TribeAssignment assign : list){
+            for (TribeAssignment assign : list) {
                 log.debug(assign.getTribe().getTribeName());
             }
             obList = FXCollections.observableList(list);
             tribeRostertable.getItems().clear();
             tribeRostertable.setItems(obList);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            displayError(e);
         }
     }
 
@@ -154,6 +144,22 @@ public class TribeRosterController implements Initializable {
 
     public void assignClicked() {
         log.debug("Assign clicked");
+
+        try {
+            CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
+            ObservableList<CamperRegistration> list = dao.queryRegisteredCampers(2017,
+                    getCampSessionFromUI().getCampSessioId(), true);
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void displayError(Exception e) {
+        e.printStackTrace();
+        log.error(e);
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.showAndWait();
     }
 
     public void printClicked() {
