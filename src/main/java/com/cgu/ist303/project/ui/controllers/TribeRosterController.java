@@ -100,6 +100,7 @@ public class TribeRosterController implements Initializable {
         if (sessions.getItems() != null) {
             if (sessions.getItems().size() > 0) {
                 sessions.getSelectionModel().select(0);
+//                loadTable(1);
             }
         }
 
@@ -141,4 +142,6 @@ public class TribeRosterController implements Initializable {
 
     }
 }
-
+//private void promptForRosterPrint(){
+//    String message ="Would you like to print Tribe Assignment Roster?? "
+//}
