@@ -7,6 +7,7 @@ import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.Tribe;
 import com.cgu.ist303.project.dao.model.TribeAssignment;
 import com.cgu.ist303.project.registrar.Registrar;
+import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -38,7 +39,11 @@ public class TribeRosterController implements Initializable {
     @FXML
     private ComboBox<CampSession> sessions;
     @FXML
-    private Button printRoster;
+    private Button print;
+    @FXML
+    private Button back;
+    @FXML
+    private Button assign;
 
     private Registrar registrar = new Registrar();
 
@@ -139,6 +144,20 @@ public class TribeRosterController implements Initializable {
         }
 
         return campSession;
+    }
+
+    public void backClicked() {
+        log.debug("Back clicked");
+
+        UIManager.getInstance().closeCurrentScreenShowPrevious();
+    }
+
+    public void assignClicked() {
+        log.debug("Assign clicked");
+    }
+
+    public void printClicked() {
+        log.debug("Print clicked");
     }
 }
 
