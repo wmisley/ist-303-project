@@ -4,6 +4,7 @@ import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
 import com.cgu.ist303.project.dao.model.*;
+import com.cgu.ist303.project.registrar.LetterGenerator;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -11,14 +12,19 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +48,7 @@ public class TribeRosterController implements Initializable {
     private Button back;
     @FXML
     private Button assign;
+    List<TribeAssignment> list;
 
     private Registrar registrar = new Registrar();
 
@@ -81,6 +88,12 @@ public class TribeRosterController implements Initializable {
         } catch (Exception e) {
             displayError(e);
         }
+        print.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                printClicked();
+            }
+        });
     }
 
     private void loadCampSession() {
@@ -114,7 +127,7 @@ public class TribeRosterController implements Initializable {
         ObservableList<TribeAssignment> obList = null;
 
         try {
-            List<TribeAssignment> list = tribeAssignmentDao.query(campSessioId);
+            list = tribeAssignmentDao.query(campSessioId);
             for (TribeAssignment assign : list) {
                 log.debug(assign.getTribe().getTribeName());
             }
@@ -165,8 +178,20 @@ public class TribeRosterController implements Initializable {
 
     public void printClicked() {
         log.debug("Print clicked");
+        LetterGenerator lg = new LetterGenerator();
+        try{
+        lg.createTribeRosterPdf(list,"tribeRoster.Pdf");
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.indexOf("mac") > 0) {
+                Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "tribeRoster.pdf"});
+            } else {
+                File myFile = new File("tribeRoster.pdf");
+                Desktop.getDesktop().open(myFile);
+            }
+        }catch (Exception e){
+            displayError(e);
+        }
+
     }
 }
-//private void promptForRosterPrint(){
-//    String message ="Would you like to print Tribe Assignment Roster?? "
-//}
