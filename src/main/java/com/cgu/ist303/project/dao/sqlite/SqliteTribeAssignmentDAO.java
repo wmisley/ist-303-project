@@ -130,10 +130,11 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         c.setAutoCommit(false);
         stmt = c.createStatement();
 
-        String sql =
-                "SELECT * " +
-                "FROM TRIBES T LEFT OUTER JOIN TRIBE_ASSIGNMENTS TA ON TA.TRIBE_ID = T.TRIBE_ID " +
-                "WHERE T.CAMP_SESSION_ID = %d ";
+        String sql = "SELECT C.CAMPER_ID AS CID, T.TRIBE_ID AS TID, * " +
+                     "FROM TRIBES T, TRIBE_ASSIGNMENTS TA, CAMPERS C " +
+                     "WHERE T.CAMP_SESSION_ID = %d " +
+                     "  AND T.TRIBE_ID = TA.TRIBE_ID " +
+                     "  AND TA.CAMPER_ID = C.CAMPER_ID";
 
         sql = String.format(sql, sessionId);
         log.debug(sql);
@@ -142,24 +143,18 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         while ( rs.next() ) {
             Camper camper = new CamperRegistration();
 
-            /*
-            int camperId = rs.getInt("CAMPER_ID");
+            int camperId = rs.getInt("CID");
+            camper.setCamperId(camperId);
+            camper.setFirstName(rs.getString("FIRST_NAME"));
+            camper.setMiddleName(rs.getString("MIDDLE_NAME"));
+            camper.setLastName(rs.getString("LAST_NAME"));
+            camper.setAge(rs.getInt("AGE"));
+            camper.setGenderValue(rs.getInt("GENDER"));
 
-            if (!rs.wasNull()) {
-                camper.setCamperId(camperId);
-                camper.setFirstName(rs.getString("FIRST_NAME"));
-                camper.setMiddleName(rs.getString("MIDDLE_NAME"));
-                camper.setLastName(rs.getString("LAST_NAME"));
-                camper.setAge(rs.getInt("AGE"));
-                camper.setGenderValue(rs.getInt("GENDER"));
-            } else {
-                camper = null;
-            }
-            */
 
             Tribe t = new Tribe();
-            t.setTribeId(rs.getInt("TRIBE_ID"));
-            //t.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
+            t.setTribeId(rs.getInt("TID"));
+            t.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
             t.setTribeName(rs.getString("TRIBE_NAME"));
 
             TribeAssignment ta = new TribeAssignment();
