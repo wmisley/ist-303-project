@@ -2,6 +2,9 @@ package com.cgu.ist303.project.dao.sqlite;
 
 import com.cgu.ist303.project.dao.BunkHouseDAO;
 import com.cgu.ist303.project.dao.model.BunkHouse;
+import com.cgu.ist303.project.dao.model.CamperRegistration;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +34,7 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
                 "     VALUES " +
                 "('%s', %d, %d, %d);";
 
-        sql = String.format(sql, bh.getBundHouseName(), bh.getGender().getValue(),
+        sql = String.format(sql, bh.getBunkHouseName(), bh.getGender().getValue(),
                 bh.getCampSessionId(), bh.getMaxOccupants());
 
         log.debug(sql);
@@ -47,4 +50,32 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
 
         return bunkHouseId;
     }
+    public ObservableList<BunkHouse> queryBunkhouses(int year) throws Exception{
+        ObservableList<BunkHouse> list = FXCollections.observableArrayList();
+
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+        stmt = c.createStatement();
+
+        return list;
+    };
+    public ObservableList<BunkHouse> queryBunkhouses(int year, int sessionId) throws Exception{
+        ObservableList<BunkHouse> list = FXCollections.observableArrayList();
+
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+        stmt = c.createStatement();
+
+
+
+        return list;
+    };
 }

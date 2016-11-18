@@ -123,6 +123,15 @@ public class UIManager {
         stage.show();
     }
 
+    public void showBunkhouseScreen() throws Exception{
+        log.debug("Showing Bunkhouse Screen");
+        Stage stage = setStage("Bunkhouse", "/bunkhouses.fxml", 653, 515);
+
+        showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
     public void showMainMenu(Stage stage) throws Exception {
         log.debug("Showing main menu form");
 
