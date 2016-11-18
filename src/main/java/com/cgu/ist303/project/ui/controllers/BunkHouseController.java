@@ -30,9 +30,11 @@ public class BunkHouseController implements Initializable {
     @FXML
     private ComboBox<BunkHouse> sessions;
     @FXML
-    private Button makePayment;
+    private Button assign;
     @FXML
-    private Button emergencyContacts;
+    private Button back;
+    @FXML
+    private Button print;
 
     private Registrar registrar = new Registrar();
 
@@ -157,10 +159,16 @@ public class BunkHouseController implements Initializable {
         alert.showAndWait();
     }
 
+    public void assignClicked() {
+        log.debug("Assign Clicked");
+    }
+
     public void printClicked() {
+        log.debug("Print clicked");
     }
 
     public void cancelClicked() throws Exception {
+        log.debug("Back clicked");
         UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
 }
