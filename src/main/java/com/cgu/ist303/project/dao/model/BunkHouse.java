@@ -20,7 +20,7 @@ public class BunkHouse {
         }
     }
 
-    private String bundHouseName = "";
+    private String bunkHouseName = "";
     private int campSessionId = 0;
     private Gender gender = Gender.Unspecified;
     private int maxOccupants = 0;
@@ -43,12 +43,12 @@ public class BunkHouse {
         this.bunkHouseId = bunkHouseId;
     }
 
-    public String getBundHouseName() {
-        return bundHouseName;
+    public String getBunkHouseName() {
+        return bunkHouseName;
     }
 
-    public void setBundHouseName(String bundHouseName) {
-        this.bundHouseName = bundHouseName;
+    public void setBunkHouseName(String bunkHouseName) {
+        this.bunkHouseName = bunkHouseName;
     }
 
     public int getCampSessionId() {

@@ -5,6 +5,7 @@ import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
 import com.cgu.ist303.project.dao.TribeDAO;
 import com.cgu.ist303.project.dao.model.*;
+import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.LetterGenerator;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.registrar.TribeAssigner;
@@ -113,9 +114,16 @@ public class TribeRosterController implements Initializable {
         if (sessions.getItems() != null) {
             if (sessions.getItems().size() > 0) {
                 sessions.getSelectionModel().select(0);
-//                loadTable(1);
             }
         }
+
+        int firstSessionId = SqliteCamperRegistrationDAO.NO_SESSIONS;
+
+        if (registrar.getSessions() != null) {
+            firstSessionId = registrar.getSessions().get(0).getCampSessioId();
+        }
+
+        loadTable(firstSessionId);
 
         sessions.setOnAction((event -> {
             CampSession session = getCampSessionFromUI();

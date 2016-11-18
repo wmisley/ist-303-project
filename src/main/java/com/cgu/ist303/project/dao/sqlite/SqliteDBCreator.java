@@ -41,21 +41,21 @@ public class SqliteDBCreator {
         BunkHouse bh = new BunkHouse();
         bh.setCampSessionId(sessionId);
         bh.setGender(BunkHouse.Gender.Male);
-        bh.setBundHouseName("Bunk House 1");
+        bh.setBunkHouseName("Bunk House 1");
         bh.setMaxOccupants(12);
         bhDAO.insert(bh);
 
         bh = new BunkHouse();
         bh.setCampSessionId(sessionId);
         bh.setGender(BunkHouse.Gender.Male);
-        bh.setBundHouseName("Bunk House 2");
+        bh.setBunkHouseName("Bunk House 2");
         bh.setMaxOccupants(12);
         bhDAO.insert(bh);
 
         bh = new BunkHouse();
         bh.setCampSessionId(sessionId);
         bh.setGender(BunkHouse.Gender.Male);
-        bh.setBundHouseName("Bunk House 3");
+        bh.setBunkHouseName("Bunk House 3");
         bh.setMaxOccupants(12);
         bhDAO.insert(bh);
 
@@ -63,21 +63,21 @@ public class SqliteDBCreator {
         bh = new BunkHouse();
         bh.setCampSessionId(sessionId);
         bh.setGender(BunkHouse.Gender.Female);
-        bh.setBundHouseName("Bunk House 4");
+        bh.setBunkHouseName("Bunk House 4");
         bh.setMaxOccupants(12);
         bhDAO.insert(bh);
 
         bh = new BunkHouse();
         bh.setCampSessionId(sessionId);
         bh.setGender(BunkHouse.Gender.Female);
-        bh.setBundHouseName("Bunk House 5");
+        bh.setBunkHouseName("Bunk House 5");
         bh.setMaxOccupants(12);
         bhDAO.insert(bh);
 
         bh = new BunkHouse();
         bh.setCampSessionId(sessionId);
         bh.setGender(BunkHouse.Gender.Female);
-        bh.setBundHouseName("Bunk House 6");
+        bh.setBunkHouseName("Bunk House 6");
         bh.setMaxOccupants(12);
         bhDAO.insert(bh);
     }
