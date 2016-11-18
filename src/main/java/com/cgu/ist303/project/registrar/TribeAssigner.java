@@ -43,6 +43,7 @@ public class TribeAssigner {
         }
 
         TribeAssignmentDAO taDAO = DAOFactory.createTribeAssignmentDAO();
+        taDAO.delete(tribes);
         taDAO.insert(tas);
     }
 }

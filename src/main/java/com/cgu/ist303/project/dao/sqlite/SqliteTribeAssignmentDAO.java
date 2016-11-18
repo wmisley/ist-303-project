@@ -61,6 +61,37 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         }
     }
 
+    public void delete(List<Tribe> tribes) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql = "DELETE FROM TRIBE_ASSIGNMENTS WHERE TRIBE_ID IN (%s)";
+
+        String tribeIdList = "";
+
+        for (int i = 0; i < tribes.size(); i++) {
+            tribeIdList += Integer.toString(tribes.get(i).getTribeId());
+
+            if ((tribes.size() != 1) && (i != (tribes.size() - 1))) {
+                tribeIdList += ",";
+            }
+        }
+
+        sql = String.format(sql, tribeIdList);
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+
+        stmt.close();
+        c.commit();
+        c.close();
+    }
+
     @Override
     public void insert(int camperId, int tribeId) throws Exception {
         Connection c = null;
