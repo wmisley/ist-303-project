@@ -1,25 +1,33 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
-import com.cgu.ist303.project.dao.model.CampSession;
-import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.Tribe;
-import com.cgu.ist303.project.dao.model.TribeAssignment;
+import com.cgu.ist303.project.dao.TribeDAO;
+import com.cgu.ist303.project.dao.model.*;
+import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
+import com.cgu.ist303.project.registrar.LetterGenerator;
 import com.cgu.ist303.project.registrar.Registrar;
+import com.cgu.ist303.project.registrar.TribeAssigner;
+import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +46,12 @@ public class TribeRosterController implements Initializable {
     @FXML
     private ComboBox<CampSession> sessions;
     @FXML
-    private Button printRoster;
+    private Button print;
+    @FXML
+    private Button back;
+    @FXML
+    private Button assign;
+    List<TribeAssignment> list;
 
     private Registrar registrar = new Registrar();
 
@@ -76,12 +89,14 @@ public class TribeRosterController implements Initializable {
             loadCampSession();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            displayError(e);
         }
+        print.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                printClicked();
+            }
+        });
     }
 
     private void loadCampSession() {
@@ -102,6 +117,14 @@ public class TribeRosterController implements Initializable {
             }
         }
 
+        int firstSessionId = SqliteCamperRegistrationDAO.NO_SESSIONS;
+
+        if (registrar.getSessions() != null) {
+            firstSessionId = registrar.getSessions().get(0).getCampSessioId();
+        }
+
+        loadTable(firstSessionId);
+
         sessions.setOnAction((event -> {
             CampSession session = getCampSessionFromUI();
             log.debug("User selected session {}", session.getShortDateString());
@@ -114,19 +137,15 @@ public class TribeRosterController implements Initializable {
         ObservableList<TribeAssignment> obList = null;
 
         try {
-            List<TribeAssignment> list = tribeAssignmentDao.query(campSessioId);
-            for(TribeAssignment assign : list){
+            list = tribeAssignmentDao.query(campSessioId);
+            for (TribeAssignment assign : list) {
                 log.debug(assign.getTribe().getTribeName());
             }
             obList = FXCollections.observableList(list);
             tribeRostertable.getItems().clear();
             tribeRostertable.setItems(obList);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            displayError(e);
         }
     }
 
@@ -140,5 +159,61 @@ public class TribeRosterController implements Initializable {
 
         return campSession;
     }
-}
 
+    public void backClicked() {
+        log.debug("Back clicked");
+
+        UIManager.getInstance().closeCurrentScreenShowPrevious();
+    }
+
+    public void assignClicked() {
+        log.debug("Assign clicked");
+
+        try {
+            int campSessionId = getCampSessionFromUI().getCampSessioId();
+
+            TribeAssigner ta = new TribeAssigner();
+            ta.assign(2017, campSessionId);
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void displayError(Exception e) {
+        e.printStackTrace();
+        log.error(e);
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.showAndWait();
+    }
+
+    public void printClicked() {
+        log.debug("Print clicked");
+        LetterGenerator lg = new LetterGenerator();
+        try{
+            if (list != null) {
+                lg.createTribeRosterPdf(list, "tribeRoster.Pdf");
+            }else {
+                displayError("No data to print");
+
+            }
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.indexOf("mac") > 0) {
+                Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "tribeRoster.pdf"});
+            } else {
+                File myFile = new File("tribeRoster.pdf");
+                Desktop.getDesktop().open(myFile);
+            }
+        }catch (Exception e){
+            displayError(e);
+        }
+
+    }
+
+    private void displayError(String error) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(error);
+        errorAlert.showAndWait();
+    }
+}

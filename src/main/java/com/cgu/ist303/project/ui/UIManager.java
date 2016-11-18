@@ -166,7 +166,7 @@ public class UIManager {
 
     public void showTribeRosterScreen() throws Exception { 
         log.debug("Showing Tribe-Roster");
-        Stage stage = setStage("Tribe Roster", "/triberoster.fxml", 653, 515);
+        Stage stage = setStage("Tribe Roster", "/triberoster.fxml", 600, 450);
 
         showNewScreenHidePrevious(stage);
 

@@ -149,10 +149,10 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         return (regCount > 0);
     }
     public ObservableList<CamperRegistration> queryRegisteredCampers(int year) throws Exception {
-        return queryRegisteredCampers(year, ALL_SESSIONS);
+        return queryRegisteredCampers(year, ALL_SESSIONS, false);
     }
 
-    public ObservableList<CamperRegistration> queryRegisteredCampers(int year, int campSessionId) throws Exception {
+    public ObservableList<CamperRegistration> queryRegisteredCampers(int year, int campSessionId, boolean isSortByAge) throws Exception {
         ObservableList<CamperRegistration> list = FXCollections.observableArrayList();
         CamperRegistration camper = null;
         Connection c = null;
@@ -173,12 +173,15 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
                 "AND P.CAMPER_ID = C.CAMPER_ID " +
                 "AND P.CAMP_SESSION_ID = CS.CAMP_SESSION_ID ";
 
-
         if (campSessionId != ALL_SESSIONS) {
             sql += String.format(" AND CS.CAMP_SESSION_ID = %d ", campSessionId);
         }
 
-        sql += "GROUP BY C.CAMPER_ID";
+        if (isSortByAge) {
+            sql += " ORDER BY C.AGE";
+        } else {
+            sql += "GROUP BY C.CAMPER_ID";
+        }
 
         sql = String.format(sql, year);
         log.debug(sql);

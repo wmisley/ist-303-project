@@ -3,6 +3,7 @@ package com.cgu.ist303.project.registrar;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.RejectedApplication;
+import com.cgu.ist303.project.dao.model.TribeAssignment;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -10,8 +11,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.*;
+import java.util.List;
 
 public class LetterGenerator {
     private static final Logger log = LogManager.getLogger(LetterGenerator.class);
@@ -169,4 +173,28 @@ public class LetterGenerator {
 
         document.close();
     }
+
+    public void createTribeRosterPdf(List<TribeAssignment> list, String fileName) throws FileNotFoundException, DocumentException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(fileName));
+        document.open();
+        PdfPTable rosterTable = new PdfPTable(3);
+        rosterTable.setSpacingBefore(0);
+        rosterTable.setWidthPercentage((float) 100);
+        for (TribeAssignment assignment : list) {
+            rosterTable.addCell(getBorderCell(assignment.getCamper().getFirstName()));
+            rosterTable.addCell(getBorderCell(Integer.toString(assignment.getCamper().getAge())));
+            rosterTable.addCell(getBorderCell(assignment.getTribe().getTribeName()));
+            rosterTable.completeRow();
+        }
+
+        document.add(rosterTable);
+        document.close();
+    }
+    private PdfPCell getBorderCell(String text){
+        PdfPCell cell = new PdfPCell(new Phrase(text));
+        cell.setBorder(1);
+        return  cell;
+    }
+
 }

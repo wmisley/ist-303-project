@@ -1,10 +1,7 @@
 package com.cgu.ist303.project.dao.sqlite;
 
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
-import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.CamperRegistration;
-import com.cgu.ist303.project.dao.model.Tribe;
-import com.cgu.ist303.project.dao.model.TribeAssignment;
+import com.cgu.ist303.project.dao.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +19,77 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
 
     public SqliteTribeAssignmentDAO(String dbPath) {
         super(dbPath);
+    }
+
+    public void insert(List<TribeAssignmentById> assignments) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+        Exception ee = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        stmt.getConnection().setAutoCommit(false);
+
+        try {
+            for (TribeAssignmentById ta : assignments) {
+                String sql = "INSERT INTO TRIBE_ASSIGNMENTS " +
+                        "(CAMPER_ID, TRIBE_ID) " +
+                        "     VALUES " +
+                        "(%d, %d);";
+
+                sql = String.format(sql, ta.getCamperId(), ta.getTribe().getTribeId());
+                log.debug(sql);
+                stmt.executeUpdate(sql);
+            }
+        } catch (Exception e) {
+            stmt.getConnection().rollback();
+            ee = e;
+        } finally {
+            stmt.getConnection().commit();
+            //stmt.getConnection().setAutoCommit(true);
+
+            stmt.close();
+            c.commit();
+            c.close();
+
+            if (ee != null) {
+                throw ee;
+            }
+        }
+    }
+
+    public void delete(List<Tribe> tribes) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql = "DELETE FROM TRIBE_ASSIGNMENTS WHERE TRIBE_ID IN (%s)";
+
+        String tribeIdList = "";
+
+        for (int i = 0; i < tribes.size(); i++) {
+            tribeIdList += Integer.toString(tribes.get(i).getTribeId());
+
+            if ((tribes.size() != 1) && (i != (tribes.size() - 1))) {
+                tribeIdList += ",";
+            }
+        }
+
+        sql = String.format(sql, tribeIdList);
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+
+        stmt.close();
+        c.commit();
+        c.close();
     }
 
     @Override
@@ -62,10 +130,11 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         c.setAutoCommit(false);
         stmt = c.createStatement();
 
-        String sql =
-                "SELECT * " +
-                "FROM TRIBES T LEFT OUTER JOIN TRIBE_ASSIGNMENTS TA ON TA.TRIBE_ID = T.TRIBE_ID " +
-                "WHERE T.CAMP_SESSION_ID = %d ";
+        String sql = "SELECT C.CAMPER_ID AS CID, T.TRIBE_ID AS TID, * " +
+                     "FROM TRIBES T, TRIBE_ASSIGNMENTS TA, CAMPERS C " +
+                     "WHERE T.CAMP_SESSION_ID = %d " +
+                     "  AND T.TRIBE_ID = TA.TRIBE_ID " +
+                     "  AND TA.CAMPER_ID = C.CAMPER_ID";
 
         sql = String.format(sql, sessionId);
         log.debug(sql);
@@ -74,24 +143,18 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
         while ( rs.next() ) {
             Camper camper = new CamperRegistration();
 
-            /*
-            int camperId = rs.getInt("CAMPER_ID");
+            int camperId = rs.getInt("CID");
+            camper.setCamperId(camperId);
+            camper.setFirstName(rs.getString("FIRST_NAME"));
+            camper.setMiddleName(rs.getString("MIDDLE_NAME"));
+            camper.setLastName(rs.getString("LAST_NAME"));
+            camper.setAge(rs.getInt("AGE"));
+            camper.setGenderValue(rs.getInt("GENDER"));
 
-            if (!rs.wasNull()) {
-                camper.setCamperId(camperId);
-                camper.setFirstName(rs.getString("FIRST_NAME"));
-                camper.setMiddleName(rs.getString("MIDDLE_NAME"));
-                camper.setLastName(rs.getString("LAST_NAME"));
-                camper.setAge(rs.getInt("AGE"));
-                camper.setGenderValue(rs.getInt("GENDER"));
-            } else {
-                camper = null;
-            }
-            */
 
             Tribe t = new Tribe();
-            t.setTribeId(rs.getInt("TRIBE_ID"));
-            //t.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
+            t.setTribeId(rs.getInt("TID"));
+            t.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
             t.setTribeName(rs.getString("TRIBE_NAME"));
 
             TribeAssignment ta = new TribeAssignment();
