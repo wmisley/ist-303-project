@@ -1,6 +1,7 @@
 package com.cgu.ist303.project.dao;
 
 import com.cgu.ist303.project.dao.model.TribeAssignment;
+import com.cgu.ist303.project.dao.model.TribeAssignmentById;
 import javafx.collections.ObservableList;
 
 import java.util.List;
@@ -11,5 +12,5 @@ import java.util.List;
 public interface TribeAssignmentDAO {
     void insert(int camperId, int tribeId) throws Exception;
     List<TribeAssignment> query(int sessionId) throws Exception;
-//    ObservableList<TribeAssignment> queryTribeRoster(int sessionId) throws Exception;
+    void insert(List<TribeAssignmentById> assignments) throws Exception;
 }

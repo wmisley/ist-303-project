@@ -1,10 +1,7 @@
 package com.cgu.ist303.project.dao.sqlite;
 
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
-import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.CamperRegistration;
-import com.cgu.ist303.project.dao.model.Tribe;
-import com.cgu.ist303.project.dao.model.TribeAssignment;
+import com.cgu.ist303.project.dao.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -22,6 +19,46 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
 
     public SqliteTribeAssignmentDAO(String dbPath) {
         super(dbPath);
+    }
+
+    public void insert(List<TribeAssignmentById> assignments) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+        Exception ee = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        stmt.getConnection().setAutoCommit(false);
+
+        try {
+            for (TribeAssignmentById ta : assignments) {
+                String sql = "INSERT INTO TRIBE_ASSIGNMENTS " +
+                        "(CAMPER_ID, TRIBE_ID) " +
+                        "     VALUES " +
+                        "(%d, %d);";
+
+                sql = String.format(sql, ta.getCamperId(), ta.getTribe().getTribeId());
+                log.debug(sql);
+                stmt.executeUpdate(sql);
+            }
+        } catch (Exception e) {
+            stmt.getConnection().rollback();
+            ee = e;
+        } finally {
+            stmt.getConnection().commit();
+            //stmt.getConnection().setAutoCommit(true);
+
+            stmt.close();
+            c.commit();
+            c.close();
+
+            if (ee != null) {
+                throw ee;
+            }
+        }
     }
 
     @Override

@@ -3,8 +3,10 @@ package com.cgu.ist303.project.ui.controllers;
 import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
+import com.cgu.ist303.project.dao.TribeDAO;
 import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.registrar.Registrar;
+import com.cgu.ist303.project.registrar.TribeAssigner;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -146,9 +148,10 @@ public class TribeRosterController implements Initializable {
         log.debug("Assign clicked");
 
         try {
-            CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
-            ObservableList<CamperRegistration> list = dao.queryRegisteredCampers(2017,
-                    getCampSessionFromUI().getCampSessioId(), true);
+            int campSessionId = getCampSessionFromUI().getCampSessioId();
+
+            TribeAssigner ta = new TribeAssigner();
+            ta.assign(2017, campSessionId);
         } catch (Exception e) {
             displayError(e);
         }
