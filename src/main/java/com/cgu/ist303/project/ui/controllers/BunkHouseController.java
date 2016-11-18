@@ -70,6 +70,7 @@ public class BunkHouseController implements Initializable {
             }
 
             loadTable(firstBunkId);
+
         } catch (Exception e) {
             log.error(e);
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -156,7 +157,8 @@ public class BunkHouseController implements Initializable {
         alert.showAndWait();
     }
 
-
+    public void printClicked() {
+    }
 
     public void cancelClicked() throws Exception {
         UIManager.getInstance().closeCurrentScreenShowPrevious();
