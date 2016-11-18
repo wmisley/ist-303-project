@@ -180,7 +180,12 @@ public class TribeRosterController implements Initializable {
         log.debug("Print clicked");
         LetterGenerator lg = new LetterGenerator();
         try{
-        lg.createTribeRosterPdf(list,"tribeRoster.Pdf");
+            if (list != null) {
+                lg.createTribeRosterPdf(list, "tribeRoster.Pdf");
+            }else {
+                displayError("No data to print");
+
+            }
             String os = System.getProperty("os.name").toLowerCase();
 
             if (os.indexOf("mac") > 0) {
@@ -193,5 +198,11 @@ public class TribeRosterController implements Initializable {
             displayError(e);
         }
 
+    }
+
+    private void displayError(String error) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(error);
+        errorAlert.showAndWait();
     }
 }
