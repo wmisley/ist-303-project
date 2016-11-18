@@ -181,10 +181,10 @@ public class TribeRosterController implements Initializable {
 
     public void printClicked() {
         log.debug("Print clicked");
-        LetterGenerator lg = new LetterGenerator();
+        TribeRosterGenerator trg = new TribeRosterGenerator();
         try{
             if (list != null) {
-                lg.createTribeRosterPdf(list, "tribeRoster.Pdf");
+                trg.createTribeRosterPdf(list, "tribeRoster.Pdf");
             }else {
                 displayError("No data to print");
 

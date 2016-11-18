@@ -174,27 +174,27 @@ public class LetterGenerator {
         document.close();
     }
 
-    public void createTribeRosterPdf(List<TribeAssignment> list, String fileName) throws FileNotFoundException, DocumentException {
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(fileName));
-        document.open();
-        PdfPTable rosterTable = new PdfPTable(3);
-        rosterTable.setSpacingBefore(0);
-        rosterTable.setWidthPercentage((float) 100);
-        for (TribeAssignment assignment : list) {
-            rosterTable.addCell(getBorderCell(assignment.getCamper().getFirstName()));
-            rosterTable.addCell(getBorderCell(Integer.toString(assignment.getCamper().getAge())));
-            rosterTable.addCell(getBorderCell(assignment.getTribe().getTribeName()));
-            rosterTable.completeRow();
-        }
-
-        document.add(rosterTable);
-        document.close();
-    }
-    private PdfPCell getBorderCell(String text){
-        PdfPCell cell = new PdfPCell(new Phrase(text));
-        cell.setBorder(1);
-        return  cell;
-    }
+//    public void createTribeRosterPdf(List<TribeAssignment> list, String fileName) throws FileNotFoundException, DocumentException {
+//        Document document = new Document();
+//        PdfWriter.getInstance(document, new FileOutputStream(fileName));
+//        document.open();
+//        PdfPTable rosterTable = new PdfPTable(3);
+//        rosterTable.setSpacingBefore(0);
+//        rosterTable.setWidthPercentage((float) 100);
+//        for (TribeAssignment assignment : list) {
+//            rosterTable.addCell(getBorderCell(assignment.getCamper().getFirstName()));
+//            rosterTable.addCell(getBorderCell(Integer.toString(assignment.getCamper().getAge())));
+//            rosterTable.addCell(getBorderCell(assignment.getTribe().getTribeName()));
+//            rosterTable.completeRow();
+//        }
+//
+//        document.add(rosterTable);
+//        document.close();
+//    }
+//    private PdfPCell getBorderCell(String text){
+//        PdfPCell cell = new PdfPCell(new Phrase(text));
+//        cell.setBorder(1);
+//        return  cell;
+//    }
 
 }
