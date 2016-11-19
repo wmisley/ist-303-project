@@ -2,7 +2,9 @@ package com.cgu.ist303.project.dao.sqlite;
 
 import com.cgu.ist303.project.dao.BunkHouseDAO;
 import com.cgu.ist303.project.dao.model.BunkHouse;
+import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.dao.model.Tribe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -51,11 +53,9 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
         return bunkHouseId;
     }
 
-    //TODO: Abbas, this method will always return an emply list.
-    //      Also, your Java syntax was incorrect. I fixed it.
-    public ObservableList<BunkHouse> queryBunkhouses(int year) throws Exception{
+    public ObservableList<BunkHouse> query(int campSessionId) throws Exception {
         ObservableList<BunkHouse> list = FXCollections.observableArrayList();
-
+        BunkHouse bh = null;
         Connection c = null;
         Statement stmt = null;
 
@@ -64,21 +64,36 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
         c.setAutoCommit(false);
         stmt = c.createStatement();
 
-        return list;
-    }
+        String sql =
+                "SELECT * FROM BUNK_HOUSES WHERE CAMP_SESSION_ID = %d ORDER BY BUNK_HOUSE_ID";
 
-    //TODO: Abbas, this method will always return an emply list.
-    //      Also, your Java syntax was incorrect. I fixed it.
-    public ObservableList<BunkHouse> queryBunkhouses(int year, int sessionId) throws Exception{
-        ObservableList<BunkHouse> list = FXCollections.observableArrayList();
+        sql = String.format(sql, campSessionId);
+        log.debug(sql);
+        ResultSet rs = stmt.executeQuery(sql);
 
-        Connection c = null;
-        Statement stmt = null;
+        while ( rs.next() ) {
+            bh = new BunkHouse();
+            bh.setBunkHouseName(rs.getString("BUNK_HOUSE_NAME"));
+            bh.setBunkHouseId(rs.getInt("BUNK_HOUSE_ID"));
+            bh.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
+            bh.setMaxOccupants(rs.getInt("MAX_OCCUPANTS"));
 
-        Class.forName("org.sqlite.JDBC");
-        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
-        c.setAutoCommit(false);
-        stmt = c.createStatement();
+            int gender = rs.getInt("GENDER");
+
+            if (gender == Camper.Gender.Male.getValue()) {
+                bh.setGender(BunkHouse.Gender.Male);
+            } else if (gender == Camper.Gender.Female.getValue()) {
+                bh.setGender(BunkHouse.Gender.Female);
+            } else {
+                bh.setGender(BunkHouse.Gender.Unspecified);
+            }
+
+            list.add(bh);
+        }
+
+        rs.close();
+        stmt.close();
+        c.close();
 
         return list;
     }

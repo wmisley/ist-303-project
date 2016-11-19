@@ -9,6 +9,5 @@ import javafx.collections.ObservableList;
  */
 public interface BunkHouseDAO {
     int insert(BunkHouse bh) throws Exception;
-    ObservableList<BunkHouse> queryBunkhouses(int year) throws Exception;
-    ObservableList<BunkHouse> queryBunkhouses(int year, int sessionId) throws Exception;
+    ObservableList<BunkHouse> query(int campSessionId) throws Exception;
 }
