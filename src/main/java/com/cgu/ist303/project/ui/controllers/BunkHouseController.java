@@ -49,18 +49,18 @@ public class BunkHouseController implements Initializable {
         middleNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("middleInitial"));
         TableColumn lastNameCol = new TableColumn("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("lastName"));
-        TableColumn phoneNumber = new TableColumn("Phone Number");
-        phoneNumber.setCellValueFactory(new PropertyValueFactory<Camper, String>("phoneNumberString"));
+
         TableColumn age = new TableColumn("Age");
         age.setCellValueFactory(new PropertyValueFactory<Camper, String>("age"));
         age.setStyle("-fx-alignment: CENTER_RIGHT;");
+
         TableColumn gender = new TableColumn("Gender");
         gender.setCellValueFactory(new PropertyValueFactory<Camper, String>("gender"));
-        TableColumn payment = new TableColumn("Amount Due");
-        payment.setCellValueFactory(new PropertyValueFactory<Camper, String>("formattedAmountDue"));
-        payment.setStyle("-fx-alignment: CENTER_RIGHT;");
 
-        bunkhouseTable.getColumns().addAll(firstNameCol, middleNameCol, lastNameCol, phoneNumber, age, gender, payment);
+        TableColumn bunkHouseCol = new TableColumn("Bunk House");
+        bunkHouseCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("bunkHouseName"));
+
+        bunkhouseTable.getColumns().addAll(firstNameCol, middleNameCol, lastNameCol, age, gender, bunkHouseCol);
 
         try {
             registrar.load(2017);
