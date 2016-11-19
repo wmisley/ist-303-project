@@ -5,6 +5,7 @@ import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
+import com.cgu.ist303.project.registrar.BunkHouseAssigner;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.collections.FXCollections;
@@ -26,15 +27,15 @@ public class BunkHouseController implements Initializable {
     private static final Logger log = LogManager.getLogger(BunkHouseController.class);
 
     @FXML
-    private TableView<BunkHouseController> bunkhouseTable;
+    public TableView<BunkHouseController> bunkhouseTable;
     @FXML
-    private ComboBox<BunkHouse> sessions;
+    public ComboBox<BunkHouse> sessions;
     @FXML
-    private Button assign;
+    public Button assign;
     @FXML
-    private Button back;
+    public Button back;
     @FXML
-    private Button print;
+    public Button print;
 
     private Registrar registrar = new Registrar();
 
@@ -75,22 +76,11 @@ public class BunkHouseController implements Initializable {
 
         } catch (Exception e) {
             log.error(e);
+            e.printStackTrace();
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setContentText(e.getMessage());
             errorAlert.showAndWait();
         }
-
-        /*
-        campersTable.setRowFactory(tv -> {
-            TableRow<CamperRegistration> row = new TableRow<>();
-
-             row.disableProperty().bind(
-                      Bindings.selectInteger(row.itemProperty(), "value")
-                     .lessThan(5));
-            return row;
-
-        });
-        */
     }
 
     public void emergencyContactsClicked() throws Exception {
@@ -159,8 +149,26 @@ public class BunkHouseController implements Initializable {
         alert.showAndWait();
     }
 
+    private void displayError(Exception e) {
+        e.printStackTrace();
+        log.error(e);
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.showAndWait();
+    }
+
     public void assignClicked() {
         log.debug("Assign Clicked");
+
+        int campSessionId = getCampSessionFromUI().getCampSessioId();
+
+        BunkHouseAssigner assigner = new BunkHouseAssigner();
+
+        try {
+            assigner.assign(2017, campSessionId);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     public void printClicked() {

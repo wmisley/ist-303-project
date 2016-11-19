@@ -30,7 +30,7 @@ public class DAOTeser {
 
     static public void main(String[] args) {
         try {
-            DAOFactory.dbPath = "ist303-term2.db";
+            DAOFactory.dbPath = "ist303-term2- bak.db";
             TribeAssignmentDAO taDAO = DAOFactory.createTribeAssignmentDAO();
             List<TribeAssignment> list = taDAO.query(2);
 
