@@ -50,6 +50,9 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
 
         return bunkHouseId;
     }
+
+    //TODO: Abbas, this method will always return an emply list.
+    //      Also, your Java syntax was incorrect. I fixed it.
     public ObservableList<BunkHouse> queryBunkhouses(int year) throws Exception{
         ObservableList<BunkHouse> list = FXCollections.observableArrayList();
 
@@ -62,7 +65,10 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
         stmt = c.createStatement();
 
         return list;
-    };
+    }
+
+    //TODO: Abbas, this method will always return an emply list.
+    //      Also, your Java syntax was incorrect. I fixed it.
     public ObservableList<BunkHouse> queryBunkhouses(int year, int sessionId) throws Exception{
         ObservableList<BunkHouse> list = FXCollections.observableArrayList();
 
@@ -74,8 +80,6 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
         c.setAutoCommit(false);
         stmt = c.createStatement();
 
-
-
         return list;
-    };
+    }
 }
