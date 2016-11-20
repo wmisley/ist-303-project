@@ -75,32 +75,17 @@ public class BunkHouseController implements Initializable {
             loadTable(firstBunkId);
 
         } catch (Exception e) {
-            log.error(e);
-            e.printStackTrace();
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            displayError(e);
         }
     }
 
-    public void emergencyContactsClicked() throws Exception {
-        UIManager.getInstance().showEmergencyContactsScreen();
-    }
-
     private void loadTable(int bunkId) {
-        BunkHouseDAO bunkDAO = DAOFactory.createBunkHouseDAO();
         ObservableList<BunkHouseAssignment> obsList  = null;
 
         try {
-
-        //    obsList = bunkDAO.queryBunkhouses(2017, bunkId);
-         //   bunkhouseTable.getItems().clear();
-         //   bunkhouseTable.setItems(obsList);
+            //TODO: Query bunk house assignments and display them here
         } catch (Exception e) {
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            displayError(e);
         }
     }
 
