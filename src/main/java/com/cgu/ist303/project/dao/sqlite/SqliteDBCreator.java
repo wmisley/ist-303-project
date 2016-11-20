@@ -337,9 +337,8 @@ public class SqliteDBCreator {
         String sql = "CREATE TABLE BUNK_HOUSE_ASSIGNMENTS " +
                 "(BUNK_HOUSE_ID    INTEGER NOT NULL, " +
                 " CAMPER_ID        INTEGER NOT NULL, " +
-                " CONSTRAINT BUNK_HOUSE_ASSIGNMENTS_PK PRIMARY KEY (BUNK_HOUSE_ID, CAMPER_ID, CAMP_SESSION_ID), " +
+                " CONSTRAINT BUNK_HOUSE_ASSIGNMENTS_PK PRIMARY KEY (BUNK_HOUSE_ID, CAMPER_ID), " +
                 " FOREIGN KEY(BUNK_HOUSE_ID) REFERENCES BUNK_HOUSES(BUNK_HOUSE_ID), " +
-                " FOREIGN KEY(CAMP_SESSION_ID) REFERENCES CAMP_SESSIONS(CAMP_SESSION_ID), " +
                 " FOREIGN KEY(CAMPER_ID) REFERENCES CAMPERS(CAMPER_ID))";
         log.debug(sql);
         stmt.executeUpdate(sql);

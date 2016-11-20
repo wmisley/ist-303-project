@@ -185,4 +185,12 @@ public class Camper {
             return phoneNumber;
         }
     }
+
+    public String getGenderString() {
+        if (gender == Gender.Male) {
+            return "M";
+        } else {
+            return "F";
+        }
+    }
 }

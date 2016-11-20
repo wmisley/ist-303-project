@@ -32,7 +32,7 @@ public class SqliteBunkHouseAssignmentDAO extends DAOBase implements BunkHouseAs
         c.setAutoCommit(false);
         stmt = c.createStatement();
 
-        String sql = "SELECT C.CAMPER_ID AS CID, BA.BUNK_HOUSE_ID AS BHID, * " +
+        String sql = "SELECT C.CAMPER_ID AS CID, BA.BUNK_HOUSE_ID AS BHID, C.GENDER AS C_GENDER, B.GENDER AS B_GENDER, * " +
                 "FROM BUNK_HOUSES B, BUNK_HOUSE_ASSIGNMENTS BA, CAMPERS C " +
                 "WHERE B.CAMP_SESSION_ID = %d " +
                 "  AND B.BUNK_HOUSE_ID = BA.BUNK_HOUSE_ID " +
@@ -51,7 +51,7 @@ public class SqliteBunkHouseAssignmentDAO extends DAOBase implements BunkHouseAs
             camper.setMiddleName(rs.getString("MIDDLE_NAME"));
             camper.setLastName(rs.getString("LAST_NAME"));
             camper.setAge(rs.getInt("AGE"));
-            camper.setGenderValue(rs.getInt("GENDER"));
+            camper.setGenderValue(rs.getInt("C_GENDER"));
 
 
             BunkHouse bh = new BunkHouse();
@@ -59,6 +59,16 @@ public class SqliteBunkHouseAssignmentDAO extends DAOBase implements BunkHouseAs
             bh.setCampSessionId(rs.getInt("CAMP_SESSION_ID"));
             bh.setBunkHouseName(rs.getString("BUNK_HOUSE_NAME"));
             bh.setMaxOccupants(rs.getInt("MAX_OCCUPANTS"));
+
+            int gender = rs.getInt("B_GENDER");
+
+            if (gender == Camper.Gender.Male.getValue()) {
+                bh.setGender(BunkHouse.Gender.Male);
+            } else if (gender == Camper.Gender.Female.getValue()) {
+                bh.setGender(BunkHouse.Gender.Female);
+            } else {
+                bh.setGender(BunkHouse.Gender.Unspecified);
+            }
 
             BunkHouseAssignment bha = new BunkHouseAssignment();
             bha.setCamper(camper);

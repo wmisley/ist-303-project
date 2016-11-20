@@ -1,5 +1,6 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.BunkHouseAssignmentDAO;
 import com.cgu.ist303.project.dao.BunkHouseDAO;
 import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
@@ -8,12 +9,16 @@ import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.BunkHouseAssigner;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,11 +28,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class BunkHouseController implements Initializable {
+public class BunkHouseController extends BaseController implements Initializable {
     private static final Logger log = LogManager.getLogger(BunkHouseController.class);
 
     @FXML
-    public TableView<BunkHouseController> bunkhouseTable;
+    public TableView<BunkHouseAssignment> bunkhouseTable;
     @FXML
     public ComboBox<BunkHouse> sessions;
     @FXML
@@ -44,21 +49,53 @@ public class BunkHouseController implements Initializable {
         bunkhouseTable.setEditable(true);
 
         TableColumn firstNameCol = new TableColumn("First Name");
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("firstName"));
+        firstNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BunkHouseAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<BunkHouseAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getCamper().getFirstName());
+            }
+        });
+
         TableColumn middleNameCol = new TableColumn("MI");
-        middleNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("middleInitial"));
+        middleNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BunkHouseAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<BunkHouseAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getCamper().getMiddleName());
+            }
+        });
+
         TableColumn lastNameCol = new TableColumn("Last Name");
-        lastNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("lastName"));
+        lastNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BunkHouseAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<BunkHouseAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getCamper().getLastName());
+            }
+        });
 
         TableColumn age = new TableColumn("Age");
-        age.setCellValueFactory(new PropertyValueFactory<Camper, String>("age"));
+        age.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BunkHouseAssignment, Number>, ObservableValue<Number>>() {
+            @Override
+            public ObservableValue<Number> call(TableColumn.CellDataFeatures<BunkHouseAssignment, Number> param) {
+                return new SimpleIntegerProperty(new Integer(param.getValue().getCamper().getAge()));
+            }
+        });
         age.setStyle("-fx-alignment: CENTER_RIGHT;");
 
         TableColumn gender = new TableColumn("Gender");
-        gender.setCellValueFactory(new PropertyValueFactory<Camper, String>("gender"));
+        gender.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BunkHouseAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<BunkHouseAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getCamper().getGenderString());
+            }
+        });
 
         TableColumn bunkHouseCol = new TableColumn("Bunk House");
-        bunkHouseCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("bunkHouseName"));
+        bunkHouseCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BunkHouseAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<BunkHouseAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getBunkHouse().getBunkHouseName());
+            }
+        });
 
         bunkhouseTable.getColumns().addAll(firstNameCol, middleNameCol, lastNameCol, age, gender, bunkHouseCol);
 
@@ -80,10 +117,16 @@ public class BunkHouseController implements Initializable {
     }
 
     private void loadTable(int bunkId) {
-        ObservableList<BunkHouseAssignment> obsList  = null;
+        ObservableList<BunkHouseAssignment> bhas  = null;
 
         try {
-            //TODO: Query bunk house assignments and display them here
+            int campSessionId = getCampSessionFromUI().getCampSessioId();
+
+            BunkHouseAssignmentDAO dao = DAOFactory.createBunkHouseAssignmentDAO();
+            bhas = dao.query(campSessionId);
+
+            bunkhouseTable.getItems().clear();
+            bunkhouseTable.setItems(bhas);
         } catch (Exception e) {
             displayError(e);
         }
@@ -124,22 +167,6 @@ public class BunkHouseController implements Initializable {
 
             loadTable(session.getCampSessioId());
         });
-    }
-
-    public void displayNotice(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Notice");
-        alert.setHeaderText("");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void displayError(Exception e) {
-        e.printStackTrace();
-        log.error(e);
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-        errorAlert.setContentText(e.getMessage());
-        errorAlert.showAndWait();
     }
 
     public void assignClicked() {
