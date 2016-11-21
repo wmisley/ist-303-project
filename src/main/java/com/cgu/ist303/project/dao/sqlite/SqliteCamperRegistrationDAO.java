@@ -177,10 +177,10 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
             sql += String.format(" AND CS.CAMP_SESSION_ID = %d ", campSessionId);
         }
 
+        sql += "GROUP BY C.CAMPER_ID";
+
         if (isSortByAge) {
             sql += " ORDER BY C.AGE";
-        } else {
-            sql += "GROUP BY C.CAMPER_ID";
         }
 
         sql = String.format(sql, year);

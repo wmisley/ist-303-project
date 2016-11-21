@@ -13,32 +13,28 @@ public class BunkHouseAssigner {
     }
 
     public void assign(int year, int campSessionId) throws Exception {
-        List<BunkHouseAssignmentById> bas = new ArrayList<>();
+        GenderBunkHouseAssigner maleAssigner = new GenderBunkHouseAssigner(campSessionId, BunkHouse.Gender.Male);
+        GenderBunkHouseAssigner femaleAssigner = new GenderBunkHouseAssigner(campSessionId, BunkHouse.Gender.Female);
+
         CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
         ObservableList<CamperRegistration> regCampers = dao.queryRegisteredCampers(year, campSessionId, true);
 
-        BunkHouseDAO bhDAO = DAOFactory.createBunkHouseDAO();
-        ObservableList<BunkHouse> bunkHouses = bhDAO.query(campSessionId);
-        int hbCount = bunkHouses.size();
-        int bhIndex = 0;
-
         for (CamperRegistration cr : regCampers) {
-            BunkHouseAssignmentById bha = new BunkHouseAssignmentById();
-
-            bha.setCamperId(cr.getCamperId());
-            bha.setBunkHouse(bunkHouses.get(bhIndex));
-
-            bas.add(bha);
-
-            if (bhIndex == (hbCount - 1)) {
-                bhIndex = 0;
+            if (cr.getGender() == Camper.Gender.Male) {
+                maleAssigner.assign(cr.getCamperId());
             } else {
-                bhIndex++;
+                femaleAssigner.assign(cr.getCamperId());
             }
         }
 
+        BunkHouseDAO bhDAO = DAOFactory.createBunkHouseDAO();
+        ObservableList<BunkHouse> bunkHouses = bhDAO.query(campSessionId);
         BunkHouseAssignmentDAO taDAO = DAOFactory.createBunkHouseAssignmentDAO();
         taDAO.delete(bunkHouses);
+
+        List<BunkHouseAssignmentById> bas = new ArrayList<>();
+        bas.addAll(maleAssigner.getAssignments());
+        bas.addAll(femaleAssigner.getAssignments());
         taDAO.insert(bas);
     }
 }

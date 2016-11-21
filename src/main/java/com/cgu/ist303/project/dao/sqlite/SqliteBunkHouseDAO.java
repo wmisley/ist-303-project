@@ -54,6 +54,10 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
     }
 
     public ObservableList<BunkHouse> query(int campSessionId) throws Exception {
+        return query(campSessionId, BunkHouse.Gender.Unspecified);
+    }
+
+    public ObservableList<BunkHouse> query(int campSessionId, BunkHouse.Gender genderFilter) throws Exception {
         ObservableList<BunkHouse> list = FXCollections.observableArrayList();
         BunkHouse bh = null;
         Connection c = null;
@@ -64,10 +68,18 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
         c.setAutoCommit(false);
         stmt = c.createStatement();
 
-        String sql =
-                "SELECT * FROM BUNK_HOUSES WHERE CAMP_SESSION_ID = %d ORDER BY BUNK_HOUSE_ID";
-
+        String sql = "SELECT * FROM BUNK_HOUSES WHERE CAMP_SESSION_ID = %d ";
         sql = String.format(sql, campSessionId);
+
+        if (genderFilter == BunkHouse.Gender.Female) {
+            sql += "AND GENDER = 1 ";
+        } else if (genderFilter == BunkHouse.Gender.Male) {
+            sql += "AND GENDER = 0 ";
+        }
+
+        sql += "ORDER BY BUNK_HOUSE_ID";
+
+
         log.debug(sql);
         ResultSet rs = stmt.executeQuery(sql);
 

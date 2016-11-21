@@ -109,14 +109,14 @@ public class BunkHouseController extends BaseController implements Initializable
                 firstBunkId = registrar.getSessions().get(0).getCampSessioId();
             }
 
-            loadTable(firstBunkId);
+            loadTable();
 
         } catch (Exception e) {
             displayError(e);
         }
     }
 
-    private void loadTable(int bunkId) {
+    private void loadTable() {
         ObservableList<BunkHouseAssignment> bhas  = null;
 
         try {
@@ -165,7 +165,7 @@ public class BunkHouseController extends BaseController implements Initializable
             CampSession session = getCampSessionFromUI();
             log.debug("User selected session {}", session.getShortDateString());
 
-            loadTable(session.getCampSessioId());
+            loadTable();
         });
     }
 
@@ -178,6 +178,8 @@ public class BunkHouseController extends BaseController implements Initializable
 
         try {
             assigner.assign(2017, campSessionId);
+
+            loadTable();
         } catch (Exception e) {
             displayError(e);
         }

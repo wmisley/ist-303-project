@@ -42,4 +42,10 @@ public class BaseController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    protected void displayError(String error) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(error);
+        errorAlert.showAndWait();
+    }
 }

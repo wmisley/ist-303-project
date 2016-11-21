@@ -32,7 +32,7 @@ public class CampRegistrationApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        DAOFactory.dbPath = "ist303-final.db";
+        DAOFactory.dbPath = "ist303-pres2.db";
 
         //TODO: Uncomment this when the login dialog is needed
         //loginPrompt();
