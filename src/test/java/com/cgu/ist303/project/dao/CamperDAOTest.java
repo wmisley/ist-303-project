@@ -1,21 +1,15 @@
 package com.cgu.ist303.project.dao;
 
 import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.sqlite.SqliteDBCreator;
 import com.cgu.ist303.project.resources.TestResources;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by will4769 on 11/20/16.
- */
 public class CamperDAOTest {
     private static final Logger log = LogManager.getLogger(CamperDAOTest.class);
 
