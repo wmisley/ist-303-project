@@ -13,8 +13,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
-public class CampSessionTest {
-    private static final Logger log = LogManager.getLogger(CampSessionTest.class);
+public class CampSessionDAOTest {
+    private static final Logger log = LogManager.getLogger(CampSessionDAOTest.class);
 
     @ClassRule
     public static final TestResources res = new TestResources();
