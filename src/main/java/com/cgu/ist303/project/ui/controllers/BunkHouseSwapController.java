@@ -52,7 +52,7 @@ public class BunkHouseSwapController extends BaseController implements Initializ
         if (selectedBunkHouse != null) {
             ObservableList<Camper> filteredAssignments = FXCollections.observableList(
                 bhas.stream()
-                        .filter(assignment -> assignment.getBunkHouse().getBunkHouseId() != selectedBunkHouse.getBunkHouseId())
+                        .filter(assignment -> assignment.getBunkHouse().getBunkHouseId() == selectedBunkHouse.getBunkHouseId())
                         .map(assignment -> assignment.getCamper())
                         .collect(Collectors.toList()));
 
@@ -95,6 +95,8 @@ public class BunkHouseSwapController extends BaseController implements Initializ
 
     public void bunkHousesChanged() {
         log.debug("bunk house changed");
+
+        loadCampers();
     }
 
     public void cancelClicked() {
