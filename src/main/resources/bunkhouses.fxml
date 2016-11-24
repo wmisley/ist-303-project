@@ -13,5 +13,6 @@
       <ComboBox fx:id="sessions" layoutX="35.0" layoutY="50.0" prefHeight="27.0" prefWidth="589.0" />
       <Label layoutX="35.0" layoutY="27.0" prefHeight="17.0" prefWidth="110.0" text="Camp Sessions" />
       <Button fx:id="assign" layoutX="100.0" layoutY="463.0" mnemonicParsing="false" onAction="#assignClicked" text="Assign Bunk Houses" />
+      <Button fx:id="changeAssignment" layoutX="254.0" layoutY="463.0" mnemonicParsing="false" onAction="#changeAssignmentCicked" text="Change Assignment" />
    </children>
 </AnchorPane>

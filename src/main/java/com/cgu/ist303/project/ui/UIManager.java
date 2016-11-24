@@ -1,8 +1,12 @@
 package com.cgu.ist303.project.ui;
 
+import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
+import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.ui.controllers.BunkHouseSwapController;
 import com.cgu.ist303.project.ui.controllers.PaymentController;
 import com.cgu.ist303.project.ui.controllers.VerifyCheckinItemsController;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
@@ -169,6 +173,25 @@ public class UIManager {
         Stage stage = setStage("Tribe Roster", "/triberoster.fxml", 600, 450);
 
         showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
+    public void showBunkHouseChangeAssignmentScreen(BunkHouseAssignment bha, ObservableList<BunkHouseAssignment> bhas)
+            throws Exception {
+        log.debug("Showing Bunk House Swap screen\"");
+
+        Stage stage = new Stage();
+        stage.setTitle("Bunk House Swap");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/bunkswap.fxml"));
+
+        Pane pane = loader.load();
+        BunkHouseSwapController controller = loader.getController();
+        controller.setSelectedAssignment(bha, bhas);
+        Scene scene = new Scene(pane, 515, 140);
+        stage.setScene(scene);
+
+        showNewScreenHidePrevious(stage, false, true);
 
         stage.show();
     }

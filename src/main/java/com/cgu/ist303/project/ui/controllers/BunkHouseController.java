@@ -41,6 +41,8 @@ public class BunkHouseController extends BaseController implements Initializable
     public Button back;
     @FXML
     public Button print;
+    @FXML
+    public Button changeAssignment;
 
     private Registrar registrar = new Registrar();
 
@@ -141,6 +143,24 @@ public class BunkHouseController extends BaseController implements Initializable
         }
 
         return campSession;
+    }
+
+    public void changeAssignmentCicked() {
+        log.info("Change assginment butoon clicked");
+
+        try {
+
+            BunkHouseAssignment bha = bunkhouseTable.getSelectionModel().getSelectedItem();
+
+            if (bha != null) {
+                ObservableList<BunkHouseAssignment> bhas = bunkhouseTable.getItems();
+                UIManager.getInstance().showBunkHouseChangeAssignmentScreen(bha, bhas);
+            } else {
+                displayAlertMessage("Select the camper that you would like to reassign");
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void loadCampSessions() {
