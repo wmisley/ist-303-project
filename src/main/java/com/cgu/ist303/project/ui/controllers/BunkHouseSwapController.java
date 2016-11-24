@@ -43,6 +43,28 @@ public class BunkHouseSwapController extends BaseController implements Initializ
         bhas = bbhas;
 
         loadBunkHouses();
+        loadCampers();
+    }
+
+    private void loadCampers() {
+        BunkHouse selectedBunkHouse = bunkHouses.getSelectionModel().getSelectedItem();
+
+        if (selectedBunkHouse != null) {
+            ObservableList<Camper> filteredAssignments = FXCollections.observableList(
+                bhas.stream()
+                        .filter(assignment -> assignment.getBunkHouse().getBunkHouseId() != selectedBunkHouse.getBunkHouseId())
+                        .map(assignment -> assignment.getCamper())
+                        .collect(Collectors.toList()));
+
+            campers.getItems().clear();
+            campers.setItems(filteredAssignments);
+
+            if (campers.getItems() != null) {
+                if (campers.getItems().size() > 0) {
+                    campers.getSelectionModel().select(0);
+                }
+            }
+        }
     }
 
     private void loadBunkHouses() {

@@ -193,4 +193,12 @@ public class Camper {
             return "F";
         }
     }
+
+    public String toString() {
+        if (middleName.trim().equalsIgnoreCase("")) {
+            return firstName + " " + lastName;
+        } else {
+            return firstName + " " + middleName + " " + lastName;
+        }
+    }
 }
