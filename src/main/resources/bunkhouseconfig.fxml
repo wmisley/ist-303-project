@@ -4,12 +4,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="358.0" prefWidth="494.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="490.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.BunkHouseConfigController">
    <children>
       <Label layoutX="29.0" layoutY="25.0" text="Year" />
       <ComboBox layoutX="79.0" layoutY="20.0" prefHeight="27.0" prefWidth="375.0" />
-      <TableView layoutX="29.0" layoutY="90.0" prefHeight="200.0" prefWidth="436.0">
+      <TableView fx:id="bunksTableView" layoutX="29.0" layoutY="90.0" prefHeight="200.0" prefWidth="436.0">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
@@ -19,6 +18,6 @@
       <Button layoutX="29.0" layoutY="305.0" mnemonicParsing="false" text="Add" />
       <Button layoutX="81.0" layoutY="305.0" mnemonicParsing="false" text="Edit" />
       <Button layoutX="133.0" layoutY="305.0" mnemonicParsing="false" text="Delete" />
-      <Button layoutX="406.0" layoutY="305.0" mnemonicParsing="false" text="Back" />
+      <Button layoutX="406.0" layoutY="305.0" mnemonicParsing="false" onAction="#backClicked" text="Back" />
    </children>
 </AnchorPane>
