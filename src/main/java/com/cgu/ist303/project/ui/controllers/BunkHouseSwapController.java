@@ -81,7 +81,8 @@ public class BunkHouseSwapController extends BaseController implements Initializ
             ObservableList<BunkHouse> allBhs = bunkHouseDAO.query(sessionId);
             otherBhs = FXCollections.observableList(
                     allBhs.stream()
-                            .filter(bh -> bh.getBunkHouseId() != bha.getBunkHouse().getBunkHouseId())
+                            .filter(bh -> (bh.getBunkHouseId() != bha.getBunkHouse().getBunkHouseId() &&
+                                    (bha.getBunkHouse().getGender() == bh.getGender())))
                             .collect(Collectors.toList()));
 
             bunkHouses.getItems().clear();
