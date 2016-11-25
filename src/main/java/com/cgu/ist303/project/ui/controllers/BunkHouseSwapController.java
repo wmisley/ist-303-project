@@ -118,6 +118,8 @@ public class BunkHouseSwapController extends BaseController implements Initializ
                 BunkHouseAssignmentDAO dao = DAOFactory.createBunkHouseAssignmentDAO();
                 dao.swap(bha.getCamper().getCamperId(), bha.getBunkHouse().getBunkHouseId(),
                         c.getCamperId(), bh.getBunkHouseId());
+
+                UIManager.getInstance().closeCurrentScreenShowPrevious();
             } else {
                 //TODO: Handle no selection
             }
