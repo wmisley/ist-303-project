@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,6 +40,7 @@ public class BunkHouseSwapController extends BaseController implements Initializ
 
     private BunkHouseAssignment bha = null;
     private ObservableList<BunkHouseAssignment> bhas;
+    public TableView<BunkHouseAssignment> bunkhouseTable = null;
 
     private ObservableList<Camper> filteredCampers;
     private ObservableList<BunkHouse> otherBhs;
@@ -46,9 +48,11 @@ public class BunkHouseSwapController extends BaseController implements Initializ
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    public void setSelectedAssignment(BunkHouseAssignment bbha, ObservableList<BunkHouseAssignment> bbhas) {
+    public void setSelectedAssignment(BunkHouseAssignment bbha, ObservableList<BunkHouseAssignment> bbhas,
+                                      TableView<BunkHouseAssignment> table ) {
         bha = bbha;
         bhas = FXCollections.observableList(new ArrayList<>(bbhas));
+        bunkhouseTable = table;
 
         loadBunkHouses();
         loadCampers();
@@ -117,6 +121,31 @@ public class BunkHouseSwapController extends BaseController implements Initializ
         UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
 
+    private void swapAssignmentInList(int cId1, BunkHouse bh1, int cId2, BunkHouse bh2) {
+        BunkHouseAssignment ass1 = null;
+        BunkHouseAssignment ass2 = null;
+
+        for (BunkHouseAssignment assign : bhas) {
+            if (assign.getCamper().getCamperId() == cId1) {
+                ass1 = assign;
+            }
+
+            if (assign.getCamper().getCamperId() == cId2) {
+                ass2 = assign;
+            }
+        }
+
+        if (ass1 != null) {
+            ass1.setBunkHouse(bh2);
+        }
+
+        if (ass2 != null) {
+            ass2.setBunkHouse(bh1);
+        }
+
+        bunkhouseTable.refresh();
+    }
+
     public void swapClicked() {
         log.debug("Swap clicked");
 
@@ -136,6 +165,7 @@ public class BunkHouseSwapController extends BaseController implements Initializ
                         swapCamperId, bh.getBunkHouseId());
 
                 UIManager.getInstance().closeCurrentScreenShowPrevious();
+                swapAssignmentInList(bha.getCamper().getCamperId(), bha.getBunkHouse(), swapCamperId, bh);
             } else {
                 //TODO: Handle no selection
             }

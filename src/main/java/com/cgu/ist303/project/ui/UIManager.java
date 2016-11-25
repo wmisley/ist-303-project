@@ -177,7 +177,8 @@ public class UIManager {
         stage.show();
     }
 
-    public void showBunkHouseChangeAssignmentScreen(BunkHouseAssignment bha, ObservableList<BunkHouseAssignment> bhas)
+    public void showBunkHouseChangeAssignmentScreen(BunkHouseAssignment bha, ObservableList<BunkHouseAssignment> bhas,
+                                                    TableView<BunkHouseAssignment> bunkhouseTable)
             throws Exception {
         log.debug("Showing Bunk House Swap screen\"");
 
@@ -187,7 +188,7 @@ public class UIManager {
 
         Pane pane = loader.load();
         BunkHouseSwapController controller = loader.getController();
-        controller.setSelectedAssignment(bha, bhas);
+        controller.setSelectedAssignment(bha, bhas, bunkhouseTable);
         Scene scene = new Scene(pane, 515, 140);
         stage.setScene(scene);
 
