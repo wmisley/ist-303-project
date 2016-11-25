@@ -47,6 +47,17 @@ public class BunkHouseController extends BaseController implements Initializable
         bhTable = t;
         bh = bunk;
         sessionId = sId;
+
+        if (bunk != null) {
+            name.setText(bunk.getBunkHouseName());
+            capacity.setText(String.valueOf(bunk.getMaxOccupants()));
+
+            if (bunk.getGender() == BunkHouse.Gender.Male) {
+                gender.getSelectionModel().select(0);
+            } else {
+                gender.getSelectionModel().select(1);
+            }
+        }
     }
 
     public void okClicked() {
