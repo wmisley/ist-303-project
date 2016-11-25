@@ -11,5 +11,6 @@ import java.util.List;
 public interface BunkHouseAssignmentDAO {
     void insert(List<BunkHouseAssignmentById> assignments) throws Exception;
     void delete(List<BunkHouse> bhList) throws Exception;
+    void swap(int camperId1, int bunkHouseId1, int camperId2, int bunkHouseId2) throws Exception;
     ObservableList<BunkHouseAssignment> query(int sessionId) throws Exception;
 }

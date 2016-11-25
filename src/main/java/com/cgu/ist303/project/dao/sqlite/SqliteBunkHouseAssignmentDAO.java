@@ -85,7 +85,6 @@ public class SqliteBunkHouseAssignmentDAO extends DAOBase implements BunkHouseAs
     }
 
     public void insert(List<BunkHouseAssignmentById> assignments) throws Exception {
-
         Connection c = null;
         Statement stmt = null;
         Exception ee = null;
@@ -153,5 +152,53 @@ public class SqliteBunkHouseAssignmentDAO extends DAOBase implements BunkHouseAs
         stmt.close();
         c.commit();
         c.close();
+    }
+
+    public void swap(int camperId1, int bunkHouseId1, int camperId2, int bunkHouseId2) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+        Exception ee = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        stmt.getConnection().setAutoCommit(false);
+
+        try {
+            String sql =
+                    "UPDATE BUNK_HOUSE_ASSIGNMENTS " +
+                    "SET    BUNK_HOUSE_ID = %d " +
+                    "WHERE  CAMPER_ID = %d AND BUNK_HOUSE_ID = %d ";
+
+            sql = String.format(sql, bunkHouseId2, camperId1, bunkHouseId1);
+
+            log.debug(sql);
+            stmt.executeUpdate(sql);
+
+            sql =
+                    "UPDATE BUNK_HOUSE_ASSIGNMENTS " +
+                            "SET    BUNK_HOUSE_ID = %d " +
+                            "WHERE  CAMPER_ID = %d AND BUNK_HOUSE_ID = %d ";
+
+            sql = String.format(sql, bunkHouseId1, camperId2, bunkHouseId2);
+
+            log.debug(sql);
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            stmt.getConnection().rollback();
+            ee = e;
+        } finally {
+            stmt.getConnection().commit();
+
+            stmt.close();
+            c.commit();
+            c.close();
+
+            if (ee != null) {
+                throw ee;
+            }
+        }
     }
 }

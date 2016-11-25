@@ -155,6 +155,8 @@ public class BunkHouseController extends BaseController implements Initializable
             if (bha != null) {
                 ObservableList<BunkHouseAssignment> bhas = bunkhouseTable.getItems();
                 UIManager.getInstance().showBunkHouseChangeAssignmentScreen(bha, bhas);
+
+                loadTable();
             } else {
                 displayAlertMessage("Select the camper that you would like to reassign");
             }

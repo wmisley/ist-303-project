@@ -1,5 +1,6 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.BunkHouseAssignmentDAO;
 import com.cgu.ist303.project.dao.BunkHouseDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.BunkHouse;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -33,14 +35,17 @@ public class BunkHouseSwapController extends BaseController implements Initializ
     public ComboBox<BunkHouse> bunkHouses;
 
     private BunkHouseAssignment bha = null;
-    private ObservableList<BunkHouseAssignment> bhas = null;
+    private ObservableList<BunkHouseAssignment> bhas;
+
+    private ObservableList<Camper> filteredCampers;
+    private ObservableList<BunkHouse> otherBhs;
 
     public void initialize(URL location, ResourceBundle resources) {
     }
 
     public void setSelectedAssignment(BunkHouseAssignment bbha, ObservableList<BunkHouseAssignment> bbhas) {
         bha = bbha;
-        bhas = bbhas;
+        bhas = FXCollections.observableList(new ArrayList<>(bbhas));
 
         loadBunkHouses();
         loadCampers();
@@ -50,14 +55,14 @@ public class BunkHouseSwapController extends BaseController implements Initializ
         BunkHouse selectedBunkHouse = bunkHouses.getSelectionModel().getSelectedItem();
 
         if (selectedBunkHouse != null) {
-            ObservableList<Camper> filteredAssignments = FXCollections.observableList(
+            filteredCampers = FXCollections.observableList(
                 bhas.stream()
                         .filter(assignment -> assignment.getBunkHouse().getBunkHouseId() == selectedBunkHouse.getBunkHouseId())
                         .map(assignment -> assignment.getCamper())
                         .collect(Collectors.toList()));
 
             campers.getItems().clear();
-            campers.setItems(filteredAssignments);
+            campers.setItems(filteredCampers);
 
             if (campers.getItems() != null) {
                 if (campers.getItems().size() > 0) {
@@ -74,11 +79,10 @@ public class BunkHouseSwapController extends BaseController implements Initializ
 
         try {
             ObservableList<BunkHouse> allBhs = bunkHouseDAO.query(sessionId);
-            ObservableList<BunkHouse> otherBhs = FXCollections.observableList(
+            otherBhs = FXCollections.observableList(
                     allBhs.stream()
                             .filter(bh -> bh.getBunkHouseId() != bha.getBunkHouse().getBunkHouseId())
                             .collect(Collectors.toList()));
-
 
             bunkHouses.getItems().clear();
             bunkHouses.setItems(otherBhs);
@@ -105,5 +109,20 @@ public class BunkHouseSwapController extends BaseController implements Initializ
 
     public void swapClicked() {
         log.debug("Swap clicked");
+
+        BunkHouse bh = bunkHouses.getSelectionModel().getSelectedItem();
+        Camper c = campers.getSelectionModel().getSelectedItem();
+
+        try {
+            if ((bh != null) && (c != null)) {
+                BunkHouseAssignmentDAO dao = DAOFactory.createBunkHouseAssignmentDAO();
+                dao.swap(bha.getCamper().getCamperId(), bha.getBunkHouse().getBunkHouseId(),
+                        c.getCamperId(), bh.getBunkHouseId());
+            } else {
+                //TODO: Handle no selection
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 }
