@@ -206,4 +206,8 @@ public class CheckinController implements Initializable {
     public void cancelClicked() throws Exception {
         UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
+
+    public void refundClicked() {
+        displayNotice("Issue a refund of $1000.00");
+    }
 }

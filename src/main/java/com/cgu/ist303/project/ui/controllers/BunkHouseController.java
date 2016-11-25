@@ -1,18 +1,18 @@
 package com.cgu.ist303.project.ui.controllers;
 
 import com.cgu.ist303.project.dao.BunkHouseDAO;
-import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
-import com.cgu.ist303.project.dao.model.*;
-import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
-import com.cgu.ist303.project.registrar.Registrar;
+import com.cgu.ist303.project.dao.model.BunkHouse;
 import com.cgu.ist303.project.ui.UIManager;
+import com.cgu.ist303.project.ui.controls.LimitedNumberTextField;
+import com.cgu.ist303.project.ui.controls.LimitedTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,154 +21,85 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
-public class BunkHouseController implements Initializable {
+public class BunkHouseController extends BaseController implements Initializable {
     private static final Logger log = LogManager.getLogger(BunkHouseController.class);
 
     @FXML
-    private TableView<BunkHouseController> bunkhouseTable;
+    public LimitedTextField name;
     @FXML
-    private ComboBox<BunkHouse> sessions;
+    public ComboBox<String> gender;
     @FXML
-    private Button assign;
-    @FXML
-    private Button back;
-    @FXML
-    private Button print;
+    public LimitedNumberTextField capacity;
 
-    private Registrar registrar = new Registrar();
+    private TableView<BunkHouse> bhTable;
+    private BunkHouse bh = null;
+    private int sessionId = -1;
 
     public void initialize(URL url, ResourceBundle rb) {
-        bunkhouseTable.getColumns().clear();
-        bunkhouseTable.setEditable(true);
+        List<String> genders = new ArrayList<>();
+        genders.add("Male");
+        genders.add("Female");
 
-        TableColumn firstNameCol = new TableColumn("First Name");
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("firstName"));
-        TableColumn middleNameCol = new TableColumn("MI");
-        middleNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("middleInitial"));
-        TableColumn lastNameCol = new TableColumn("Last Name");
-        lastNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("lastName"));
-        TableColumn phoneNumber = new TableColumn("Phone Number");
-        phoneNumber.setCellValueFactory(new PropertyValueFactory<Camper, String>("phoneNumberString"));
-        TableColumn age = new TableColumn("Age");
-        age.setCellValueFactory(new PropertyValueFactory<Camper, String>("age"));
-        age.setStyle("-fx-alignment: CENTER_RIGHT;");
-        TableColumn gender = new TableColumn("Gender");
-        gender.setCellValueFactory(new PropertyValueFactory<Camper, String>("gender"));
-        TableColumn payment = new TableColumn("Amount Due");
-        payment.setCellValueFactory(new PropertyValueFactory<Camper, String>("formattedAmountDue"));
-        payment.setStyle("-fx-alignment: CENTER_RIGHT;");
+        ObservableList<String> obsGenders = FXCollections.observableList(genders);
+        gender.setItems(obsGenders);
+        gender.getSelectionModel().select(0);
 
-        bunkhouseTable.getColumns().addAll(firstNameCol, middleNameCol, lastNameCol, phoneNumber, age, gender, payment);
-
-        try {
-            registrar.load(2017);
-            loadCampSessions();
-
-            int firstBunkId = SqliteCamperRegistrationDAO.NO_SESSIONS;
-
-            if (registrar.getSessions() != null) {
-                firstBunkId = registrar.getSessions().get(0).getCampSessioId();
-            }
-
-            loadTable(firstBunkId);
-
-        } catch (Exception e) {
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
-        }
-
-        /*
-        campersTable.setRowFactory(tv -> {
-            TableRow<CamperRegistration> row = new TableRow<>();
-
-             row.disableProperty().bind(
-                      Bindings.selectInteger(row.itemProperty(), "value")
-                     .lessThan(5));
-            return row;
-
-        });
-        */
+        name.setMaxlength(30);
+        capacity.setMaxlength(3);
     }
 
-    public void emergencyContactsClicked() throws Exception {
-        UIManager.getInstance().showEmergencyContactsScreen();
-    }
+    public void setTable(BunkHouse bunk, int sId, TableView<BunkHouse> t) {
+        bhTable = t;
+        bh = bunk;
+        sessionId = sId;
 
-    private void loadTable(int bunkId) {
-        BunkHouseDAO bunkDAO = DAOFactory.createBunkHouseDAO();
-        ObservableList<BunkHouseAssignment> obsList  = null;
+        if (bunk != null) {
+            name.setText(bunk.getBunkHouseName());
+            capacity.setText(String.valueOf(bunk.getMaxOccupants()));
 
-        try {
-
-        //    obsList = bunkDAO.queryBunkhouses(2017, bunkId);
-         //   bunkhouseTable.getItems().clear();
-         //   bunkhouseTable.setItems(obsList);
-        } catch (Exception e) {
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
-        }
-    }
-
-    private CampSession getCampSessionFromUI() {
-        int index = sessions.getSelectionModel().getSelectedIndex();
-        CampSession campSession = null;
-
-        if (index >= 0) {
-            campSession = registrar.getSessions().get(index);
-        }
-
-        return campSession;
-    }
-
-    private void loadCampSessions() {
-        List<CampSession> sessionList = registrar.getSessions();
-        List<String> list = new ArrayList<String>();
-
-        for (CampSession session : sessionList) {
-            list.add(session.getShortDateString());
-        }
-
-        ObservableList obList = FXCollections.observableList(list);
-        sessions.getItems().clear();
-        sessions.setItems(obList);
-
-        if (sessions.getItems() != null) {
-            if (sessions.getItems().size() > 0) {
-                sessions.getSelectionModel().select(0);
+            if (bunk.getGender() == BunkHouse.Gender.Male) {
+                gender.getSelectionModel().select(0);
+            } else {
+                gender.getSelectionModel().select(1);
             }
         }
-
-        sessions.setOnAction((event) -> {
-            CampSession session = getCampSessionFromUI();
-            log.debug("User selected session {}", session.getShortDateString());
-
-            loadTable(session.getCampSessioId());
-        });
     }
 
-    public void displayNotice(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Notice");
-        alert.setHeaderText("");
-        alert.setContentText(message);
-        alert.showAndWait();
+    public void okClicked() {
+        BunkHouseDAO dao  = DAOFactory.createBunkHouseDAO();
+        String g = gender.getSelectionModel().getSelectedItem();
+        BunkHouse.Gender gg = g.equalsIgnoreCase("Male") ? BunkHouse.Gender.Male : BunkHouse.Gender.Female;
+
+        try {
+            if (bh == null) {
+                BunkHouse house = new BunkHouse();
+                house.setCampSessionId(sessionId);
+                house.setBunkHouseName(name.getText());
+                house.setMaxOccupants(Integer.parseInt(capacity.getText()));
+                house.setGender(gg);
+                int bhId = dao.insert(house);
+                house.setBunkHouseId(bhId);
+
+                bhTable.getItems().add(house);
+                bhTable.refresh();
+
+                UIManager.getInstance().closeCurrentScreenShowPrevious();
+            } else {
+                bh.setBunkHouseName(name.getText());
+                bh.setMaxOccupants(Integer.parseInt(capacity.getText()));
+                bh.setGender(gg);
+
+                dao.update(bh);
+                bhTable.refresh();
+
+                UIManager.getInstance().closeCurrentScreenShowPrevious();
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
-    public void assignClicked() {
-        log.debug("Assign Clicked");
-    }
-
-    public void printClicked() {
-        log.debug("Print clicked");
-    }
-
-    public void cancelClicked() throws Exception {
-        log.debug("Back clicked");
+    public void cancelClicked() {
         UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
 }

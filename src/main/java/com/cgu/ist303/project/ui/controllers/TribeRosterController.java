@@ -1,14 +1,12 @@
 package com.cgu.ist303.project.ui.controllers;
 
-import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.TribeAssignmentDAO;
-import com.cgu.ist303.project.dao.TribeDAO;
 import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
-import com.cgu.ist303.project.registrar.LetterGenerator;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.registrar.TribeAssigner;
+import com.cgu.ist303.project.registrar.TribeRosterGenerator;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,7 +19,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,26 +28,22 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.ResourceBundle;
 
-/**
- * Created by a on 10-11-2016.
- */
-public class TribeRosterController implements Initializable {
+public class TribeRosterController extends BaseController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(TribeRosterController.class);
 
     @FXML
     private TableView<TribeAssignment> tribeRostertable;
     @FXML
-    private ComboBox<CampSession> sessions;
+    public ComboBox<CampSession> sessions;
     @FXML
-    private Button print;
+    public Button print;
     @FXML
-    private Button back;
+    public Button back;
     @FXML
-    private Button assign;
+    public Button assign;
     List<TribeAssignment> list;
 
     private Registrar registrar = new Registrar();
@@ -138,9 +131,11 @@ public class TribeRosterController implements Initializable {
 
         try {
             list = tribeAssignmentDao.query(campSessioId);
+
             for (TribeAssignment assign : list) {
                 log.debug(assign.getTribe().getTribeName());
             }
+
             obList = FXCollections.observableList(list);
             tribeRostertable.getItems().clear();
             tribeRostertable.setItems(obList);
@@ -174,29 +169,24 @@ public class TribeRosterController implements Initializable {
 
             TribeAssigner ta = new TribeAssigner();
             ta.assign(2017, campSessionId);
+
+            loadTable(campSessionId);
         } catch (Exception e) {
             displayError(e);
         }
     }
 
-    private void displayError(Exception e) {
-        e.printStackTrace();
-        log.error(e);
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-        errorAlert.setContentText(e.getMessage());
-        errorAlert.showAndWait();
-    }
-
     public void printClicked() {
         log.debug("Print clicked");
         TribeRosterGenerator trg = new TribeRosterGenerator();
-        try{
+
+        try {
             if (list != null) {
                 trg.createTribeRosterPdf(list, "tribeRoster.Pdf");
-            }else {
+            } else {
                 displayError("No data to print");
-
             }
+
             String os = System.getProperty("os.name").toLowerCase();
 
             if (os.indexOf("mac") > 0) {
@@ -205,15 +195,8 @@ public class TribeRosterController implements Initializable {
                 File myFile = new File("tribeRoster.pdf");
                 Desktop.getDesktop().open(myFile);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             displayError(e);
         }
-
-    }
-
-    private void displayError(String error) {
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-        errorAlert.setContentText(error);
-        errorAlert.showAndWait();
     }
 }

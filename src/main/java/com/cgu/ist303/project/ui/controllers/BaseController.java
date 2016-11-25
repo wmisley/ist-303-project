@@ -26,4 +26,26 @@ public class BaseController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    protected void displayError(Exception e) {
+        e.printStackTrace();
+        log.error(e);
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.showAndWait();
+    }
+
+    protected void displayNotice(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Notice");
+        alert.setHeaderText("");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    protected void displayError(String error) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(error);
+        errorAlert.showAndWait();
+    }
 }

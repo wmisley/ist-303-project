@@ -1,8 +1,13 @@
 package com.cgu.ist303.project.ui;
 
+import com.cgu.ist303.project.dao.model.BunkHouse;
+import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.ui.controllers.BunkHouseController;
+import com.cgu.ist303.project.ui.controllers.BunkHouseSwapController;
 import com.cgu.ist303.project.ui.controllers.PaymentController;
 import com.cgu.ist303.project.ui.controllers.VerifyCheckinItemsController;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
@@ -66,6 +71,24 @@ public class UIManager {
         }
     }
 
+    public void showBunkHouseScreen(BunkHouse bunk, int sessionId, TableView<BunkHouse> t) throws Exception {
+        log.debug("Showing bunk house form");
+
+        Stage stage = new Stage();
+        stage.setTitle("Bunk House");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/bunkhouse.fxml"));
+
+        Pane pane = loader.load();
+        BunkHouseController controller = loader.getController();
+        controller.setTable(bunk, sessionId, t);
+        Scene scene = new Scene(pane, 340, 190);
+        stage.setScene(scene);
+
+        showNewScreenHidePrevious(stage, false, true);
+
+        stage.show();
+    }
+
     public void showPayScreen(CamperRegistration cr, TableView<CamperRegistration> table) throws Exception {
         log.debug("Showing pay form");
 
@@ -123,9 +146,9 @@ public class UIManager {
         stage.show();
     }
 
-    public void showBunkhouseScreen() throws Exception{
+    public void showBunkHouseRosterScreen() throws Exception{
         log.debug("Showing Bunkhouse Screen");
-        Stage stage = setStage("Bunkhouse", "/bunkhouses.fxml", 653, 515);
+        Stage stage = setStage("Bunkhouse", "/bunkhouseroster.fxml", 653, 515);
 
         showNewScreenHidePrevious(stage);
 
@@ -138,7 +161,7 @@ public class UIManager {
 
         FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
         Pane myPane = myLoader.load();
-        Scene myScene = new Scene(myPane, 510, 370);
+        Scene myScene = new Scene(myPane, 350, 370);
 
         stage.setTitle("Main Menu");
         stage.setScene(myScene);
@@ -169,6 +192,35 @@ public class UIManager {
         Stage stage = setStage("Tribe Roster", "/triberoster.fxml", 600, 450);
 
         showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
+    public void showBunkHouseConfig() throws Exception {
+        log.debug("Showing Bunk House Configuration");
+        Stage stage = setStage("Bunk House Configuration", "/bunkhouseconfig.fxml", 490, 360);
+
+        showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
+    public void showBunkHouseChangeAssignmentScreen(BunkHouseAssignment bha, ObservableList<BunkHouseAssignment> bhas,
+                                                    TableView<BunkHouseAssignment> bunkhouseTable)
+            throws Exception {
+        log.debug("Showing Bunk House Swap screen\"");
+
+        Stage stage = new Stage();
+        stage.setTitle("Bunk House Swap");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/bunkswap.fxml"));
+
+        Pane pane = loader.load();
+        BunkHouseSwapController controller = loader.getController();
+        controller.setSelectedAssignment(bha, bhas, bunkhouseTable);
+        Scene scene = new Scene(pane, 515, 140);
+        stage.setScene(scene);
+
+        showNewScreenHidePrevious(stage, false, true);
 
         stage.show();
     }

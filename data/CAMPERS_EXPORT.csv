@@ -1,0 +1,46 @@
+CAMPER_ID,FIRST_NAME,MIDDLE_NAME,LAST_NAME,GENDER,AGE,STREET_NUMBER,STREET,APT_NUMBER,CITY,STATE,ZIPCODE,PHONE_NUMBER,RP_FIRST_NAME,RP_MIDDLE_NAME,RP_LAST_NAME
+1,Minnie,,Mouse,1,18,,123 Disney Ln.,,Eastvale,CA,92880,9515556644,Mickey,,Mouse
+2,Elsa,,Arendelle,1,16,,123 Snow Ln,,Aredelle,AK,98888,6265558934,King,,Arendelle
+3,Daisey,,Duck,1,13,,123 Disney Land Ln.,,Anaheim,CA,92554,8185555622,Donald,,Duck
+4,Evana,,Trump,1,18,,123 N St.,,Redlands,CA,96677,8185553343,Donald,,Trump
+5,Princess,,Leia,1,18,,554 Star Wars Ln.,,Alderan,CA,99887,9995554333,Han,,Solo
+6,Princess,,Belle,1,14,,555 Disney Ln.,,Anaheim,CA,66559,7145551212,The,,Beast
+7,Princess,,Cinderella,1,12,,1234 Disney Dr.,,Glendora,CA,98877,7145551403,The,,Princess
+8,Princess,,Merida,1,11,,123 Ireland Dr.,,Ireland,AL,88776,6765553344,The,,King
+9,Hermione,,Granger,1,15,,664 Hogewarts,,Potter,CA,88776,6665551288,Harry,,Potter
+10,Ripley,,Weaver,1,18,,223 Mars,,Venu,CA,77886,6668888989,Alient,,Kill
+11,Mary,,Poppins,1,17,,380 New York St.,,Redlands,CA,98877,7775553434,Will,,Isley
+12,Sarah,,Connor,1,12,,123 Terminator,,Covina,CA,98877,5556667777,Some,,Guy
+13,Juno,,MacGuff,1,13,,333 New St.,,Covina,CA,98855,8885559200,Tom,,MacGuff
+14,Erin,,Brockovich,1,18,,112 Water St.,,Covina,CA,88766,5555553222,Tom,,Brockovich
+15,Carrie,,White,1,13,,123 Hell St.,,Hell,AK,66666,6666666666,The,,Devil
+16,Jessica,,Rabbit,1,17,,445 Rabbit Ln.,,Hollywood,CA,88888,7776565533,Roger,,Rabbit
+17,Annie,,Hall,1,11,,122 Orphan Dr.,,Orphan,AR,99999,5554449087,No,,One
+18,Bridget,,Jones,1,11,,111 Lady St.,,Covina,CA,91722,5557488894,Who,,Cares
+19,Kim,,Kardashian,1,18,,566 Hubba Hubba Dr.,,Covina,CA,99988,6265568890,Tom,,Kardashian
+20,Anjolina,,Jolie,1,18,,155 Hollywood Dr.,,Hollywood,CA,98855,3235551222,Brad,,Pitt
+21,Marylin,,Monroe,1,12,,123 President Ln,,Washiington,WA,55454,6645553252,John,,Kennedy
+22,Jane,,Fonda,1,18,,556 Star St.,,Hollywood,CA,99877,5453335432,Tom,,Fonda
+23,Martha,,Stewart,1,15,,343 Food Dr.,,Hollywood,CA,77333,6644459088,Bill,,Stewart
+24,Taylor,,Swift,1,10,,5554 Singer Ln.,,Hollywood,CA,88833,6445553434,No,,Boyfriend
+25,Princess,,Dianna,1,18,,5454 She Is Dead Ln.,,England,AL,88834,6565553434,Prince,,Charles
+26,Grace,,Kelly,1,13,,665 Star Ln.,,Hollywood,CA,98334,6665559998,Tom,,Kelly
+27,Tina,,Fey,1,11,,55 Star St.,,Hollywood,CA,98877,3335554545,Bill,,Fey
+28,Jennifer,,Lawerance,1,13,,555 Bo St.,,Covina,CA,33333,3335557676,Tom,,Lawerance
+29,Jennifer,,Lopez,1,12,,4545 Bobby Ln,,Music,AR,99888,5554448989,Tom,,Lopez
+30,Kate,,Perry,1,13,,123 Yes St.,,Redlands,CA,92880,5555558888,Yes,,Perry
+31,Anna,,Hathaway,1,10,,124 Hollywood,,Hollywood,CA,89898,5455554544,Tom,,Hathaway
+32,Michelle,,Obama,1,11,,555 President St.,,DC,WA,99887,5454444545,Barach,,Obama
+33,Barabara,,Walters,1,18,,2020 Show Dr.,,Hollywood,CA,88997,5555555555,Tim,,Walters
+34,Kate,,Hudson,1,12,,343 Star Ln.,,Hollywood,CA,88997,5555555454,Tom,,Hudson
+35,Sandra,,Bullock,1,12,,54545 Yep St.,,Hollywood,CA,88776,5555553434,Jo,,Bullock
+36,Cameron,,Diaz,1,11,,54545 Star St,,Hollywood,CA,98877,5555556677,Bill,,Diaz
+37,Audri,,Hepburn,1,13,,23423 Hell,,Hollywood,CA,91722,5555555454,Tom,,Hepburn
+38,Donald,,Duck,0,9,,123 Disney Ln,,Ahaheim,CA,98877,5555553322,Mickey,,Mouse
+39,Hilary,,Clinton,1,18,,1234 Main St.,,Claremont,CA,91722,5556565454,Bill,,Clinton
+40,Marvin,,Martian,0,11,,1234 Mars,,Venus,CA,91788,5555555555,Sarah,,Martian
+41,Hilary,,Clinton,1,18,,1234 Washington,,Claremont,CA,91722,4444447766,Bill,,Clinton
+42,Donald,,Trump,0,10,,1234 BuildAWall St.,,Claremont,CA,66666,6666666666,Evana,,Trump
+43,Will,,Isley,1,10,,123 East St.,,Covina,CA,91722,5555555555,Tom,,Hill
+44,Renee,,Isley,1,10,,123 Main St.,,Covina,CA,91722,5555555555,Bob,,Isley
+45,t,t,t,0,10,,t,,t,AK,66666,6666666666,t,t,t

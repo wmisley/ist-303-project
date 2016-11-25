@@ -185,4 +185,20 @@ public class Camper {
             return phoneNumber;
         }
     }
+
+    public String getGenderString() {
+        if (gender == Gender.Male) {
+            return "M";
+        } else {
+            return "F";
+        }
+    }
+
+    public String toString() {
+        if (middleName.trim().equalsIgnoreCase("")) {
+            return firstName + " " + lastName;
+        } else {
+            return firstName + " " + middleName + " " + lastName;
+        }
+    }
 }

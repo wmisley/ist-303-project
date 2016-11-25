@@ -27,6 +27,8 @@ public class TribeAssigner {
         int tribeCount = tribes.size();
         int tribeIndex = 0;
 
+        //TODO: Add logic to balance campers into the appropriate bunk house for their gender
+
         for (CamperRegistration cr : regCampers) {
             TribeAssignmentById ta = new TribeAssignmentById();
 
