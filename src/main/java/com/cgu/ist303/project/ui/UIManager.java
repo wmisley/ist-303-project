@@ -1,7 +1,6 @@
 package com.cgu.ist303.project.ui;
 
 import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
-import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.ui.controllers.BunkHouseSwapController;
 import com.cgu.ist303.project.ui.controllers.PaymentController;
@@ -70,6 +69,24 @@ public class UIManager {
         }
     }
 
+    public void showBunkHouseScreen() throws Exception {
+        log.debug("Showing bunk house form");
+
+        Stage stage = new Stage();
+        stage.setTitle("Bunk House");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/bunkhouse.fxml"));
+
+        Pane pane = loader.load();
+        //PaymentController controller = loader.getController();
+        //controller.setCamperRegistration(cr, table);
+        Scene scene = new Scene(pane, 340, 190);
+        stage.setScene(scene);
+
+        showNewScreenHidePrevious(stage, false, true);
+
+        stage.show();
+    }
+
     public void showPayScreen(CamperRegistration cr, TableView<CamperRegistration> table) throws Exception {
         log.debug("Showing pay form");
 
@@ -127,9 +144,9 @@ public class UIManager {
         stage.show();
     }
 
-    public void showBunkhouseScreen() throws Exception{
+    public void showBunkHouseRosterScreen() throws Exception{
         log.debug("Showing Bunkhouse Screen");
-        Stage stage = setStage("Bunkhouse", "/bunkhouses.fxml", 653, 515);
+        Stage stage = setStage("Bunkhouse", "/bunkhouseroster.fxml", 653, 515);
 
         showNewScreenHidePrevious(stage);
 

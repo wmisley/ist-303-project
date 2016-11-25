@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.BunkHouseController">
+   <children>
+      <Label layoutX="24.0" layoutY="28.0" text="Name" />
+      <TextField fx:id="name" layoutX="98.0" layoutY="23.0" prefHeight="27.0" prefWidth="209.0" />
+      <Label layoutX="19.0" layoutY="70.0" text="Gender" />
+      <ComboBox fx:id="gender" layoutX="98.0" layoutY="65.0" prefHeight="27.0" prefWidth="209.0" />
+      <Label layoutX="19.0" layoutY="109.0" text="Capacity" />
+      <TextField fx:id="capacity" layoutX="98.0" layoutY="104.0" prefHeight="27.0" prefWidth="209.0" />
+      <Button layoutX="248.0" layoutY="148.0" mnemonicParsing="false" onAction="#cancelClicked" text="Cancel" />
+      <Button layoutX="196.0" layoutY="148.0" mnemonicParsing="false" onAction="#okClicked" text="OK" />
+   </children>
+</AnchorPane>

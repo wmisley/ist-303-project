@@ -34,7 +34,7 @@ public class MenuController implements Initializable {
 
     public void showBunkhouseScreen() throws Exception {
         log.debug("User pressed \"Tribe\" button");
-        UIManager.getInstance().showBunkhouseScreen();
+        UIManager.getInstance().showBunkHouseRosterScreen();
     }
 
     public void showBunkhouseConfigScreen() throws Exception {

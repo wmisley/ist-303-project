@@ -37,4 +37,11 @@ public class BunkHouseAssigner {
         bas.addAll(femaleAssigner.getAssignments());
         taDAO.insert(bas);
     }
+
+    public void clearAssignments(int campSessionId) throws Exception {
+        BunkHouseDAO bhDAO = DAOFactory.createBunkHouseDAO();
+        ObservableList<BunkHouse> bunkHouses = bhDAO.query(campSessionId);
+        BunkHouseAssignmentDAO taDAO = DAOFactory.createBunkHouseAssignmentDAO();
+        taDAO.delete(bunkHouses);
+    }
 }
