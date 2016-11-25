@@ -4,6 +4,8 @@ import com.cgu.ist303.project.dao.BunkHouseDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.BunkHouse;
 import com.cgu.ist303.project.ui.UIManager;
+import com.cgu.ist303.project.ui.controls.LimitedNumberTextField;
+import com.cgu.ist303.project.ui.controls.LimitedTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,11 +25,11 @@ public class BunkHouseController extends BaseController implements Initializable
     private static final Logger log = LogManager.getLogger(BunkHouseController.class);
 
     @FXML
-    public TextField name;
+    public LimitedTextField name;
     @FXML
     public ComboBox<String> gender;
     @FXML
-    public TextField capacity;
+    public LimitedNumberTextField capacity;
 
     private TableView<BunkHouse> bhTable;
     private BunkHouse bh = null;
@@ -41,6 +43,9 @@ public class BunkHouseController extends BaseController implements Initializable
         ObservableList<String> obsGenders = FXCollections.observableList(genders);
         gender.setItems(obsGenders);
         gender.getSelectionModel().select(0);
+
+        name.setMaxlength(30);
+        capacity.setMaxlength(3);
     }
 
     public void setTable(BunkHouse bunk, int sId, TableView<BunkHouse> t) {
@@ -80,7 +85,14 @@ public class BunkHouseController extends BaseController implements Initializable
 
                 UIManager.getInstance().closeCurrentScreenShowPrevious();
             } else {
+                bh.setBunkHouseName(name.getText());
+                bh.setMaxOccupants(Integer.parseInt(capacity.getText()));
+                bh.setGender(gg);
 
+                dao.update(bh);
+                bhTable.refresh();
+
+                UIManager.getInstance().closeCurrentScreenShowPrevious();
             }
         } catch (Exception e) {
             displayError(e);

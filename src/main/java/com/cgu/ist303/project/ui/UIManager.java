@@ -161,7 +161,7 @@ public class UIManager {
 
         FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
         Pane myPane = myLoader.load();
-        Scene myScene = new Scene(myPane, 510, 370);
+        Scene myScene = new Scene(myPane, 350, 370);
 
         stage.setTitle("Main Menu");
         stage.setScene(myScene);

@@ -144,6 +144,20 @@ public class BunkHouseConfigController extends BaseController implements Initial
     }
 
     public void deleteClicked() {
+        try {
+            BunkHouse bh = bunksTableView.getSelectionModel().getSelectedItem();
 
+            if (bh != null) {
+                BunkHouseDAO dao = DAOFactory.createBunkHouseDAO();
+                dao.delete(bh);
+
+                bunksTableView.getItems().remove(bh);
+                bunksTableView.refresh();
+            } else {
+                displayAlertMessage("Please select a bunk house.");
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 }

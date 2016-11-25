@@ -22,6 +22,65 @@ public class SqliteBunkHouseDAO extends DAOBase implements BunkHouseDAO{
         super(dbPath);
     }
 
+    public int delete(BunkHouse bh) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql =
+                "DELETE FROM BUNK_HOUSES WHERE BUNK_HOUSE_ID = %d";
+
+        sql = String.format(sql, bh.getBunkHouseId());
+
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+        ResultSet rs = stmt.getGeneratedKeys();
+        int bunkHouseId = rs.getInt(1);
+        log.info("Bunk House ID is {}", bunkHouseId);
+
+        stmt.close();
+        c.commit();
+        c.close();
+
+        return bunkHouseId;
+    }
+
+    public int update(BunkHouse bh) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql =
+                "UPDATE BUNK_HOUSES " +
+                "SET    BUNK_HOUSE_NAME = '%s', GENDER = %d, MAX_OCCUPANTS = %d " +
+                "WHERE  BUNK_HOUSE_ID = %d";
+
+        sql = String.format(sql, bh.getBunkHouseName(), bh.getGender().getValue(),
+                bh.getMaxOccupants(), bh.getBunkHouseId());
+
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+        ResultSet rs = stmt.getGeneratedKeys();
+        int bunkHouseId = rs.getInt(1);
+        log.info("Bunk House ID is {}", bunkHouseId);
+
+        stmt.close();
+        c.commit();
+        c.close();
+
+        return bunkHouseId;
+    }
+
     public int insert(BunkHouse bh) throws Exception {
         Connection c = null;
         Statement stmt = null;

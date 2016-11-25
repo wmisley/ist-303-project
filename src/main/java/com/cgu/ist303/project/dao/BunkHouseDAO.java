@@ -8,4 +8,6 @@ public interface BunkHouseDAO {
     int insert(BunkHouse bh) throws Exception;
     ObservableList<BunkHouse> query(int campSessionId) throws Exception;
     ObservableList<BunkHouse> query(int campSessionId, BunkHouse.Gender genderFilter) throws Exception;
+    int update(BunkHouse bh) throws Exception;
+    int delete(BunkHouse bh) throws Exception;
 }
