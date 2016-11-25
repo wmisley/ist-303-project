@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,6 +34,8 @@ public class BunkHouseSwapController extends BaseController implements Initializ
     public ComboBox<Camper> campers;
     @FXML
     public ComboBox<BunkHouse> bunkHouses;
+    @FXML
+    public Label camperLabel;
 
     private BunkHouseAssignment bha = null;
     private ObservableList<BunkHouseAssignment> bhas;
@@ -64,10 +67,16 @@ public class BunkHouseSwapController extends BaseController implements Initializ
             campers.getItems().clear();
             campers.setItems(filteredCampers);
 
-            if (campers.getItems() != null) {
+            if (campers.getItems().size() > 0) {
                 if (campers.getItems().size() > 0) {
                     campers.getSelectionModel().select(0);
                 }
+
+                campers.setDisable(false);
+                camperLabel.setDisable(false);
+            } else {
+                campers.setDisable(true);
+                camperLabel.setDisable(true);
             }
         }
     }
@@ -115,10 +124,16 @@ public class BunkHouseSwapController extends BaseController implements Initializ
         Camper c = campers.getSelectionModel().getSelectedItem();
 
         try {
-            if ((bh != null) && (c != null)) {
+            if (bh != null) {
                 BunkHouseAssignmentDAO dao = DAOFactory.createBunkHouseAssignmentDAO();
+                int swapCamperId = -1;
+
+                if (c != null) {
+                    swapCamperId = c.getCamperId();
+                }
+
                 dao.swap(bha.getCamper().getCamperId(), bha.getBunkHouse().getBunkHouseId(),
-                        c.getCamperId(), bh.getBunkHouseId());
+                        swapCamperId, bh.getBunkHouseId());
 
                 UIManager.getInstance().closeCurrentScreenShowPrevious();
             } else {

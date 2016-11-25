@@ -173,19 +173,20 @@ public class SqliteBunkHouseAssignmentDAO extends DAOBase implements BunkHouseAs
                     "WHERE  CAMPER_ID = %d AND BUNK_HOUSE_ID = %d ";
 
             sql = String.format(sql, bunkHouseId2, camperId1, bunkHouseId1);
-
             log.debug(sql);
             stmt.executeUpdate(sql);
 
-            sql =
-                    "UPDATE BUNK_HOUSE_ASSIGNMENTS " +
-                            "SET    BUNK_HOUSE_ID = %d " +
-                            "WHERE  CAMPER_ID = %d AND BUNK_HOUSE_ID = %d ";
+            if (camperId2 != -1) {
+                sql =
+                        "UPDATE BUNK_HOUSE_ASSIGNMENTS " +
+                                "SET    BUNK_HOUSE_ID = %d " +
+                                "WHERE  CAMPER_ID = %d AND BUNK_HOUSE_ID = %d ";
 
-            sql = String.format(sql, bunkHouseId1, camperId2, bunkHouseId2);
+                sql = String.format(sql, bunkHouseId1, camperId2, bunkHouseId2);
 
-            log.debug(sql);
-            stmt.executeUpdate(sql);
+                log.debug(sql);
+                stmt.executeUpdate(sql);
+            }
         } catch (Exception e) {
             stmt.getConnection().rollback();
             ee = e;
