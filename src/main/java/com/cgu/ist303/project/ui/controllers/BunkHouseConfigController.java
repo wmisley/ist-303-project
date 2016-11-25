@@ -22,7 +22,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 
 
 public class BunkHouseConfigController extends BaseController implements Initializable {
@@ -122,7 +121,8 @@ public class BunkHouseConfigController extends BaseController implements Initial
 
     public void addClicked() {
         try {
-            UIManager.getInstance().showBunkHouseScreen();
+            CampSession session = getCampSessionFromUI();
+            UIManager.getInstance().showBunkHouseScreen(null, session.getCampSessioId(), this.bunksTableView);
         } catch (Exception e) {
             displayError(e);
         }
@@ -130,7 +130,14 @@ public class BunkHouseConfigController extends BaseController implements Initial
 
     public void editClicked() {
         try {
-            UIManager.getInstance().showBunkHouseScreen();
+            BunkHouse bh = bunksTableView.getSelectionModel().getSelectedItem();
+
+            if (bh != null) {
+                CampSession session = getCampSessionFromUI();
+                UIManager.getInstance().showBunkHouseScreen(bh, session.getCampSessioId(), this.bunksTableView);
+            } else {
+                displayAlertMessage("Please select a bunk house.");
+            }
         } catch (Exception e) {
             displayError(e);
         }

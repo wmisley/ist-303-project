@@ -1,7 +1,9 @@
 package com.cgu.ist303.project.ui;
 
+import com.cgu.ist303.project.dao.model.BunkHouse;
 import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
+import com.cgu.ist303.project.ui.controllers.BunkHouseController;
 import com.cgu.ist303.project.ui.controllers.BunkHouseSwapController;
 import com.cgu.ist303.project.ui.controllers.PaymentController;
 import com.cgu.ist303.project.ui.controllers.VerifyCheckinItemsController;
@@ -69,7 +71,7 @@ public class UIManager {
         }
     }
 
-    public void showBunkHouseScreen() throws Exception {
+    public void showBunkHouseScreen(BunkHouse bunk, int sessionId, TableView<BunkHouse> t) throws Exception {
         log.debug("Showing bunk house form");
 
         Stage stage = new Stage();
@@ -77,8 +79,8 @@ public class UIManager {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/bunkhouse.fxml"));
 
         Pane pane = loader.load();
-        //PaymentController controller = loader.getController();
-        //controller.setCamperRegistration(cr, table);
+        BunkHouseController controller = loader.getController();
+        controller.setTable(bunk, sessionId, t);
         Scene scene = new Scene(pane, 340, 190);
         stage.setScene(scene);
 
