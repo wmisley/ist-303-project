@@ -177,6 +177,15 @@ public class UIManager {
         stage.show();
     }
 
+    public void showBunkHouseConfig() throws Exception {
+        log.debug("Showing Bunk House Configuration");
+        Stage stage = setStage("Bunk House Configuration", "/bunkhouseconfig.fxml", 490, 360);
+
+        showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
     public void showBunkHouseChangeAssignmentScreen(BunkHouseAssignment bha, ObservableList<BunkHouseAssignment> bhas,
                                                     TableView<BunkHouseAssignment> bunkhouseTable)
             throws Exception {
