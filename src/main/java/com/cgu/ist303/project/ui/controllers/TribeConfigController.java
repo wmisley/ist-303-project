@@ -131,7 +131,7 @@ public class TribeConfigController extends BaseController implements Initializab
                 CampSession session = getCampSessionFromUI();
                 UIManager.getInstance().showTribeScreen(tribe, session.getCampSessioId(), this.tribeTableView);
             } else {
-                displayAlertMessage("Please select a bunk house.");
+                displayAlertMessage("Please select a tribe.");
             }
         }catch (Exception e){
             displayError(e);
@@ -141,15 +141,16 @@ public class TribeConfigController extends BaseController implements Initializab
     public void deleteClicked(ActionEvent actionEvent) {
         try {
             Tribe tribe = tribeTableView.getSelectionModel().getSelectedItem();
+            if(displayConfirmationMessage("Are you sure you want to delete " + tribe.getTribeName())){
+                if (tribe != null) {
+                    TribeDAO dao = DAOFactory.createTribeDAO();
+                    dao.delete(tribe);
 
-            if (tribe != null) {
-                TribeDAO dao = DAOFactory.createTribeDAO();
-                dao.delete(tribe);
-
-                tribeTableView.getItems().remove(tribe);
-                tribeTableView.refresh();
-            } else {
-                displayAlertMessage("Please select a bunk house.");
+                    tribeTableView.getItems().remove(tribe);
+                    tribeTableView.refresh();
+                } else {
+                    displayAlertMessage("Please select a tribe.");
+                }
             }
         } catch (Exception e) {
             displayError(e);
