@@ -85,4 +85,63 @@ public class SqliteTribeDAO implements TribeDAO {
 
         return list;
     }
+
+    @Override
+    public int update(Tribe tribe) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql =
+                "UPDATE TRIBES " +
+                        "SET    TRIBE_NAME = '%s' " +
+                        "WHERE  TRIBE_ID = %d";
+
+        sql = String.format(sql, tribe.getTribeName(), tribe.getTribeId());
+
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+        ResultSet rs = stmt.getGeneratedKeys();
+        int tribeId = rs.getInt(1);
+        log.info("Tribe ID is {}", tribeId);
+
+        stmt.close();
+        c.commit();
+        c.close();
+
+        return tribeId;
+    }
+
+    public int delete(Tribe t) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql =
+                "DELETE FROM TRIBES WHERE TRIBE_ID = %d";
+
+        sql = String.format(sql, t.getTribeId());
+
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+        ResultSet rs = stmt.getGeneratedKeys();
+        int tribeId = rs.getInt(1);
+        log.info("Tribe ID is {}", tribeId);
+
+        stmt.close();
+        c.commit();
+        c.close();
+
+        return tribeId;
+    }
 }

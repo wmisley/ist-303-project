@@ -44,5 +44,6 @@ public class MenuController implements Initializable {
 
     public void showTribeConfigScreen() throws Exception {
         log.debug("User pressed \"Tribe Configuration\" screen");
+        UIManager.getInstance().showTribeConfig();
     }
 }

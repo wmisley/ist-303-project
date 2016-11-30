@@ -50,32 +50,48 @@ public class TribeRosterController extends BaseController implements Initializab
 
     public void initialize(URL location, ResourceBundle resources) {
 
-        TableColumn<TribeAssignment, String> campersNameCol = new TableColumn<TribeAssignment, String>("Camper's Name");
-        campersNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
+        TableColumn<TribeAssignment, String> campersFNameCol = new TableColumn<TribeAssignment, String>("First Name");
+        campersFNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TribeAssignment, String> param) {
                 return new SimpleStringProperty(param.getValue().getCamper().getFirstName());
             }
         });
-        campersNameCol.setPrefWidth(246);
-        TableColumn<TribeAssignment, Number> age = new TableColumn<TribeAssignment, Number>("Age");
-        age.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, Number>, ObservableValue<Number>>() {
+        campersFNameCol.prefWidthProperty().bind(tribeRostertable.widthProperty().multiply(0.25));
+        campersFNameCol.setResizable(false);
+
+        TableColumn<TribeAssignment, String> campersLNameCol = new TableColumn<TribeAssignment, String>("Last Name");
+        campersLNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<TribeAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getCamper().getLastName());
+            }
+        });
+        campersLNameCol.prefWidthProperty().bind(tribeRostertable.widthProperty().multiply(0.25));
+        campersLNameCol.setResizable(false);
+
+        TableColumn<TribeAssignment, Number> ageCol = new TableColumn<TribeAssignment, Number>("Age");
+        ageCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, Number>, ObservableValue<Number>>() {
             @Override
             public ObservableValue<Number> call(TableColumn.CellDataFeatures<TribeAssignment, Number> param) {
                 return new SimpleIntegerProperty(param.getValue().getCamper().getAge());
             }
         });
-        age.setPrefWidth(101);
-        TableColumn<TribeAssignment, String> assignedTribe = new TableColumn<TribeAssignment, String>("Assigned Tribe");
-        assignedTribe.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
+        ageCol.prefWidthProperty().bind(tribeRostertable.widthProperty().multiply(0.25));
+        ageCol.setResizable(false);
+        ageCol.setStyle("-fx-alignment: CENTER;");
+
+        TableColumn<TribeAssignment, String> assignedTribeCol = new TableColumn<TribeAssignment, String>("Assigned Tribe");
+        assignedTribeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TribeAssignment, String> param) {
                 return new SimpleStringProperty(param.getValue().getTribe().getTribeName());
             }
         });
-        assignedTribe.setPrefWidth(238);
+        assignedTribeCol.prefWidthProperty().bind(tribeRostertable.widthProperty().multiply(0.25));
+        assignedTribeCol.setResizable(false);
 
-        tribeRostertable.getColumns().addAll(campersNameCol,age,assignedTribe);
+        tribeRostertable.getColumns().addAll(campersFNameCol,campersLNameCol,ageCol,assignedTribeCol);
 
         try {
             registrar.load(2017);
@@ -131,10 +147,6 @@ public class TribeRosterController extends BaseController implements Initializab
 
         try {
             list = tribeAssignmentDao.query(campSessioId);
-
-            for (TribeAssignment assign : list) {
-                log.debug(assign.getTribe().getTribeName());
-            }
 
             obList = FXCollections.observableList(list);
             tribeRostertable.getItems().clear();

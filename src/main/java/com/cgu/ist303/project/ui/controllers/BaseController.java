@@ -1,8 +1,11 @@
 package com.cgu.ist303.project.ui.controllers;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Optional;
 
 public class BaseController {
     private static final Logger log = LogManager.getLogger(BaseController.class);
@@ -25,6 +28,19 @@ public class BaseController {
         alert.setHeaderText("");
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    protected boolean displayConfirmationMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("");
+        alert.setHeaderText("");
+        alert.setContentText(message);
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == ButtonType.OK){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     protected void displayError(Exception e) {

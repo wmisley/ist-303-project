@@ -3,10 +3,8 @@ package com.cgu.ist303.project.ui;
 import com.cgu.ist303.project.dao.model.BunkHouse;
 import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
-import com.cgu.ist303.project.ui.controllers.BunkHouseController;
-import com.cgu.ist303.project.ui.controllers.BunkHouseSwapController;
-import com.cgu.ist303.project.ui.controllers.PaymentController;
-import com.cgu.ist303.project.ui.controllers.VerifyCheckinItemsController;
+import com.cgu.ist303.project.dao.model.Tribe;
+import com.cgu.ist303.project.ui.controllers.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,6 +15,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.Stack;
 
 
@@ -218,6 +217,33 @@ public class UIManager {
         BunkHouseSwapController controller = loader.getController();
         controller.setSelectedAssignment(bha, bhas, bunkhouseTable);
         Scene scene = new Scene(pane, 515, 140);
+        stage.setScene(scene);
+
+        showNewScreenHidePrevious(stage, false, true);
+
+        stage.show();
+    }
+
+    public void showTribeConfig() throws Exception {
+        log.debug("Showing Bunk House Configuration");
+        Stage stage = setStage("Tribe Configuration", "/tribeconfig.fxml", 490, 360);
+
+        showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
+    public void showTribeScreen(Tribe tribe, int campSessioId, TableView<Tribe> tribeTableView) throws IOException {
+        log.debug("Showing tribe form");
+
+        Stage stage = new Stage();
+        stage.setTitle("Tribe");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/tribe.fxml"));
+
+        Pane pane = loader.load();
+        TribeController controller = loader.getController();
+        controller.setTable(tribe, campSessioId, tribeTableView);
+        Scene scene = new Scene(pane, 340, 190);
         stage.setScene(scene);
 
         showNewScreenHidePrevious(stage, false, true);
