@@ -5,3 +5,8 @@ addons:
   apt:
     packages:
       - oracle-java8-installer
+notifications:
+  email:
+    - William.Isley@cgu.edu
+    - meera.chowhan@gmail.com
+    - Abbas.Albekhit@cgu.edu
