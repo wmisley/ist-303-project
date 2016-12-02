@@ -35,7 +35,7 @@ public class CampRegistrationApplication extends Application {
         DAOFactory.dbPath = "ist303-pres2.db";
 
         //TODO: Uncomment this when the login dialog is needed
-        //loginPrompt();
+        loginPrompt();
 
         File f = new File(DAOFactory.dbPath);
 
