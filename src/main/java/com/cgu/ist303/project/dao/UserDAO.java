@@ -4,4 +4,5 @@ import com.cgu.ist303.project.dao.model.User;
 
 public interface UserDAO {
     User query(String login, String password) throws Exception;
+    void insert(User user) throws Exception;
 }

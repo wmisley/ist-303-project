@@ -1,6 +1,7 @@
 package com.cgu.ist303.project.dao.sqlite;
 
 import com.cgu.ist303.project.dao.UserDAO;
+import com.cgu.ist303.project.dao.model.BunkHouse;
 import com.cgu.ist303.project.dao.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,5 +61,29 @@ public class SqliteUserDAO implements UserDAO {
         c.close();
 
         return user;
+    }
+
+    public void insert(User user) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql = "INSERT INTO USERS " +
+                "(LOGIN, PASSWORD, ROLE) " +
+                "     VALUES " +
+                "('%s', '%s', %d);";
+
+        sql = String.format(sql, user.getUser(), user.getPasswrod(), user.getType().getValue());
+
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+        stmt.close();
+        c.commit();
+        c.close();
     }
 }
