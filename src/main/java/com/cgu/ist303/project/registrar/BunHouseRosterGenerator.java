@@ -1,23 +1,26 @@
 package com.cgu.ist303.project.registrar;
 
+import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
 import com.cgu.ist303.project.dao.model.TribeAssignment;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import javafx.collections.ObservableList;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.List;
 
-
-public class TribeRosterGenerator {
+/**
+ * Created by 33843 on 12/4/2016.
+ */
+public class BunHouseRosterGenerator {
 
     private final Font bold14 = new Font(Font.FontFamily.COURIER,14,Font.BOLD);
     private final Font bold12 = new Font(Font.FontFamily.COURIER,12,Font.NORMAL);
     private final Font normal12 = new Font(Font.FontFamily.COURIER,12,Font.NORMAL);
 
-    public void createTribeRosterPdf(List<TribeAssignment> list, String fileName) throws FileNotFoundException, DocumentException {
+    public void createBunkHouseRosterPdf(ObservableList<BunkHouseAssignment> bhas, String fileName) throws FileNotFoundException, DocumentException {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream(fileName));
         document.open();
@@ -25,7 +28,7 @@ public class TribeRosterGenerator {
         campHead.setAlignment(Element.ALIGN_CENTER);
         document.add(campHead);
 
-        document.add(new Paragraph("Tribe Roster",bold12));
+        document.add(new Paragraph("Bunk House Roster",bold12));
 
         PdfPTable rosterTable = new PdfPTable(4);
         rosterTable.setSpacingBefore(10);
@@ -34,14 +37,14 @@ public class TribeRosterGenerator {
         rosterTable.addCell(getBorderCellWithBoldText("First Name"));
         rosterTable.addCell(getBorderCellWithBoldText("Last Name"));
         rosterTable.addCell(getBorderCellWithBoldText("Age"));
-        rosterTable.addCell(getBorderCellWithBoldText("Tribe Name"));
+        rosterTable.addCell(getBorderCellWithBoldText("Bunk House Name"));
         rosterTable.completeRow();
 
-        for (TribeAssignment assignment : list) {
+        for (BunkHouseAssignment assignment : bhas) {
             rosterTable.addCell(getBorderCell(assignment.getCamper().getFirstName()));
             rosterTable.addCell(getBorderCell(assignment.getCamper().getLastName()));
             rosterTable.addCell(getBorderCell(Integer.toString(assignment.getCamper().getAge())));
-            rosterTable.addCell(getBorderCell(assignment.getTribe().getTribeName()));
+            rosterTable.addCell(getBorderCell(assignment.getBunkHouse().getBunkHouseName()));
             rosterTable.completeRow();
         }
 

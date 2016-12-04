@@ -6,6 +6,7 @@ import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.BunkHouseAssigner;
 import com.cgu.ist303.project.registrar.Registrar;
+import com.cgu.ist303.project.registrar.BunHouseRosterGenerator;
 import com.cgu.ist303.project.ui.LoggedInUser;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -16,10 +17,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +45,8 @@ public class BunkHouseRosterController extends BaseController implements Initial
     public Button print;
     @FXML
     public Button changeAssignment;
+
+    ObservableList<BunkHouseAssignment> bhas  = null;
 
     private Registrar registrar = new Registrar();
 
@@ -120,7 +126,6 @@ public class BunkHouseRosterController extends BaseController implements Initial
     }
 
     private void loadTable() {
-        ObservableList<BunkHouseAssignment> bhas  = null;
 
         try {
             int campSessionId = getCampSessionFromUI().getCampSessioId();
@@ -208,6 +213,26 @@ public class BunkHouseRosterController extends BaseController implements Initial
 
     public void printClicked() {
         log.debug("Print clicked");
+        BunHouseRosterGenerator brg = new BunHouseRosterGenerator();
+
+        try{
+            if(bhas != null){
+                brg.createBunkHouseRosterPdf(bhas, "BunkHouseRoster.pdf");
+            }else{
+                displayError("No data to print");
+            }
+
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.indexOf("mac") > 0) {
+                Runtime.getRuntime().exec(new String[]{"open", "-a", "Preview", "BunkHouseRoster.pdf"});
+            } else {
+                File myFile = new File("BunkHouseRoster.pdf");
+                Desktop.getDesktop().open(myFile);
+            }
+        }catch(Exception e){
+            displayError(e);
+        }
     }
 
     public void cancelClicked() throws Exception {
