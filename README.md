@@ -42,7 +42,17 @@ To run the tool, execute the following command:
 ist-303-project
 ```
 
-Notes:
+When launching the application, it will prompt for log-in and password. Use the following:
+
+Role          | Login | Password
+------------- | ----- | --------
+Clerk         | tom   | password
+Director      | jerry | password 
+
+
+The first time the application runs, it will create a database and schema automatically, populated with initial values.
+
+# Developer Notes:
 
 This project uses the DAO pattern on Sqlite. For more information:
 
