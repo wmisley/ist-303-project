@@ -1,8 +1,12 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.model.User;
+import com.cgu.ist303.project.ui.LoggedInUser;
 import com.cgu.ist303.project.ui.UIManager;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+import javafx.scene.control.Button;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +17,16 @@ import java.util.ResourceBundle;
 public class MenuController implements Initializable {
     private static final Logger log = LogManager.getLogger(MenuController.class);
 
+    @FXML
+    public Button bunkHouseConfig;
+    @FXML
+    public Button tribeConfig;
+
     public void initialize(URL url, ResourceBundle rb) {
+        User u = LoggedInUser.getInstance().getUser();
+
+        bunkHouseConfig.setDisable(u.getType() != User.UserType.Director);
+        tribeConfig.setDisable(u.getType() != User.UserType.Director);
     }
 
     public void showApplication() throws Exception {

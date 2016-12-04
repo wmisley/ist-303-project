@@ -17,4 +17,5 @@ public class DAOFactory {
     static public BunkHouseDAO createBunkHouseDAO() { return new SqliteBunkHouseDAO(dbPath); }
     static public TribeAssignmentDAO createTribeAssignmentDAO() { return new SqliteTribeAssignmentDAO(dbPath); }
     static public BunkHouseAssignmentDAO createBunkHouseAssignmentDAO() { return new SqliteBunkHouseAssignmentDAO(dbPath); }
+    static public UserDAO createUserDAO() { return new SqliteUserDAO(dbPath); }
 }

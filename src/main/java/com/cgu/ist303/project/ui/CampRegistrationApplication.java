@@ -1,7 +1,9 @@
 package com.cgu.ist303.project.ui;
 
 import com.cgu.ist303.project.dao.DAOFactory;
+import com.cgu.ist303.project.dao.UserDAO;
 import com.cgu.ist303.project.dao.model.CampSession;
+import com.cgu.ist303.project.dao.model.User;
 import com.cgu.ist303.project.dao.sqlite.SqliteDBCreator;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -23,6 +25,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static com.cgu.ist303.project.dao.DAOFactory.createUserDAO;
+
 public class CampRegistrationApplication extends Application {
     private static final Logger log = LogManager.getLogger(CampRegistrationApplication.class);
 
@@ -32,19 +36,35 @@ public class CampRegistrationApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        DAOFactory.dbPath = "ist303-pres2.db";
-
-        //TODO: Uncomment this when the login dialog is needed
-        loginPrompt();
+        DAOFactory.dbPath = "ist303-presentation-2.db";
 
         File f = new File(DAOFactory.dbPath);
 
-        if(!f.exists()) {
+        if (!f.exists()) {
             log.warn("Database does not exist at {}", DAOFactory.dbPath);
             createDb(DAOFactory.dbPath);
         }
 
+        User user = null;
+
+        do {
+            user = loginPrompt();
+
+            if (user == null) {
+                displayInvalidCredentials();
+            }
+        } while (user == null);
+
+        LoggedInUser.getInstance().setUser(user);
         UIManager.getInstance().showMainMenu(primaryStage);
+    }
+
+    protected void displayInvalidCredentials() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("");
+        alert.setHeaderText("");
+        alert.setContentText("The login or password you provided is not correct");
+        alert.showAndWait();
     }
 
     public void createDb(String dbPath) {
@@ -58,7 +78,7 @@ public class CampRegistrationApplication extends Application {
         }
     }
 
-    public void loginPrompt() {
+    public User loginPrompt() throws Exception {
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Please provide login and password");
@@ -97,16 +117,26 @@ public class CampRegistrationApplication extends Application {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
                 return new Pair<>(username.getText(), password.getText());
+            } else {
+                System.exit(0);
             }
+
             return null;
         });
 
         Optional<Pair<String, String>> result = dialog.showAndWait();
 
-        result.ifPresent(usernamePassword -> {
-            System.out.println("Username=" + usernamePassword.getKey() + ", Password=" + usernamePassword.getValue());
-        });
+        User user = null;
+
+        if (result.isPresent()) {
+            String userName = result.get().getKey();
+            String userPasswrod = result.get().getValue();
+            log.info("User {} logging in", userName);
+
+            UserDAO userDAO = DAOFactory.createUserDAO();
+            user = userDAO.query(userName, userPasswrod);
+        }
+
+        return user;
     }
-
-
 }

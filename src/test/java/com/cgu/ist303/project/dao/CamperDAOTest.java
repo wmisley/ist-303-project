@@ -18,6 +18,7 @@ public class CamperDAOTest {
 
     @Test
     public void testInsertAndQuery() {
+
         log.info("Testing insert and query for campers");
 
         DAOFactory.dbPath = TestResources.dbFile;

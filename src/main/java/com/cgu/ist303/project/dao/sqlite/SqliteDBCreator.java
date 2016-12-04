@@ -1,12 +1,10 @@
 package com.cgu.ist303.project.dao.sqlite;
 
-import com.cgu.ist303.project.dao.BunkHouseDAO;
-import com.cgu.ist303.project.dao.TribeDAO;
+import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.BunkHouse;
 import com.cgu.ist303.project.dao.model.CampSession;
-import com.cgu.ist303.project.dao.CampSessionDAO;
-import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.Tribe;
+import com.cgu.ist303.project.dao.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +30,24 @@ public class SqliteDBCreator {
             createTribes(dbPath, session.getCampSessioId());
             createBunkHouses(dbPath, session.getCampSessioId());
         }
+
+        createUsers();
+    }
+
+    private void createUsers() throws Exception {
+        UserDAO dao = DAOFactory.createUserDAO();
+
+        User clerk = new User();
+        clerk.setUser("tom");
+        clerk.setPasswrod("password");
+        clerk.setType(User.UserType.Clerk);
+        dao.insert(clerk);
+
+        User director = new User();
+        director.setUser("jerry");
+        director.setPasswrod("password");
+        director.setType(User.UserType.Director);
+        dao.insert(director);
     }
 
     private void createBunkHouses(String dbPath, int sessionId) throws Exception{

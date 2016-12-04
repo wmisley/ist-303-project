@@ -6,6 +6,7 @@ import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.BunkHouseAssigner;
 import com.cgu.ist303.project.registrar.Registrar;
+import com.cgu.ist303.project.ui.LoggedInUser;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -113,6 +114,9 @@ public class BunkHouseRosterController extends BaseController implements Initial
         } catch (Exception e) {
             displayError(e);
         }
+
+        User u = LoggedInUser.getInstance().getUser();
+        changeAssignment.setDisable(u.getType() != User.UserType.Director);
     }
 
     private void loadTable() {

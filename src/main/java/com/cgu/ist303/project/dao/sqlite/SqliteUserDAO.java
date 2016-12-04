@@ -1,7 +1,6 @@
 package com.cgu.ist303.project.dao.sqlite;
 
 import com.cgu.ist303.project.dao.UserDAO;
-import com.cgu.ist303.project.dao.model.BunkHouse;
 import com.cgu.ist303.project.dao.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,9 +10,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-/**
- * Created by will4769 on 12/1/16.
- */
 public class SqliteUserDAO implements UserDAO {
     private static final Logger log = LogManager.getLogger(SqliteUserDAO.class);
     public String dbFilepath = "";
@@ -42,7 +38,7 @@ public class SqliteUserDAO implements UserDAO {
 
         while ( rs.next() ) {
             user = new User();
-            int role = rs.getInt("ROLD");
+            int role = rs.getInt("ROLE");
 
             if (role == User.UserType.Clerk.getValue()) {
                 user.setType(User.UserType.Clerk);
