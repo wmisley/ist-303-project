@@ -33,16 +33,16 @@ then you need to install it.
 See https://www.tutorialspoint.com/sqlite/sqlite_installation.htm
 
 # Instructions
-1. To build the tool, perform the following command:
+Step 1. To build the tool, perform the following command:
 ```
 mvn install
 ```
-2. To run the tool, execute the following command:
+Step 2. To run the tool, execute the following command:
 ```
 ist-303-project
 ```
 
-3. When launching the application, it will prompt for log-in and password. Use the following:
+Step 3. When launching the application, it will prompt for log-in and password. Use the following:
 
 Role          | Login | Password
 ------------- | ----- | --------
