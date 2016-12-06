@@ -1,9 +1,6 @@
 package com.cgu.ist303.project.registrar;
 
-import com.cgu.ist303.project.dao.CamperRegistrationDAO;
-import com.cgu.ist303.project.dao.DAOFactory;
-import com.cgu.ist303.project.dao.TribeAssignmentDAO;
-import com.cgu.ist303.project.dao.TribeDAO;
+import com.cgu.ist303.project.dao.*;
 import com.cgu.ist303.project.dao.model.*;
 import javafx.collections.ObservableList;
 
@@ -27,8 +24,6 @@ public class TribeAssigner {
         int tribeCount = tribes.size();
         int tribeIndex = 0;
 
-        //TODO: Add logic to balance campers into the appropriate bunk house for their gender
-
         for (CamperRegistration cr : regCampers) {
             TribeAssignmentById ta = new TribeAssignmentById();
 
@@ -47,5 +42,13 @@ public class TribeAssigner {
         TribeAssignmentDAO taDAO = DAOFactory.createTribeAssignmentDAO();
         taDAO.delete(tribes);
         taDAO.insert(tas);
+    }
+
+    public void clearAssignments(int campSessionId) throws Exception {
+        TribeDAO bhDAO = DAOFactory.createTribeDAO();
+        List<Tribe> tribes = bhDAO.query(campSessionId);
+
+        TribeAssignmentDAO taDAO = DAOFactory.createTribeAssignmentDAO();
+        taDAO.delete(tribes);
     }
 }

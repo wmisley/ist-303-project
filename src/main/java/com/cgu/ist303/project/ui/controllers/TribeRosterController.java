@@ -7,6 +7,7 @@ import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.registrar.TribeAssigner;
 import com.cgu.ist303.project.registrar.TribeRosterGenerator;
+import com.cgu.ist303.project.ui.LoggedInUser;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -44,6 +45,9 @@ public class TribeRosterController extends BaseController implements Initializab
     public Button back;
     @FXML
     public Button assign;
+    @FXML
+    public Button clear;
+
     List<TribeAssignment> list;
 
     private Registrar registrar = new Registrar();
@@ -106,6 +110,25 @@ public class TribeRosterController extends BaseController implements Initializab
                 printClicked();
             }
         });
+
+        User u = LoggedInUser.getInstance().getUser();
+
+        //This button on is only active for camp director
+        clear.setDisable(u.getType() != User.UserType.Director);
+    }
+
+    public void clearSession() {
+        log.info("User pressed to clear the session");
+
+        int campSessionId = getCampSessionFromUI().getCampSessioId();
+
+        try {
+            TribeAssigner ta = new TribeAssigner();
+            ta.clearAssignments(campSessionId);
+            loadTable(campSessionId);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     private void loadCampSession() {
