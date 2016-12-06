@@ -43,7 +43,19 @@ public class SessionConfigController extends BaseController implements Initializ
     public void initialize(URL url, ResourceBundle rb)  {
         loadYears();
         buildTableHeaders();
-        loadTable();
+
+        int yy = Integer.parseInt(year.getSelectionModel().getSelectedItem());
+        loadTable(yy);
+
+        year.setOnAction((event -> {
+            int y = Integer.parseInt(year.getSelectionModel().getSelectedItem());
+            log.debug("User selected year {}", y);
+            try {
+                loadTable(y);
+            } catch (Exception e) {
+                displayError(e);
+            }
+        }));
     }
 
     private void buildTableHeaders() {
@@ -73,11 +85,11 @@ public class SessionConfigController extends BaseController implements Initializ
         year.getSelectionModel().select(0);
     }
 
-    private void loadTable() {
+    private void loadTable(int year) {
         Registrar registrar = new Registrar();
 
         try {
-            registrar.load(2017);
+            registrar.load(year);
             List<CampSession> sessions = registrar.getSessions();
             ObservableList<CampSession> obsSessions = FXCollections.observableList(sessions);
             csTableView.setItems(obsSessions);
