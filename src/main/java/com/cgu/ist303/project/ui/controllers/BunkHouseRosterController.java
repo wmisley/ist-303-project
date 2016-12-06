@@ -45,6 +45,8 @@ public class BunkHouseRosterController extends BaseController implements Initial
     public Button print;
     @FXML
     public Button changeAssignment;
+    @FXML
+    public Button clear;
 
     ObservableList<BunkHouseAssignment> bhas  = null;
 
@@ -122,7 +124,10 @@ public class BunkHouseRosterController extends BaseController implements Initial
         }
 
         User u = LoggedInUser.getInstance().getUser();
+
+        // These buttons on are only active for camp director
         changeAssignment.setDisable(u.getType() != User.UserType.Director);
+        clear.setDisable(u.getType() != User.UserType.Director);
     }
 
     private void loadTable() {
