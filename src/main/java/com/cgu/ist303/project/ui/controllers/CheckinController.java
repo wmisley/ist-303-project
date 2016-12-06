@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class CheckinController implements Initializable {
+public class CheckinController extends BaseController implements Initializable {
     private static final Logger log = LogManager.getLogger(CheckinController.class);
 
     @FXML
@@ -50,8 +50,6 @@ public class CheckinController implements Initializable {
 
         TableColumn firstNameCol = new TableColumn("First Name");
         firstNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("firstName"));
-        TableColumn middleNameCol = new TableColumn("MI");
-        middleNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("middleInitial"));
         TableColumn lastNameCol = new TableColumn("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("lastName"));
         TableColumn phoneNumber = new TableColumn("Phone Number");
@@ -64,8 +62,10 @@ public class CheckinController implements Initializable {
         TableColumn payment = new TableColumn("Amount Due");
         payment.setCellValueFactory(new PropertyValueFactory<Camper, String>("formattedAmountDue"));
         payment.setStyle("-fx-alignment: CENTER_RIGHT;");
+        TableColumn isCheckedIn = new TableColumn("Checked-in");
+        isCheckedIn.setCellValueFactory(new PropertyValueFactory<Camper, String>("checkedInStatus"));
 
-        campersTable.getColumns().addAll(firstNameCol, middleNameCol, lastNameCol, phoneNumber, age, gender, payment);
+        campersTable.getColumns().addAll(firstNameCol, lastNameCol, phoneNumber, age, gender, payment, isCheckedIn);
 
         try {
             registrar.load(2017);
@@ -84,18 +84,6 @@ public class CheckinController implements Initializable {
             errorAlert.setContentText(e.getMessage());
             errorAlert.showAndWait();
         }
-
-        /*
-        campersTable.setRowFactory(tv -> {
-            TableRow<CamperRegistration> row = new TableRow<>();
-
-             row.disableProperty().bind(
-                      Bindings.selectInteger(row.itemProperty(), "value")
-                     .lessThan(5));
-            return row;
-
-        });
-        */
     }
 
     public void emergencyContactsClicked() throws Exception {
@@ -156,14 +144,6 @@ public class CheckinController implements Initializable {
         });
     }
 
-    public void displayNotice(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Notice");
-        alert.setHeaderText("");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
     public void checkinClicked() throws Exception {
         CamperRegistration cr = campersTable.getSelectionModel().getSelectedItem();
 
@@ -175,7 +155,8 @@ public class CheckinController implements Initializable {
                 displayNotice(String.format("The camper can not check-in until they pay $%s",
                         String.format("%,.2f", cr.getAmountDue())));
             } else {
-                UIManager.getInstance().showVerifyCheckinItems(cr.getCamperId(), cr.getCampSessionId());
+                UIManager.getInstance().showVerifyCheckinItems(cr);
+                campersTable.refresh();
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

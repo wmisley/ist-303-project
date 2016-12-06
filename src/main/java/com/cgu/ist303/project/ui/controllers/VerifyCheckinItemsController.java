@@ -3,6 +3,7 @@ package com.cgu.ist303.project.ui.controllers;
 import com.cgu.ist303.project.dao.CamperRegistrationDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.ArrivalPacketItem;
+import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.dao.model.Equipment;
 import com.cgu.ist303.project.registrar.MissingItemListGenerator;
 import com.cgu.ist303.project.ui.UIManager;
@@ -37,8 +38,7 @@ public class VerifyCheckinItemsController extends BaseController implements Init
     @FXML
     private Button cancel;
 
-    private int camperId = 0;
-    private int sessionId = 0;
+    private CamperRegistration cr;
 
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<EquipmentItem> equipmentList = FXCollections.observableArrayList();
@@ -68,9 +68,8 @@ public class VerifyCheckinItemsController extends BaseController implements Init
         packet.setItems(packetItemsList);
     }
 
-    public void setSessionInfo(int cId, int sId) {
-        camperId = cId;
-        sessionId = sId;
+    public void setSessionInfo(CamperRegistration campReg) {
+        cr = campReg;
     }
 
     private ObservableList<EquipmentItem> getUncheckedEquipment() {
@@ -109,6 +108,7 @@ public class VerifyCheckinItemsController extends BaseController implements Init
                 checkInCamper();
 
                 this.displayAlertMessage("Camper is now checked in.");
+                cr.setCheckedIn(true);
                 UIManager.getInstance().closeCurrentScreenShowPrevious();
             } catch (Exception e) {
                 log.error("Could not check in camper");
@@ -121,7 +121,7 @@ public class VerifyCheckinItemsController extends BaseController implements Init
 
     private void checkInCamper() throws Exception {
         CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
-        dao.checkInCamper(camperId, sessionId);
+        dao.checkInCamper(cr.getCamperId(), cr.getCampSessionId());
     }
 
     public void cancelClicked() throws Exception {

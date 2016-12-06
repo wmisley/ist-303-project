@@ -11,6 +11,14 @@ public class CamperRegistration extends Camper {
         return isCheckedIn;
     }
 
+    public String getCheckedInStatus() {
+        if (isCheckedIn) {
+            return "yes";
+        } else {
+            return "no";
+        }
+    }
+
     public void setCheckedIn(boolean checkedIn) {
         isCheckedIn = checkedIn;
     }

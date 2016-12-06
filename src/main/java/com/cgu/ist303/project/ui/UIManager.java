@@ -168,7 +168,7 @@ public class UIManager {
         showNewScreenHidePrevious(stage);
     }
 
-    public void showVerifyCheckinItems(int camperId, int sessionId) throws Exception {
+    public void showVerifyCheckinItems(CamperRegistration cr) throws Exception {
         log.debug("Showing verify check-in items form");
 
         Stage stage = new Stage();
@@ -177,7 +177,7 @@ public class UIManager {
 
         Pane pane = loader.load();
         VerifyCheckinItemsController controller = loader.getController();
-        controller.setSessionInfo(camperId, sessionId);
+        controller.setSessionInfo(cr);
         Scene scene = new Scene(pane, 376, 456);
         stage.setScene(scene);
 
