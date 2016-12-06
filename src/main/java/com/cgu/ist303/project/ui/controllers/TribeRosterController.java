@@ -61,8 +61,6 @@ public class TribeRosterController extends BaseController implements Initializab
                 return new SimpleStringProperty(param.getValue().getCamper().getFirstName());
             }
         });
-        campersFNameCol.prefWidthProperty().bind(tribeRostertable.widthProperty().multiply(0.25));
-        campersFNameCol.setResizable(false);
 
         TableColumn<TribeAssignment, String> campersLNameCol = new TableColumn<TribeAssignment, String>("Last Name");
         campersLNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
@@ -71,8 +69,6 @@ public class TribeRosterController extends BaseController implements Initializab
                 return new SimpleStringProperty(param.getValue().getCamper().getLastName());
             }
         });
-        campersLNameCol.prefWidthProperty().bind(tribeRostertable.widthProperty().multiply(0.25));
-        campersLNameCol.setResizable(false);
 
         TableColumn<TribeAssignment, Number> ageCol = new TableColumn<TribeAssignment, Number>("Age");
         ageCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, Number>, ObservableValue<Number>>() {
@@ -81,21 +77,26 @@ public class TribeRosterController extends BaseController implements Initializab
                 return new SimpleIntegerProperty(param.getValue().getCamper().getAge());
             }
         });
-        ageCol.prefWidthProperty().bind(tribeRostertable.widthProperty().multiply(0.25));
-        ageCol.setResizable(false);
-        ageCol.setStyle("-fx-alignment: CENTER;");
+        ageCol.setStyle("-fx-alignment: CENTER_RIGHT;");
 
-        TableColumn<TribeAssignment, String> assignedTribeCol = new TableColumn<TribeAssignment, String>("Assigned Tribe");
+        TableColumn gender = new TableColumn("Gender");
+        gender.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<TribeAssignment, String> param) {
+                return new SimpleStringProperty(param.getValue().getCamper().getGenderString());
+            }
+        });
+        gender.setStyle("-fx-alignment: CENTER_RIGHT;");
+
+        TableColumn<TribeAssignment, String> assignedTribeCol = new TableColumn<TribeAssignment, String>("Tribe");
         assignedTribeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TribeAssignment, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<TribeAssignment, String> param) {
                 return new SimpleStringProperty(param.getValue().getTribe().getTribeName());
             }
         });
-        assignedTribeCol.prefWidthProperty().bind(tribeRostertable.widthProperty().multiply(0.25));
-        assignedTribeCol.setResizable(false);
 
-        tribeRostertable.getColumns().addAll(campersFNameCol,campersLNameCol,ageCol,assignedTribeCol);
+        tribeRostertable.getColumns().addAll(campersFNameCol, campersLNameCol, ageCol, gender, assignedTribeCol);
 
         try {
             registrar.load(2017);

@@ -12,8 +12,9 @@
       </TableView>
       <Label layoutX="35.0" layoutY="14.0" prefHeight="17.0" prefWidth="216.0" text="Camp Session" />
       <ComboBox fx:id="sessions" layoutX="29.0" layoutY="42.0" prefHeight="27.0" prefWidth="542.0" />
-      <Button fx:id="print" layoutX="30.0" layoutY="409.0" mnemonicParsing="false" onAction="#printClicked" prefHeight="25.0" prefWidth="92.0" text="Print " />
-      <Button fx:id="assign" layoutX="143.0" layoutY="409.0" mnemonicParsing="false" onAction="#assignClicked" text="Assign Tribes" />
+      <Button fx:id="print" layoutX="30.0" layoutY="409.0" mnemonicParsing="false" onAction="#printClicked" prefHeight="27.0" prefWidth="75.0" text="Print " />
+      <Button fx:id="assign" layoutX="119.0" layoutY="409.0" mnemonicParsing="false" onAction="#assignClicked" prefHeight="27.0" prefWidth="75.0" text="Assign" />
       <Button fx:id="back" layoutX="522.0" layoutY="409.0" mnemonicParsing="false" onAction="#backClicked" text="Back" />
+      <Button fx:id="clear" layoutX="207.0" layoutY="409.0" mnemonicParsing="false" onAction="#clearSession" prefHeight="27.0" prefWidth="66.0" text="Clear" />
    </children>
 </AnchorPane>

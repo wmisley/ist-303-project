@@ -6,23 +6,49 @@ import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * Created by will4769 on 11/2/16.
- */
 public class TribeAssigner {
+    //private int tribeIndex = 0;
+
     public TribeAssigner() {
     }
 
     public void assign(int year, int campSessionId) throws Exception {
-        List<TribeAssignmentById> tas = new ArrayList<>();
+        //tribeIndex = 0;
+
+        //Get registered campers for the session
         CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
         ObservableList<CamperRegistration> regCampers = dao.queryRegisteredCampers(year, campSessionId, true);
 
+        //Get the tribes for the session
         TribeDAO tribeDAO = DAOFactory.createTribeDAO();
         ObservableList<Tribe> tribes = tribeDAO.query(campSessionId);
-        int tribeCount = tribes.size();
+
+
+        List<CamperRegistration> boys = regCampers.stream()
+                .filter(c -> c.getGender() == Camper.Gender.Male)
+                .collect(Collectors.toList());
+
+        List<CamperRegistration> girls = regCampers.stream()
+                .filter(c -> c.getGender() == Camper.Gender.Female)
+                .collect(Collectors.toList());
+
+
+        List<TribeAssignmentById> boyAssignments = assign(boys, tribes);
+        List<TribeAssignmentById> girlAssignments = assign(girls, tribes);
+
+        //Delete previous assignments and save the new assignments
+        TribeAssignmentDAO taDAO = DAOFactory.createTribeAssignmentDAO();
+        taDAO.delete(tribes);
+        taDAO.insert(boyAssignments);
+        taDAO.insert(girlAssignments);
+    }
+
+    private List<TribeAssignmentById>  assign(List<CamperRegistration> regCampers, ObservableList<Tribe> tribes) {
         int tribeIndex = 0;
+        List<TribeAssignmentById> tas = new ArrayList<>();
+        int tribeCount = tribes.size();
 
         for (CamperRegistration cr : regCampers) {
             TribeAssignmentById ta = new TribeAssignmentById();
@@ -39,9 +65,7 @@ public class TribeAssigner {
             }
         }
 
-        TribeAssignmentDAO taDAO = DAOFactory.createTribeAssignmentDAO();
-        taDAO.delete(tribes);
-        taDAO.insert(tas);
+        return tas;
     }
 
     public void clearAssignments(int campSessionId) throws Exception {

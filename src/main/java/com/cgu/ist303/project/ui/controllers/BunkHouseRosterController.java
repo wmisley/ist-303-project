@@ -64,6 +64,7 @@ public class BunkHouseRosterController extends BaseController implements Initial
             }
         });
 
+        /*
         TableColumn middleNameCol = new TableColumn("MI");
         middleNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BunkHouseAssignment, String>, ObservableValue<String>>() {
             @Override
@@ -71,6 +72,7 @@ public class BunkHouseRosterController extends BaseController implements Initial
                 return new SimpleStringProperty(param.getValue().getCamper().getMiddleName());
             }
         });
+        */
 
         TableColumn lastNameCol = new TableColumn("Last Name");
         lastNameCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<BunkHouseAssignment, String>, ObservableValue<String>>() {
@@ -105,7 +107,7 @@ public class BunkHouseRosterController extends BaseController implements Initial
             }
         });
 
-        bunkhouseTable.getColumns().addAll(firstNameCol, middleNameCol, lastNameCol, age, gender, bunkHouseCol);
+        bunkhouseTable.getColumns().addAll(firstNameCol, /*middleNameCol,*/ lastNameCol, age, gender, bunkHouseCol);
 
         try {
             registrar.load(2017);
