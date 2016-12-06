@@ -160,7 +160,7 @@ public class UIManager {
 
         FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
         Pane myPane = myLoader.load();
-        Scene myScene = new Scene(myPane, 350, 370);
+        Scene myScene = new Scene(myPane, 350, 475);
 
         stage.setTitle("Main Menu");
         stage.setScene(myScene);
@@ -227,6 +227,15 @@ public class UIManager {
     public void showTribeConfig() throws Exception {
         log.debug("Showing Bunk House Configuration");
         Stage stage = setStage("Tribe Configuration", "/tribeconfig.fxml", 490, 360);
+
+        showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
+    public void showSessionConfig() throws Exception {
+        log.debug("Showing Session Configuration");
+        Stage stage = setStage("Camp Session Configuration", "/sessionconfig.fxml", 570, 370);
 
         showNewScreenHidePrevious(stage);
 

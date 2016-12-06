@@ -21,6 +21,8 @@ public class MenuController implements Initializable {
     public Button bunkHouseConfig;
     @FXML
     public Button tribeConfig;
+    @FXML
+    public Button sessionConfig;
 
     public void initialize(URL url, ResourceBundle rb) {
         User u = LoggedInUser.getInstance().getUser();
@@ -58,5 +60,10 @@ public class MenuController implements Initializable {
     public void showTribeConfigScreen() throws Exception {
         log.debug("User pressed \"Tribe Configuration\" screen");
         UIManager.getInstance().showTribeConfig();
+    }
+
+    public void showSessionConfigScreen() throws Exception {
+        log.debug("User pressed \"Tribe Configuration\" screen");
+        UIManager.getInstance().showSessionConfig();
     }
 }
