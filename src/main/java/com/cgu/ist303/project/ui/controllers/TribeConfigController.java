@@ -1,9 +1,13 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.BunkHouseAssignmentDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
+import com.cgu.ist303.project.dao.TribeAssignmentDAO;
 import com.cgu.ist303.project.dao.TribeDAO;
+import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Tribe;
+import com.cgu.ist303.project.dao.model.TribeAssignment;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
@@ -115,10 +119,23 @@ public class TribeConfigController extends BaseController implements Initializab
         tribeTableView.refresh();
     }
 
+    private boolean areTribesAssignedForSession() throws Exception {
+        CampSession session = getCampSessionFromUI();
+        TribeAssignmentDAO dao = DAOFactory.createTribeAssignmentDAO();
+        List<TribeAssignment> assignments = dao.query(session.getCampSessioId());
+        return (assignments.size() > 0);
+    }
+
     public void addClicked(ActionEvent actionEvent) {
         try{
-            CampSession session = getCampSessionFromUI();
-            UIManager.getInstance().showTribeScreen(null, session.getCampSessioId(), tribeTableView);
+            if (areTribesAssignedForSession()) {
+                displayNotice("The selected session already has tribe assignments. " +
+                        "Tribes can not be added for the selected session. " +
+                        "The director will need to clear tribe selections before you can add any tribes for this session.");
+            } else {
+                CampSession session = getCampSessionFromUI();
+                UIManager.getInstance().showTribeScreen(null, session.getCampSessioId(), tribeTableView);
+            }
         }catch (Exception e){
             displayError(e);
         }
@@ -126,12 +143,19 @@ public class TribeConfigController extends BaseController implements Initializab
 
     public void editClicked(ActionEvent actionEvent) {
         try{
-            Tribe tribe = tribeTableView.getSelectionModel().getSelectedItem();
-            if (tribe != null) {
-                CampSession session = getCampSessionFromUI();
-                UIManager.getInstance().showTribeScreen(tribe, session.getCampSessioId(), this.tribeTableView);
+            if (areTribesAssignedForSession()) {
+                displayNotice("The selected session already has tribe assignments. " +
+                        "Tribes can not be edited for the selected session. " +
+                        "The director will need to clear tribe selections before you can edit any tribes for this session.");
             } else {
-                displayAlertMessage("Please select a tribe.");
+                Tribe tribe = tribeTableView.getSelectionModel().getSelectedItem();
+
+                if (tribe != null) {
+                    CampSession session = getCampSessionFromUI();
+                    UIManager.getInstance().showTribeScreen(tribe, session.getCampSessioId(), this.tribeTableView);
+                } else {
+                    displayAlertMessage("Please select a tribe.");
+                }
             }
         }catch (Exception e){
             displayError(e);
@@ -140,16 +164,23 @@ public class TribeConfigController extends BaseController implements Initializab
 
     public void deleteClicked(ActionEvent actionEvent) {
         try {
-            Tribe tribe = tribeTableView.getSelectionModel().getSelectedItem();
-            if(displayConfirmationMessage("Are you sure you want to delete " + tribe.getTribeName())){
-                if (tribe != null) {
-                    TribeDAO dao = DAOFactory.createTribeDAO();
-                    dao.delete(tribe);
+            if (areTribesAssignedForSession()) {
+                displayNotice("The selected session already has tribe assignments. " +
+                        "Tribes can not be deleted for the selected session. " +
+                        "The director will need to clear tribe selections before you can delete any tribes for this session.");
+            } else {
+                Tribe tribe = tribeTableView.getSelectionModel().getSelectedItem();
 
-                    tribeTableView.getItems().remove(tribe);
-                    tribeTableView.refresh();
-                } else {
-                    displayAlertMessage("Please select a tribe.");
+                if (displayConfirmationMessage("Are you sure you want to delete " + tribe.getTribeName())) {
+                    if (tribe != null) {
+                        TribeDAO dao = DAOFactory.createTribeDAO();
+                        dao.delete(tribe);
+
+                        tribeTableView.getItems().remove(tribe);
+                        tribeTableView.refresh();
+                    } else {
+                        displayAlertMessage("Please select a tribe.");
+                    }
                 }
             }
         } catch (Exception e) {
