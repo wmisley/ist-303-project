@@ -1,8 +1,11 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.BunkHouseAssignmentDAO;
 import com.cgu.ist303.project.dao.BunkHouseDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.BunkHouse;
+import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
+import com.cgu.ist303.project.dao.model.BunkHouseAssignmentById;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
 import com.cgu.ist303.project.registrar.Registrar;
@@ -121,8 +124,14 @@ public class BunkHouseConfigController extends BaseController implements Initial
 
     public void addClicked() {
         try {
-            CampSession session = getCampSessionFromUI();
-            UIManager.getInstance().showBunkHouseScreen(null, session.getCampSessioId(), this.bunksTableView);
+            if (areBunkHousesAssignedForSession()) {
+                displayNotice("The selected session already has bunk house assignments. " +
+                        "Bunk houses can not be added for the selected session. " +
+                        "The director will need to clear bunk house selections before you can add any bunk houses for this session.");
+            } else {
+                CampSession session = getCampSessionFromUI();
+                UIManager.getInstance().showBunkHouseScreen(null, session.getCampSessioId(), this.bunksTableView);
+            }
         } catch (Exception e) {
             displayError(e);
         }
@@ -133,8 +142,14 @@ public class BunkHouseConfigController extends BaseController implements Initial
             BunkHouse bh = bunksTableView.getSelectionModel().getSelectedItem();
 
             if (bh != null) {
-                CampSession session = getCampSessionFromUI();
-                UIManager.getInstance().showBunkHouseScreen(bh, session.getCampSessioId(), this.bunksTableView);
+                if (areBunkHousesAssignedForSession()) {
+                    displayNotice("The selected session already has bunk house assignments. " +
+                            "Bunk houses can not be edited for the selected session. " +
+                            "The director will need to clear bunk house selections before you can edit any bunk houses for this session.");
+                } else {
+                    CampSession session = getCampSessionFromUI();
+                    UIManager.getInstance().showBunkHouseScreen(bh, session.getCampSessioId(), this.bunksTableView);
+                }
             } else {
                 displayAlertMessage("Please select a bunk house.");
             }
@@ -143,16 +158,29 @@ public class BunkHouseConfigController extends BaseController implements Initial
         }
     }
 
+    private boolean areBunkHousesAssignedForSession() throws Exception {
+        CampSession session = getCampSessionFromUI();
+        BunkHouseAssignmentDAO bhaDAO = DAOFactory.createBunkHouseAssignmentDAO();
+        ObservableList<BunkHouseAssignment> assignments = bhaDAO.query(session.getCampSessioId());
+        return (assignments.size() > 0);
+    }
+
     public void deleteClicked() {
         try {
             BunkHouse bh = bunksTableView.getSelectionModel().getSelectedItem();
 
             if (bh != null) {
-                BunkHouseDAO dao = DAOFactory.createBunkHouseDAO();
-                dao.delete(bh);
+                if (areBunkHousesAssignedForSession()) {
+                    displayNotice("The selected session already has bunk house assignments. " +
+                            "Bunk houses can not be deleted for the selected session. " +
+                            "The director will need to clear bunk house selections before you can delete any bunk houses for this session.");
+                } else {
+                    BunkHouseDAO dao = DAOFactory.createBunkHouseDAO();
+                    dao.delete(bh);
 
-                bunksTableView.getItems().remove(bh);
-                bunksTableView.refresh();
+                    bunksTableView.getItems().remove(bh);
+                    bunksTableView.refresh();
+                }
             } else {
                 displayAlertMessage("Please select a bunk house.");
             }
