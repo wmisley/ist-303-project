@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="372.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.SessionController">
+   <children>
+      <Label layoutX="26.0" layoutY="29.0" text="Start Date:" />
+      <DatePicker fx:id="start" layoutX="146.0" layoutY="24.0" />
+      <Label layoutX="29.0" layoutY="74.0" text="End Date:" />
+      <DatePicker fx:id="end" layoutX="146.0" layoutY="69.0" />
+      <Label layoutX="23.0" layoutY="125.0" text="Gender Capacity:" />
+      <TextField fx:id="capacity" layoutX="146.0" layoutY="120.0" prefHeight="27.0" prefWidth="194.0" />
+      <Button fx:id="save" layoutX="292.0" layoutY="166.0" mnemonicParsing="false" onAction="#saveClicked" text="Save" />
+      <Button fx:id="cancel" layoutX="213.0" layoutY="166.0" mnemonicParsing="false" onAction="#cancelClicked" text="Cancel" />
+   </children>
+</AnchorPane>

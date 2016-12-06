@@ -1,9 +1,6 @@
 package com.cgu.ist303.project.ui;
 
-import com.cgu.ist303.project.dao.model.BunkHouse;
-import com.cgu.ist303.project.dao.model.BunkHouseAssignment;
-import com.cgu.ist303.project.dao.model.CamperRegistration;
-import com.cgu.ist303.project.dao.model.Tribe;
+import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.ui.controllers.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -238,6 +235,24 @@ public class UIManager {
         Stage stage = setStage("Camp Session Configuration", "/sessionconfig.fxml", 570, 370);
 
         showNewScreenHidePrevious(stage);
+
+        stage.show();
+    }
+
+    public void showSessionScreen(CampSession session) throws IOException {
+        log.debug("Showing camp session form");
+
+        Stage stage = new Stage();
+        stage.setTitle("Camp Session");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/session.fxml"));
+
+        Pane pane = loader.load();
+        SessionController controller = loader.getController();
+        controller.setSession(session);
+        Scene scene = new Scene(pane, 375, 220);
+        stage.setScene(scene);
+
+        showNewScreenHidePrevious(stage, false, true);
 
         stage.show();
     }

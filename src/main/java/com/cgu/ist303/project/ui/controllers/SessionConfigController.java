@@ -100,12 +100,29 @@ public class SessionConfigController extends BaseController implements Initializ
     }
 
     public void addClicked() {
+        try {
+            UIManager.getInstance().showSessionScreen(null);
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     public void deleteClicked() {
     }
 
     public void editClicked() {
+        try {
+            CampSession session = csTableView.getSelectionModel().getSelectedItem();
+
+            if (session != null) {
+                UIManager.getInstance().showSessionScreen(session);
+                csTableView.refresh();
+            } else {
+                displayNotice("You must first selected a camp session.");
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     public void backClicked() {
