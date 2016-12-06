@@ -73,4 +73,9 @@ public class CampSession {
         return String.format("%d/%d to %d/%d", getStartMonth(), getStartDay(),
                 getEndMonth(), getEndDay());
     }
+
+    public String getLongDateString() {
+        return String.format("%d/%d/%d to %d/%d/%d", getStartMonth(), getStartDay(), getCampYear(),
+                getEndMonth(), getEndDay(), getCampYear());
+    }
 }

@@ -120,7 +120,6 @@ public class BunkHouseRosterController extends BaseController implements Initial
             }
 
             loadTable();
-
         } catch (Exception e) {
             displayError(e);
         }
