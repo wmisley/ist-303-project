@@ -19,6 +19,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -39,6 +41,12 @@ public class SessionConfigController extends BaseController implements Initializ
     public ComboBox<String> year;
 
     public void initialize(URL url, ResourceBundle rb)  {
+        loadYears();
+        buildTableHeaders();
+        loadTable();
+    }
+
+    private void buildTableHeaders() {
         TableColumn idCol = new TableColumn("ID");
         idCol.setCellValueFactory(new PropertyValueFactory<CampSession, String>("campSessioId"));
 
@@ -50,11 +58,22 @@ public class SessionConfigController extends BaseController implements Initializ
 
         csTableView.getColumns().clear();
         csTableView.getColumns().addAll(idCol, dateCol, glCol);
-
-        loadTable();
     }
 
-    public void loadTable() {
+    private void loadYears() {
+        List<String> years = new ArrayList<>();
+        int y = Calendar.getInstance().get(Calendar.YEAR);
+
+        for (int i = 2017; i <= (y + 5); i++) {
+            years.add(Integer.toString(i));
+        }
+
+        ObservableList<String> obsYears = FXCollections.observableArrayList(years);
+        year.setItems(obsYears);
+        year.getSelectionModel().select(0);
+    }
+
+    private void loadTable() {
         Registrar registrar = new Registrar();
 
         try {
