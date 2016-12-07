@@ -5,6 +5,7 @@ import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.dao.model.CamperRegistrationRecord;
 import com.cgu.ist303.project.dao.CamperRegistrationDAO;
+import com.cgu.ist303.project.dao.model.Tribe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -217,5 +218,28 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
         c.close();
 
         return list;
+    }
+
+    public void delete(int camperId, int sessionId) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql =
+                "DELETE FROM CAMP_REGISTRATION WHERE CAMP_SESSION_ID = %d AND CAMPER_ID = %d";
+
+        sql = String.format(sql, sessionId, camperId);
+
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+
+        stmt.close();
+        c.commit();
+        c.close();
     }
 }

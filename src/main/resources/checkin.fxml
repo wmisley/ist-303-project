@@ -8,12 +8,13 @@
    <children>
       <TableView fx:id="campersTable" layoutX="35.0" layoutY="116.0" prefHeight="332.0" prefWidth="589.0" />
       <Label layoutX="35.0" layoutY="92.0" text="Register Campers" />
-      <Button layoutX="361.0" layoutY="463.0" mnemonicParsing="false" onAction="#checkinClicked" text="Check-in" />
+      <Button layoutX="335.0" layoutY="463.0" mnemonicParsing="false" onAction="#checkinClicked" text="Check-in" />
       <Button layoutX="550.0" layoutY="463.0" mnemonicParsing="false" onAction="#cancelClicked" prefHeight="27.0" prefWidth="74.0" text="Back" />
       <ComboBox fx:id="sessions" layoutX="35.0" layoutY="50.0" prefHeight="27.0" prefWidth="589.0" />
       <Label layoutX="35.0" layoutY="27.0" prefHeight="17.0" prefWidth="110.0" text="Camp Session" />
-      <Button fx:id="makePayment" layoutX="198.0" layoutY="463.0" mnemonicParsing="false" onAction="#makePaymentClicked" text="Payment" />
+      <Button fx:id="makePayment" layoutX="187.0" layoutY="463.0" mnemonicParsing="false" onAction="#makePaymentClicked" text="Payment" />
       <Button fx:id="emergencyContacts" layoutX="35.0" layoutY="463.0" mnemonicParsing="false" onAction="#emergencyContactsClicked" text="Emergency Contacts" />
-      <Button layoutX="283.0" layoutY="463.0" mnemonicParsing="false" onAction="#refundClicked" text="Refund" />
+      <Button layoutX="266.0" layoutY="463.0" mnemonicParsing="false" onAction="#refundClicked" text="Refund" />
+      <Button fx:id="cancellation" layoutX="416.0" layoutY="463.0" mnemonicParsing="false" onAction="#cancellationClicked" text="Cancellation" />
    </children>
 </AnchorPane>

@@ -41,6 +41,8 @@ public class CheckinController extends BaseController implements Initializable {
     private Button makePayment;
     @FXML
     private Button emergencyContacts;
+    @FXML
+    public Button cancellation;
 
     private Registrar registrar = new Registrar();
 
@@ -79,10 +81,7 @@ public class CheckinController extends BaseController implements Initializable {
 
             loadTable(firstSessionId);
         } catch (Exception e) {
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            displayError(e);
         }
     }
 
@@ -100,10 +99,7 @@ public class CheckinController extends BaseController implements Initializable {
             campersTable.getItems().clear();
             campersTable.setItems(obsList);
         } catch (Exception e) {
-            log.error(e);
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            displayError(e);
         }
     }
 
@@ -159,11 +155,7 @@ public class CheckinController extends BaseController implements Initializable {
                 campersTable.refresh();
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Notice");
-            alert.setHeaderText("");
-            alert.setContentText("Please select a camper.");
-            alert.showAndWait();
+            displayNotice("Please select a camper.");
         }
     }
 
@@ -190,5 +182,26 @@ public class CheckinController extends BaseController implements Initializable {
 
     public void refundClicked() {
         displayNotice("Issue a refund of $1000.00");
+    }
+
+    public void cancellationClicked() {
+        CamperRegistration cr = campersTable.getSelectionModel().getSelectedItem();
+        CampSession session = getCampSessionFromUI();
+
+        if ((cr != null) && (session != null)) {
+            try {
+                CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
+                dao.delete(cr.getCamperId(), session.getCampSessioId());
+
+                campersTable.getItems().remove(cr);
+                campersTable.refresh();
+
+                displayNotice("The camper registration is cancelled. Please submit a refund of $1,000.00.");
+            } catch (Exception e) {
+                displayError(e);
+            }
+        } else {
+            displayNotice("Please select a camper.");
+        }
     }
 }
