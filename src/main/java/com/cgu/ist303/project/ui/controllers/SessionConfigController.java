@@ -105,8 +105,7 @@ public class SessionConfigController extends BaseController implements Initializ
     public void addClicked() {
         try {
             int yy = Integer.parseInt(year.getSelectionModel().getSelectedItem());
-            UIManager.getInstance().showSessionScreen(null, yy);
-            loadTable(yy);
+            UIManager.getInstance().showSessionScreen(null, yy, csTableView);
         } catch (Exception e) {
             displayError(e);
         }
@@ -148,7 +147,7 @@ public class SessionConfigController extends BaseController implements Initializ
                 CampSession session = csTableView.getSelectionModel().getSelectedItem();
 
                 if (session != null) {
-                    UIManager.getInstance().showSessionScreen(session, session.getCampYear());
+                    UIManager.getInstance().showSessionScreen(session, session.getCampYear(), csTableView);
                     csTableView.refresh();
                 } else {
                     displayNotice("You must first selected a camp session.");

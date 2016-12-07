@@ -239,7 +239,7 @@ public class UIManager {
         stage.show();
     }
 
-    public void showSessionScreen(CampSession session, int year) throws IOException {
+    public void showSessionScreen(CampSession session, int year, TableView<CampSession> tblCampSession) throws IOException {
         log.debug("Showing camp session form");
 
         Stage stage = new Stage();
@@ -248,7 +248,7 @@ public class UIManager {
 
         Pane pane = loader.load();
         SessionController controller = loader.getController();
-        controller.setSession(session, year);
+        controller.setSession(session, year, tblCampSession);
         Scene scene = new Scene(pane, 375, 220);
         stage.setScene(scene);
 

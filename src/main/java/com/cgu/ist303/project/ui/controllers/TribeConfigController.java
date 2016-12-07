@@ -127,7 +127,7 @@ public class TribeConfigController extends BaseController implements Initializab
     }
 
     public void addClicked(ActionEvent actionEvent) {
-        try{
+        try {
             if (areTribesAssignedForSession()) {
                 displayNotice("The selected session already has tribe assignments. " +
                         "Tribes can not be added for the selected session. " +
@@ -136,7 +136,7 @@ public class TribeConfigController extends BaseController implements Initializab
                 CampSession session = getCampSessionFromUI();
                 UIManager.getInstance().showTribeScreen(null, session.getCampSessioId(), tribeTableView);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             displayError(e);
         }
     }
