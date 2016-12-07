@@ -6,6 +6,7 @@ import com.cgu.ist303.project.ui.UIManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,7 +71,36 @@ public class MenuController implements Initializable {
         UIManager.getInstance().showSessionConfig();
     }
 
-    public void logoutClicked() {
+    protected void displayError(Exception e) {
+        e.printStackTrace();
+        log.error(e);
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.showAndWait();
+    }
 
+    public void logoutClicked() {
+        LoginController lc = new LoginController();
+        User user = null;
+        UIManager.getInstance().hideCurrentScreen();
+
+        do {
+            try {
+                user = lc.loginPrompt();
+            } catch (Exception e) {
+                displayError(e);
+            }
+
+            if (user == null) {
+                lc.displayInvalidCredentials();
+            }
+        } while (user == null);
+
+        LoggedInUser.getInstance().setUser(user);
+        UIManager.getInstance().showPreviousScreen();
+
+        bunkHouseConfig.setDisable(user.getType() != User.UserType.Director);
+        tribeConfig.setDisable(user.getType() != User.UserType.Director);
+        sessionConfig.setDisable(user.getType() != User.UserType.Director);
     }
 }

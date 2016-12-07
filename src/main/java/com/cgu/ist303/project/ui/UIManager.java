@@ -32,6 +32,20 @@ public class UIManager {
         return uiManager;
     }
 
+    public void hideCurrentScreen() {
+        if (!stageStack.isEmpty()){
+            Stage prev = stageStack.peek();
+            prev.hide();
+        }
+    }
+
+    public void showPreviousScreen() {
+        if (!stageStack.isEmpty()){
+            Stage prev = stageStack.peek();
+            prev.show();
+        }
+    }
+
     private void showNewScreenHidePrevious(Stage current) {
         showNewScreenHidePrevious(current, true, false);
     }
