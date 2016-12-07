@@ -23,6 +23,8 @@ public class MenuController implements Initializable {
     public Button tribeConfig;
     @FXML
     public Button sessionConfig;
+    @FXML
+    public Button logout;
 
     public void initialize(URL url, ResourceBundle rb) {
         User u = LoggedInUser.getInstance().getUser();
@@ -66,5 +68,9 @@ public class MenuController implements Initializable {
     public void showSessionConfigScreen() throws Exception {
         log.debug("User pressed \"Tribe Configuration\" screen");
         UIManager.getInstance().showSessionConfig();
+    }
+
+    public void logoutClicked() {
+
     }
 }
