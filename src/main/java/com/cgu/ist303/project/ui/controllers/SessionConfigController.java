@@ -1,5 +1,8 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.CampSessionDAO;
+import com.cgu.ist303.project.dao.CamperRegistrationDAO;
+import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.dao.model.Tribe;
@@ -101,24 +104,55 @@ public class SessionConfigController extends BaseController implements Initializ
 
     public void addClicked() {
         try {
-            UIManager.getInstance().showSessionScreen(null);
+            int yy = Integer.parseInt(year.getSelectionModel().getSelectedItem());
+            UIManager.getInstance().showSessionScreen(null, yy);
+            loadTable(yy);
         } catch (Exception e) {
             displayError(e);
         }
     }
 
     public void deleteClicked() {
+        try {
+            if (areCampersRegistered()) {
+                displayNotice("Can not delete this camp session, campers are registered.");
+            } else {
+                CampSession session = csTableView.getSelectionModel().getSelectedItem();
+
+                CampSessionDAO dao = DAOFactory.createCampSessionDAO();
+                dao.delete(session.getCampSessioId());
+
+                int yy = Integer.parseInt(year.getSelectionModel().getSelectedItem());
+                loadTable(yy);
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    public boolean areCampersRegistered() throws Exception {
+        int yy = Integer.parseInt(year.getSelectionModel().getSelectedItem());
+        CampSession session = csTableView.getSelectionModel().getSelectedItem();
+
+        CamperRegistrationDAO crDAO = DAOFactory.createCamperRegistrationDAO();
+        ObservableList<CamperRegistration> list = crDAO.queryRegisteredCampers(yy, session.getCampSessioId(), false);
+
+        return list.size() > 0;
     }
 
     public void editClicked() {
         try {
-            CampSession session = csTableView.getSelectionModel().getSelectedItem();
-
-            if (session != null) {
-                UIManager.getInstance().showSessionScreen(session);
-                csTableView.refresh();
+            if (areCampersRegistered()) {
+                displayNotice("Can not edit camp session, campers are already registered.");
             } else {
-                displayNotice("You must first selected a camp session.");
+                CampSession session = csTableView.getSelectionModel().getSelectedItem();
+
+                if (session != null) {
+                    UIManager.getInstance().showSessionScreen(session, session.getCampYear());
+                    csTableView.refresh();
+                } else {
+                    displayNotice("You must first selected a camp session.");
+                }
             }
         } catch (Exception e) {
             displayError(e);

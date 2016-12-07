@@ -2,6 +2,7 @@ package com.cgu.ist303.project.dao.sqlite;
 
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.CampSessionDAO;
+import com.cgu.ist303.project.dao.model.Tribe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,6 +54,59 @@ public class SqliteCampSessionDAO implements CampSessionDAO {
         c.close();
 
         return camperId;
+    }
+
+    public void delete(int sessionId) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql =
+                "DELETE FROM CAMP_SESSIONS WHERE CAMP_SESSION_ID = %d";
+
+        sql = String.format(sql, sessionId);
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+        ResultSet rs = stmt.getGeneratedKeys();
+
+        stmt.close();
+        c.commit();
+        c.close();
+    }
+
+    public void update(CampSession cs) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        String sql =
+                "UPDATE CAMP_SESSIONS " +
+                        "SET START_MONTH = %d, " +
+                        "    START_DAY = %d,  " +
+                        "    END_MONTH = %d, " +
+                        "    END_DAY = %d, " +
+                        "    GENDER_LIMIT = %d " +
+                        "WHERE CAMP_SESSION_ID = %d";
+
+        sql = String.format(sql, cs.getStartMonth(), cs.getStartDay(), cs.getEndMonth(), cs.getEndDay(),
+                cs.getGenderLimit());
+
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+
+        stmt.close();
+        c.commit();
+        c.close();
     }
 
     public List<CampSession> query(int year) throws Exception {

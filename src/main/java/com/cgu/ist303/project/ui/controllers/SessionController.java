@@ -1,5 +1,7 @@
 package com.cgu.ist303.project.ui.controllers;
 
+import com.cgu.ist303.project.dao.CampSessionDAO;
+import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import java.util.ResourceBundle;
 public class SessionController extends BaseController implements Initializable {
     private static final Logger log = LogManager.getLogger(SessionController.class);
     private CampSession cs = null;
+    private int campYear = 0;
 
     @FXML
     public Button save;
@@ -28,8 +31,9 @@ public class SessionController extends BaseController implements Initializable {
     @FXML
     public TextField capacity;
 
-    public void setSession(CampSession session) {
+    public void setSession(CampSession session, int y) {
         cs = session;
+        campYear = y;
 
         if (cs != null) {
             start.setValue(create(cs.getStartDay(), cs.getEndMonth(), cs.getCampYear()));
@@ -52,7 +56,35 @@ public class SessionController extends BaseController implements Initializable {
     public void initialize(URL url, ResourceBundle rb)  {
     }
 
+    private CampSession getSessionFromUI() {
+        CampSession session = new CampSession();
+
+        session.setGenderLimit(Integer.parseInt(capacity.getText()));
+        session.setCampYear(campYear);
+        session.setStartDay(start.getValue().getDayOfMonth());
+        session.setStartMonth(start.getValue().getMonthValue());
+        session.setEndDay(end.getValue().getDayOfMonth());
+
+        return session;
+    }
+
     public void saveClicked() {
+        try {
+            CampSessionDAO dao = DAOFactory.createCampSessionDAO();
+            dao.insert(getSessionFromUI());
+
+            if (cs != null) {
+                cs.setGenderLimit(Integer.parseInt(capacity.getText()));
+                cs.setCampYear(campYear);
+                cs.setStartDay(start.getValue().getDayOfMonth());
+                cs.setStartMonth(start.getValue().getMonthValue());
+                cs.setEndDay(end.getValue().getDayOfMonth());
+            }
+
+            UIManager.getInstance().closeCurrentScreenShowPrevious();
+        } catch (Exception e) {
+            displayError(e);
+        }
     }
 
     public void cancelClicked() {

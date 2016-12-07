@@ -29,6 +29,7 @@ public class MenuController implements Initializable {
 
         bunkHouseConfig.setDisable(u.getType() != User.UserType.Director);
         tribeConfig.setDisable(u.getType() != User.UserType.Director);
+        sessionConfig.setDisable(u.getType() != User.UserType.Director);
     }
 
     public void showApplication() throws Exception {
