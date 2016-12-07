@@ -181,7 +181,25 @@ public class CheckinController extends BaseController implements Initializable {
     }
 
     public void refundClicked() {
-        displayNotice("Issue a refund of $1000.00");
+        CamperRegistration cr = campersTable.getSelectionModel().getSelectedItem();
+        CampSession session = getCampSessionFromUI();
+        if(cr != null && session != null){
+            try{
+                if(cr.getAmountDue() < 0){
+                    CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
+                    dao.update(cr.getCamperId(), session.getCampSessioId(), cr.getPayment() + cr.getAmountDue());
+                    displayNotice("Issue a refund of $" + Double.toString(cr.getPayment()));
+                    campersTable.refresh();
+                    loadTable(session.getCampSessioId());
+                }else{
+                    displayNotice("You do not have any refund.");
+                }
+            }catch(Exception e){
+                displayError(e);
+            }
+        }else{
+            displayNotice("Please select a camper");
+        }
     }
 
     public void cancellationClicked() {

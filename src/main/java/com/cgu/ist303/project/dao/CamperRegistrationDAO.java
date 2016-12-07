@@ -14,4 +14,5 @@ public interface CamperRegistrationDAO {
     ObservableList<CamperRegistration> queryRegisteredCampers(int year) throws Exception;
     ObservableList<CamperRegistration> queryRegisteredCampers(int year, int sessionId, boolean isSortByAge) throws Exception;
     void delete(int camperId, int sessionId) throws Exception;
+    void update(int camperId, int campSessioId, double balance) throws Exception;
 }
