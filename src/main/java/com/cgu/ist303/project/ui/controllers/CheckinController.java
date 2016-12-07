@@ -188,7 +188,7 @@ public class CheckinController extends BaseController implements Initializable {
                 if(cr.getAmountDue() < 0){
                     CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
                     dao.update(cr.getCamperId(), session.getCampSessioId(), cr.getPayment() + cr.getAmountDue());
-                    displayNotice("Issue a refund of $" + Double.toString(cr.getPayment()));
+                    displayNotice("Issue a refund of $" + Double.toString(-1 * cr.getAmountDue()));
                     campersTable.refresh();
                     loadTable(session.getCampSessioId());
                 }else{
