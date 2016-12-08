@@ -211,7 +211,6 @@ public class TribeRosterController extends BaseController implements Initializab
         }
     }
 
-
     public void assignClicked() {
         log.debug("Assign clicked");
 
