@@ -39,7 +39,7 @@ mvn install
 ```
 Step 2. To run the tool, execute the following command:
 ```
-ist-303-project
+mvn exec:java
 ```
 
 Step 3. When launching the application, it will prompt for log-in and password. Use the following:
@@ -51,6 +51,21 @@ Director      | jerry | password
 
 
 The first time the application runs, it will create a database and schema automatically, populated with initial values.
+
+Step 4 (optional). If you would like to load the software with a test data set of campers, then download SQLite Studio:
+
+http://sqlitestudio.pl/
+
+a. Click "Add a Database" icon in toolbar
+b. Point to file "ist303-presentation-2.db" in the project folder
+c. Click "OK"
+d. Right mouse on "CAMPERS" table, select "Import into the table"
+e. Click "Continue"
+f. Point the file "data/CAMPERS_EXPORT.csv"
+g. Click on option "Use file line represents CSV column name"
+h. Click "Done"
+i. Repeat steps d. through h. for the CAMPER_REGISTRATION table and "data/CAMPER_REGISTRATION_EXPORT.csv"
+i. Repeat steps d. through h. for the PAYMENTS table and "data/PAYMENTS.csv"
 
 # Developer Notes:
 
