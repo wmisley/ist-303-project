@@ -15,4 +15,5 @@ public interface TribeAssignmentDAO {
     List<TribeAssignment> query(int sessionId) throws Exception;
     void insert(List<TribeAssignmentById> assignments) throws Exception;
     void delete(List<Tribe> tribes) throws Exception;
+    void swap(int camperId1, int tribeId1, int camperId2, int tribeId2) throws Exception;
 }

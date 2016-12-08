@@ -16,5 +16,6 @@
       <Button fx:id="assign" layoutX="119.0" layoutY="409.0" mnemonicParsing="false" onAction="#assignClicked" prefHeight="27.0" prefWidth="75.0" text="Assign" />
       <Button fx:id="back" layoutX="522.0" layoutY="409.0" mnemonicParsing="false" onAction="#backClicked" text="Back" />
       <Button fx:id="clear" layoutX="207.0" layoutY="409.0" mnemonicParsing="false" onAction="#clearSession" prefHeight="27.0" prefWidth="66.0" text="Clear" />
+      <Button fx:id="swap" layoutX="284.0" layoutY="409.0" mnemonicParsing="false" onAction="#swapClicked" text="Swap" />
    </children>
 </AnchorPane>

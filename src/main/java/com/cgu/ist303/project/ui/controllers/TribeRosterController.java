@@ -204,7 +204,7 @@ public class TribeRosterController extends BaseController implements Initializab
             displayNotice("Please select a tribe assignment.");
         } else {
             try {
-                UIManager.getInstance().showTribeChangeAssignmentScreen(ta, tribeRostertable.getItems());
+                UIManager.getInstance().showTribeChangeAssignmentScreen(ta, tribeRostertable.getItems(), tribeRostertable);
             } catch (Exception e) {
                 displayError(e);
             }

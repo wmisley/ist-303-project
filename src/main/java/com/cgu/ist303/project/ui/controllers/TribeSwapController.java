@@ -2,11 +2,9 @@ package com.cgu.ist303.project.ui.controllers;
 
 import com.cgu.ist303.project.dao.BunkHouseDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
+import com.cgu.ist303.project.dao.TribeAssignmentDAO;
 import com.cgu.ist303.project.dao.TribeDAO;
-import com.cgu.ist303.project.dao.model.BunkHouse;
-import com.cgu.ist303.project.dao.model.Camper;
-import com.cgu.ist303.project.dao.model.Tribe;
-import com.cgu.ist303.project.dao.model.TribeAssignment;
+import com.cgu.ist303.project.dao.model.*;
 import com.cgu.ist303.project.ui.UIManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +30,7 @@ public class TribeSwapController extends BaseController implements Initializable
     private ObservableList<Tribe> otherTribes = null;
     private ObservableList<Camper> filteredCampers = null;
     private ObservableList<TribeAssignment> taList = null;
+    private TableView<TribeAssignment> tribeRostertable = null;
 
     @FXML
     public Button swap;
@@ -93,9 +93,11 @@ public class TribeSwapController extends BaseController implements Initializable
         }
     }
 
-    public void setTribeAssignment(TribeAssignment assignment, ObservableList<TribeAssignment> tal) {
+    public void setTribeAssignment(TribeAssignment assignment, ObservableList<TribeAssignment> tal,
+                                   TableView<TribeAssignment> trt) {
         ta = assignment;
         taList = tal;
+        tribeRostertable = trt;
         loatTribes();
         loadCampers();
     }
@@ -104,7 +106,50 @@ public class TribeSwapController extends BaseController implements Initializable
     }
 
     public void swapClicked() {
+        try {
+            Tribe tribe = tribes.getSelectionModel().getSelectedItem();
+            Camper camper = campers.getSelectionModel().getSelectedItem();
 
+            if (tribe == null) {
+                displayNotice("Please select a tribe.");
+            } else if (camper == null) {
+                displayNotice("Please select a camper.");
+            } else {
+                TribeAssignmentDAO dao = DAOFactory.createTribeAssignmentDAO();
+                dao.swap(ta.getCamper().getCamperId(), ta.getTribe().getTribeId(),
+                        camper.getCamperId(), tribe.getTribeId());
+                UIManager.getInstance().closeCurrentScreenShowPrevious();
+
+                swapAssignmentInList(ta.getCamper().getCamperId(), ta.getTribe(),
+                        camper.getCamperId(), tribe);
+                tribeRostertable.refresh();
+            }
+        } catch (Exception e) {
+            displayError(e);
+        }
+    }
+
+    private void swapAssignmentInList(int cId1, Tribe t1, int cId2, Tribe t2) {
+        TribeAssignment ass1 = null;
+        TribeAssignment ass2 = null;
+
+        for (TribeAssignment assign : taList) {
+            if (assign.getCamper().getCamperId() == cId1) {
+                ass1 = assign;
+            }
+
+            if (assign.getCamper().getCamperId() == cId2) {
+                ass2 = assign;
+            }
+        }
+
+        if (ass1 != null) {
+            ass1.setTribe(t2);
+        }
+
+        if (ass2 != null) {
+            ass2.setTribe(t1);
+        }
     }
 
     public void tribeChanged() {

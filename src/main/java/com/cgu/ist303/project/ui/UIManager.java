@@ -215,7 +215,8 @@ public class UIManager {
         stage.show();
     }
 
-    public void showTribeChangeAssignmentScreen(TribeAssignment ta, ObservableList<TribeAssignment> taList)
+    public void showTribeChangeAssignmentScreen(TribeAssignment ta, ObservableList<TribeAssignment> taList,
+                                                TableView<TribeAssignment> t)
             throws Exception {
         log.debug("Showing Tribe Swap screen\"");
 
@@ -225,7 +226,7 @@ public class UIManager {
 
         Pane pane = loader.load();
         TribeSwapController controller = loader.getController();
-        controller.setTribeAssignment(ta, taList);
+        controller.setTribeAssignment(ta, taList, t);
         Scene scene = new Scene(pane, 515, 140);
         stage.setScene(scene);
 

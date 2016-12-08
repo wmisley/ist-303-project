@@ -167,7 +167,7 @@ public class BunkHouseSwapController extends BaseController implements Initializ
                 UIManager.getInstance().closeCurrentScreenShowPrevious();
                 swapAssignmentInList(bha.getCamper().getCamperId(), bha.getBunkHouse(), swapCamperId, bh);
             } else {
-                //TODO: Handle no selection
+                displayNotice("Please select a bunk house.");
             }
         } catch (Exception e) {
             displayError(e);

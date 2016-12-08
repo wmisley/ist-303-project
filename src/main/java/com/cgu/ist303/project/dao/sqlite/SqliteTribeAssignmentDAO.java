@@ -170,4 +170,53 @@ public class SqliteTribeAssignmentDAO extends DAOBase implements TribeAssignment
 
         return list;
     }
+
+    public void swap(int camperId1, int tribeId1, int camperId2, int tribeId2) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+        Exception ee = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        stmt = c.createStatement();
+        stmt.getConnection().setAutoCommit(false);
+
+        try {
+            String sql =
+                    "UPDATE TRIBE_ASSIGNMENTS " +
+                            "SET    TRIBE_ID = %d " +
+                            "WHERE  CAMPER_ID = %d AND TRIBE_ID = %d ";
+
+            sql = String.format(sql, tribeId2, camperId1, tribeId1);
+            log.debug(sql);
+            stmt.executeUpdate(sql);
+
+            if (camperId2 != -1) {
+                sql =
+                        "UPDATE TRIBE_ASSIGNMENTS " +
+                                "SET    TRIBE_ID = %d " +
+                                "WHERE  CAMPER_ID = %d AND TRIBE_ID = %d ";
+
+                sql = String.format(sql, tribeId1, camperId2, tribeId2);
+
+                log.debug(sql);
+                stmt.executeUpdate(sql);
+            }
+        } catch (Exception e) {
+            stmt.getConnection().rollback();
+            ee = e;
+        } finally {
+            stmt.getConnection().commit();
+
+            stmt.close();
+            c.commit();
+            c.close();
+
+            if (ee != null) {
+                throw ee;
+            }
+        }
+    }
 }
