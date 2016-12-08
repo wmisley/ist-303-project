@@ -5,7 +5,6 @@ import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.dao.model.CamperRegistrationRecord;
 import com.cgu.ist303.project.dao.CamperRegistrationDAO;
-import com.cgu.ist303.project.dao.model.Tribe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
@@ -233,6 +232,31 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
                 "DELETE FROM CAMP_REGISTRATION WHERE CAMP_SESSION_ID = %d AND CAMPER_ID = %d";
 
         sql = String.format(sql, sessionId, camperId);
+
+        log.debug(sql);
+
+        stmt.executeUpdate(sql);
+
+        stmt.close();
+        c.commit();
+        c.close();
+    }
+
+    @Override
+    public void update(int camperId, int campSessioId, double balance) throws Exception {
+        Connection c = null;
+        Statement stmt = null;
+
+        Class.forName("org.sqlite.JDBC");
+        c = DriverManager.getConnection("jdbc:sqlite:" + dbFilepath);
+        c.setAutoCommit(false);
+
+        log.debug(balance);
+        stmt = c.createStatement();
+        String sql =
+                "UPDATE PAYMENTS SET AMOUNT = %f WHERE CAMP_SESSION_ID = %d AND CAMPER_ID = %d";
+
+        sql = String.format(sql,balance, campSessioId, camperId);
 
         log.debug(sql);
 
