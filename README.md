@@ -57,14 +57,23 @@ Step 4 (optional). If you would like to load the software with a test data set o
 http://sqlitestudio.pl/
 
 a. Click "Add a Database" icon in toolbar
+
 b. Point to file "ist303-presentation-2.db" in the project folder
+
 c. Click "OK"
+
 d. Right mouse on "CAMPERS" table, select "Import into the table"
+
 e. Click "Continue"
+
 f. Point the file "data/CAMPERS_EXPORT.csv"
+
 g. Click on option "Use file line represents CSV column name"
+
 h. Click "Done"
+
 i. Repeat steps d. through h. for the CAMPER_REGISTRATION table and "data/CAMPER_REGISTRATION_EXPORT.csv"
+
 i. Repeat steps d. through h. for the PAYMENTS table and "data/PAYMENTS.csv"
 
 # Developer Notes:
