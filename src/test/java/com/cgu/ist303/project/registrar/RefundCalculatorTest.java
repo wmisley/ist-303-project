@@ -85,7 +85,7 @@ public class RefundCalculatorTest {
 
         double refund = rc.calculteRefund(100.0, dat1, dat2);
 
-        Assert.assertTrue((refund - 65.0) < .001);
+        Assert.assertTrue((refund - 45.0) < .001);
     }
 
     @SuppressWarnings("Duplicates")
@@ -101,7 +101,7 @@ public class RefundCalculatorTest {
 
         double refund = rc.calculteRefund(100.0, dat1, dat2);
 
-        Assert.assertTrue((refund - 65.0) < .001);
+        Assert.assertTrue((refund - 45.0) < .001);
     }
 
     @SuppressWarnings("Duplicates")

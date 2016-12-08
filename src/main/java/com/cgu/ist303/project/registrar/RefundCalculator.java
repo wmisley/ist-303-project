@@ -29,7 +29,7 @@ public class RefundCalculator {
         if (days <= DAYS_IN_THREE_WEEKS) {
             perCentageRefund = 0.9;
         } else if (days <= DAYS_IN_SIX_WEEKS) {
-            perCentageRefund = 0.65;
+            perCentageRefund = 0.45;
         } else {
             perCentageRefund = 0.0;
         }
