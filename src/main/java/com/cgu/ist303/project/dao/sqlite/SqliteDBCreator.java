@@ -249,6 +249,7 @@ public class SqliteDBCreator {
                 "(CAMP_SESSION_ID   INTEGER NOT NULL," +
                 " CAMPER_ID         INTEGER NOT NULL, " +
                 " IS_CHECKED_IN     INTEGER NOT NULL DEFAULT 0, " +
+                " REGISTRATION_DATE TEXT NOT NULL DEFAULT (DATE('now')), " +
                 " CONSTRAINT CAMPER_SESSION_PK PRIMARY KEY (CAMP_SESSION_ID, CAMPER_ID), " +
                 " FOREIGN KEY(CAMP_SESSION_ID) REFERENCES CAMP_SESSIONS(CAMP_SESSION_ID), " +
                 " FOREIGN KEY(CAMPER_ID) REFERENCES CAMPERS(CAMPER_ID)) ";

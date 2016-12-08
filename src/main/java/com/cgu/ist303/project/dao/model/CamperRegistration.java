@@ -1,11 +1,25 @@
 package com.cgu.ist303.project.dao.model;
 
-/**
- * Created by will4769 on 10/19/16.
- */
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CamperRegistration extends Camper {
     private double payment = 0.0;
     private int campSessionId = 0;
+    private Date registrationDate = new Date();
+
+    public String getRegistrationDateString() {
+        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
+        return dt1.format(registrationDate);
+    }
+
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
 
     public boolean isCheckedIn() {
         return isCheckedIn;

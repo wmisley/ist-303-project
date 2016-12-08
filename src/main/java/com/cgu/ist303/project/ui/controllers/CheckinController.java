@@ -6,6 +6,7 @@ import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.dao.model.Camper;
 import com.cgu.ist303.project.dao.model.CamperRegistration;
 import com.cgu.ist303.project.dao.sqlite.SqliteCamperRegistrationDAO;
+import com.cgu.ist303.project.registrar.RefundCalculator;
 import com.cgu.ist303.project.registrar.Registrar;
 import com.cgu.ist303.project.ui.UIManager;
 import com.cgu.ist303.project.ui.model.EquipmentItem;
@@ -24,10 +25,7 @@ import org.controlsfx.control.PropertySheet;
 
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class CheckinController extends BaseController implements Initializable {
@@ -64,10 +62,12 @@ public class CheckinController extends BaseController implements Initializable {
         TableColumn payment = new TableColumn("Amount Due");
         payment.setCellValueFactory(new PropertyValueFactory<Camper, String>("formattedAmountDue"));
         payment.setStyle("-fx-alignment: CENTER_RIGHT;");
+        TableColumn regDateCol = new TableColumn("Registered");
+        regDateCol.setCellValueFactory(new PropertyValueFactory<Camper, String>("registrationDateString"));
         TableColumn isCheckedIn = new TableColumn("Checked-in");
         isCheckedIn.setCellValueFactory(new PropertyValueFactory<Camper, String>("checkedInStatus"));
 
-        campersTable.getColumns().addAll(firstNameCol, lastNameCol, phoneNumber, age, gender, payment, isCheckedIn);
+        campersTable.getColumns().addAll(firstNameCol, lastNameCol, phoneNumber, age, gender, payment, regDateCol, isCheckedIn);
 
         try {
             registrar.load(2017);
@@ -203,18 +203,30 @@ public class CheckinController extends BaseController implements Initializable {
     }
 
     public void cancellationClicked() {
+        log.info("User has selected to cancel a camper registration.");
+
         CamperRegistration cr = campersTable.getSelectionModel().getSelectedItem();
         CampSession session = getCampSessionFromUI();
 
         if ((cr != null) && (session != null)) {
             try {
+                RefundCalculator rc = new RefundCalculator(cr.getRegistrationDate(), new Date());
+                long days = rc.calculateNumberOfDays();
+                double refund = rc.calculteRefund(cr.getPayment());
+                double percentage = rc.calculatePercentageRefund() * 100;
+
+                log.info("Paid={}, Days since acceptance={}, Calculated refund={}, Calculated percentage={}",
+                        cr.getAmountDue(), days, refund, percentage);
+                String message =String.format(
+                        "The camper registration is cancelled. It has been %d days since the acceptance letter and " +
+                        "arrival packet has been sent. Therefore the camper will only get a %.0f%% refund. Please " +
+                        "refund the camper $%.2f.", days, percentage, refund);
+                displayNotice(message);
+
                 CamperRegistrationDAO dao = DAOFactory.createCamperRegistrationDAO();
                 dao.delete(cr.getCamperId(), session.getCampSessioId());
-
                 campersTable.getItems().remove(cr);
                 campersTable.refresh();
-
-                displayNotice("The camper registration is cancelled. Please submit a refund of $1,000.00.");
             } catch (Exception e) {
                 displayError(e);
             }

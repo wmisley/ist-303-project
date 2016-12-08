@@ -14,6 +14,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
@@ -165,7 +168,8 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
 
         String sql =
             "SELECT C.FIRST_NAME, C.MIDDLE_NAME, C.LAST_NAME, C.PHONE_NUMBER, C.AGE, C.GENDER, " +
-            " C.CAMPER_ID AS CID, CR.CAMP_SESSION_ID AS CSID, SUM(P.AMOUNT) AS TOTAL_PAYMENT, CR.IS_CHECKED_IN " +
+            " C.CAMPER_ID AS CID, CR.CAMP_SESSION_ID AS CSID, SUM(P.AMOUNT) AS TOTAL_PAYMENT, CR.IS_CHECKED_IN, " +
+            " CR.REGISTRATION_DATE " +
             "FROM CAMPERS C, CAMP_REGISTRATION CR, CAMP_SESSIONS CS, PAYMENTS P " +
             "WHERE C.CAMPER_ID = CR.CAMPER_ID " +
                 "AND CR.CAMP_SESSION_ID = CS.CAMP_SESSION_ID " +
@@ -207,6 +211,19 @@ public class SqliteCamperRegistrationDAO implements CamperRegistrationDAO {
                 camper.setGender(Camper.Gender.Female);
             } else {
                 camper.setGender(Camper.Gender.Unspecified);
+            }
+
+            try {
+                //Date stored in format 'YYYY-MM-DD'
+                String regDateString = rs.getString("REGISTRATION_DATE");
+                String[] tokens = regDateString.split("-");
+                Calendar cal2 = new GregorianCalendar(
+                        Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]) - 1, Integer.parseInt(tokens[2]));
+                Date regDate = cal2.getTime();
+                camper.setRegistrationDate(regDate);
+            } catch (Exception e) {
+                log.error(e);
+                camper.setRegistrationDate(new Date());
             }
 
             list.add(camper);
