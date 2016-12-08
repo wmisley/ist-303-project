@@ -4,6 +4,7 @@ import com.cgu.ist303.project.dao.CampSessionDAO;
 import com.cgu.ist303.project.dao.DAOFactory;
 import com.cgu.ist303.project.dao.model.CampSession;
 import com.cgu.ist303.project.ui.UIManager;
+import com.cgu.ist303.project.ui.controls.LimitedNumberTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -30,7 +31,7 @@ public class SessionController extends BaseController implements Initializable {
     @FXML
     public DatePicker end;
     @FXML
-    public TextField capacity;
+    public LimitedNumberTextField capacity;
 
     public void setSession(CampSession session, int y, TableView<CampSession> tbl) {
         cs = session;

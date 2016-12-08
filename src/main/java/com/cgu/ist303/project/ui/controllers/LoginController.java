@@ -76,7 +76,7 @@ public class LoginController {
             log.info("User {} logging in", userName);
 
             UserDAO userDAO = DAOFactory.createUserDAO();
-            user = userDAO.query(userName, userPasswrod);
+            user = userDAO.query(userName.replaceAll("'", "''"), userPasswrod.replaceAll("'", "''"));
         }
 
         return user;

@@ -47,6 +47,8 @@ public class TribeRosterController extends BaseController implements Initializab
     public Button assign;
     @FXML
     public Button clear;
+    @FXML
+    public Button swap;
 
     List<TribeAssignment> list;
 
@@ -116,6 +118,7 @@ public class TribeRosterController extends BaseController implements Initializab
 
         //This button on is only active for camp director
         clear.setDisable(u.getType() != User.UserType.Director);
+        swap.setDisable(u.getType() != User.UserType.Director);
     }
 
     public void clearSession() {
