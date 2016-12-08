@@ -215,6 +215,25 @@ public class UIManager {
         stage.show();
     }
 
+    public void showTribeChangeAssignmentScreen(TribeAssignment ta, ObservableList<TribeAssignment> taList)
+            throws Exception {
+        log.debug("Showing Tribe Swap screen\"");
+
+        Stage stage = new Stage();
+        stage.setTitle("Tribe Swap");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/tribeswap.fxml"));
+
+        Pane pane = loader.load();
+        TribeSwapController controller = loader.getController();
+        controller.setTribeAssignment(ta, taList);
+        Scene scene = new Scene(pane, 515, 140);
+        stage.setScene(scene);
+
+        showNewScreenHidePrevious(stage, false, true);
+
+        stage.show();
+    }
+
     public void showBunkHouseChangeAssignmentScreen(BunkHouseAssignment bha, ObservableList<BunkHouseAssignment> bhas,
                                                     TableView<BunkHouseAssignment> bunkhouseTable)
             throws Exception {

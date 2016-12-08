@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="143.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgu.ist303.project.ui.controllers.TribeSwapController">
+   <children>
+      <ComboBox fx:id="tribes" layoutX="22.0" layoutY="48.0" onAction="#tribeChanged" prefHeight="27.0" prefWidth="184.0" />
+      <ComboBox fx:id="campers" layoutX="225.0" layoutY="48.0" prefHeight="27.0" prefWidth="202.0" />
+      <Label layoutX="22.0" layoutY="18.0" text="Desired tribe " />
+      <Label layoutX="225.0" layoutY="18.0" text="Camper to swap with" />
+      <Button fx:id="cancel" layoutX="368.0" layoutY="96.0" mnemonicParsing="false" onAction="#cancelClicked" text="Cancel" />
+      <Button fx:id="swap" layoutX="297.0" layoutY="96.0" mnemonicParsing="false" onAction="#swapClicked" text="Swap" />
+   </children>
+</AnchorPane>

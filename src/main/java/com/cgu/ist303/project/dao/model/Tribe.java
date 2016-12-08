@@ -34,4 +34,8 @@ public class Tribe {
 
     public Tribe() {
     }
+
+    public String toString() {
+        return getTribeName();
+    }
 }

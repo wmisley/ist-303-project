@@ -197,6 +197,21 @@ public class TribeRosterController extends BaseController implements Initializab
         UIManager.getInstance().closeCurrentScreenShowPrevious();
     }
 
+    public void swapClicked() {
+        TribeAssignment ta = tribeRostertable.getSelectionModel().getSelectedItem();
+
+        if (ta == null) {
+            displayNotice("Please select a tribe assignment.");
+        } else {
+            try {
+                UIManager.getInstance().showTribeChangeAssignmentScreen(ta, tribeRostertable.getItems());
+            } catch (Exception e) {
+                displayError(e);
+            }
+        }
+    }
+
+
     public void assignClicked() {
         log.debug("Assign clicked");
 
